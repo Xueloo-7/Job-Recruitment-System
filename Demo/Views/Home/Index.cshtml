@@ -1,1 +1,64 @@
-﻿<h1>Home | Index</h1>
+﻿@{
+    ViewBag.Title = "Welcome";
+    ViewBag.Active = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="hero-section">
+    <div class="hero-content">
+        <h1>Find your new job</h1>
+
+        <form id="job-search-form">
+            <div class="search-field">
+                <label for="keyword">What</label>
+                <input type="text" id="keyword" name="keyword" placeholder="e.g. Web Developer" />
+            </div>
+
+            <div class="search-field">
+                <label for="location">Where</label>
+                <input type="text" id="location" name="location" placeholder="e.g. Malaysia" />
+            </div>
+
+            <button type="submit" class="search-btn">Search</button>
+        </form>
+
+        <div id="job-results">
+            @* search result can insert in AJAX *@
+            @* @Html.Partial("_JobListPartial", Model) *@
+        </div>
+    </div>
+</section>
+
+<section class="employer-section">
+    <div class="section-header">
+        <h2>Find your next employer</h2>
+    </div>
+
+    <div class="employer-grid">
+        <div class="employer-card">
+            <div class="employer-logo">
+                <img src="~/images/image5.png" alt="Intel">
+            </div>
+            <div class="job-count">15 jobs</div>
+        </div>
+
+        <div class="employer-card">
+            <div class="employer-logo">
+                <img src="~/images/image4.png" alt="Lazada">
+            </div>
+            <div class="job-count">20 jobs</div>
+        </div>
+
+        <div class="employer-card">
+            <div class="employer-logo">
+                <img src="~/images/image3.png" alt="Google">
+            </div>
+            <div class="job-count">5 jobs</div>
+        </div>
+    </div>
+
+    <div class="section-footer">
+        <a href="#" class="see-more-link">See More</a>
+        <a href="#" class="view-all-link">View All Jobs</a>
+    </div>
+</section>

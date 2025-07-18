@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Welcome";
+    ViewBag.Active = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Profile Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/Profile.css" />
+</head>
+<body>
+    <div class="profile-container">
+        <div class="tab-container">
+            <button class="tab-button active">Profile</button>
+            <button class="tab-button">Summary</button>
+            <button class="tab-button">Career History</button>
+            <button class="tab-button">Education</button>
+        </div>
+
+        <div class="profile-card">
+            <h2>Xueloo</h2>
+            <div class="profile-info">
+                <div><i class="fas fa-map-marker-alt"></i> Kuala Lumpur</div>
+                <div><i class="fas fa-envelope"></i> example@gmail.com</div>
+                <div><i class="fas fa-phone"></i> 012-3456789</div>
+            </div>
+            <button class="edit-btn">Edit</button>
+        </div>
+    </div>
+</body>
+</html>
