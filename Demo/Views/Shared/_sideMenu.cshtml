@@ -1,0 +1,46 @@
+﻿<!-- Side Menu -->
+<div class="sideMenu">
+    <div class="menu-header hidden">
+        <p>Menu</p>
+        <i class="fas fa-times closeMenu"></i>
+    </div>
+    <ul class="menu-list">
+        <li class="nav-item" data-get="@Url.Content("~/")">
+            <i class="fas fa-home"></i> Home
+        </li>
+
+        @* <li class="nav-item" data-get="@(User.Identity.IsAuthenticated? Url.Action("Account", "User") : Url.Action("Login", "Account"))">
+            <i class="fas fa-user"></i> @(User.Identity.IsAuthenticated ? "Account" : "Login")
+        </li> *@
+
+        <li class="nav-item" data-get="@Url.Action("Notifications", "User")">
+            <i class="fas fa-comment-dots"></i> Notifications
+        </li>
+
+        <li class="nav-item" data-get="@Url.Action("Favorites", "User")">
+            <i class="fas fa-bookmark"></i> Favorites
+        </li>
+
+        <li class="nav-item" data-get="@Url.Action("Settings", "User")">
+            <i class="fas fa-cog"></i> Settings
+        </li>
+
+        @* Admin Only
+        @if (User.IsInRole("Admin"))
+        {
+            <hr />
+            <li class="nav-item" data-get="@Url.Action("MemberListing", "Admin", new { id = 1 })">
+                <i class="fas fa-users-cog"></i> Member Management
+            </li>
+            <li class="nav-item" data-get="@Url.Action("OrderListing", "Admin", new { id = 1 })">
+                <i class="fas fa-file-invoice-dollar"></i> Order Management
+            </li>
+            <li class="nav-item" data-get="@Url.Action("ProductListing", "Admin", new { id = 1 })">
+                <i class="fas fa-boxes"></i> Product Management
+            </li>
+        } *@
+    </ul>
+</div>
+
+<!-- Sidebar Overlay -->
+<div class="overlay"></div>

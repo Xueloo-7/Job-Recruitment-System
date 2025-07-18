@@ -6,29 +6,31 @@ public class HomeController : Controller
 {
     public IActionResult Index()
     {
+        ViewBag.Active = "Search";
         return View();
     }
 
-    public IActionResult Demo1(string name, int age)
+    public IActionResult Profile()
     {
-        ViewBag.Name = name;
-        ViewBag.Age = age;
+        ViewBag.Active = "Profile";
         return View();
     }
 
-    public IActionResult Demo2(string name, int age)
+    public IActionResult Employer()
     {
-        var m = new
-        {
-            Name = name,
-            Age = age,
-        };
-        return View(m);
+        ViewBag.Active = "Employer";
+        return View();
     }
 
-    [Route("ABC")]
-    public IActionResult Demo3()
+    public IActionResult SignIn()
     {
-        return View("123");
+        ViewBag.Active = "SignIn";
+        return View();
+    }
+
+    public IActionResult EsignIn()
+    {
+        ViewBag.Active = "EsignIn";
+        return View();
     }
 }

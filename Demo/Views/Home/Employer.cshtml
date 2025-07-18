@@ -1,0 +1,54 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/css/Employer.css" />
+<script src="~/js/Employer.js"></script>
+
+<div class="employer-container">
+    <div class="employer-card">
+        <div class="punch-holes">
+            @for (int i = 0; i < 10; i++)
+            {
+                <span class="hole"></span>
+            }
+        </div>
+        <h2>Filling job vacancies</h2>
+
+        <div class="highlight-message">
+            free services charge only!
+        </div>
+
+        <form id="employer-form">
+            <label for="email">Enter Your Business Email</label>
+            <div class="email-input-group">
+                <input type="email" id="email" name="email" placeholder="example@domain.com" required />
+                <button type="submit">Register</button>
+            </div>
+        </form>
+
+        <p class="help-text">
+            Need help? Reach out to us on <a href="https://wa.me">WhatsApp</a><br />
+            Or visit our <a href="#">Help Centre</a>.
+        </p>
+    </div>
+</div>
+
+<div class="features-section">
+    <h2>We make it quicker and easier to find the right people</h2>
+    <div class="features">
+        <div class="feature-card">
+            <img src="~/images/image.png" alt="1st choice icon" />
+            <p>1st choice for Malaysian<br />job seekers</p>
+        </div>
+        <div class="feature-card">
+            <img src="~/images/image2.png" alt="5 million profiles icon" />
+            <p>Over 5 million<br />candidate profiles</p>
+        </div>
+        <div class="feature-card">
+            <img src="~/images/image1.png" alt="job placements icon" />
+            <p>First 1 job placements</p>
+        </div>
+    </div>
+    <a href="~/Home/EsignIn" class="create-btn">Create account</a>
+</div>
