@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Sign In";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewData["Title"] - Job Seeker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/signIn.css">
+</head>
+<body>
+    <h1 class="logo">Job Seeker</h1>
+    <div class="signIn-container">
+        <h1>Sign In</h1>
+        
+        <div class="social-login">
+            <button href="https://www.google.com" class="social-btn google" target="_blank">
+                <i class="fab fa-google"></i> Continue with Google
+            </button>
+
+            <button href="https://www.facebook.com" class="social-btn facebook" target="_blank">
+                <i class="fab fa-facebook"></i> Continue with Facebook
+            </button>
+            <button href="https://www.apple.com" class="social-btn apple" target="_blank">
+                <i class="fab fa-apple"></i> Continue with Apple
+            </button>
+        </div>
+
+        <div class="divider">or</div>
+
+        <form class="email-login">
+            <input type="email" placeholder="Email Address">
+            <label><input type="checkbox"> Remember Me</label>
+            <button type="submit">Login</button>
+        </form>
+
+        <p>Don’t have account? <a href="#">Click me to create!</a></p>
+
+    </div>
+
+    <footer>
+        <a href="#">Security & Privacy</a> -
+        <a href="#">Terms & Conditions</a> -
+        <a href="#">Contact</a>
+        <p>Developed by ROXY'S • © 2025</p>
+    </footer>
+
+</body>
+</html>
