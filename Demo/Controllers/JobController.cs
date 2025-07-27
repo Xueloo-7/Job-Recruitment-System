@@ -41,3 +41,4 @@ public class JobController : Controller
         return View(promotions); // ✅ 正确，传入 Model
     }
 }
+
