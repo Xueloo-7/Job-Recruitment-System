@@ -39,23 +39,49 @@
             <div class="employer-logo">
                 <img src="~/images/image5.png" alt="Intel">
             </div>
-            <div class="job-count">15 jobs</div>
+            <button class="job-count">15 jobs</button>
+            <a>
+                href="/Home/LoadJobs?company=intel"
+                data-ajax="true"
+                data-ajax-method="GET"
+                data-ajax-mode="replace"
+                data-ajax-update="job-list"
+            </a>
         </div>
 
         <div class="employer-card">
             <div class="employer-logo">
                 <img src="~/images/image4.png" alt="Lazada">
             </div>
-            <div class="job-count">20 jobs</div>
+            <button class="job-count">20 jobs</button>
+            <a>
+                href="/Home/LoadJobs?company=Lazada"
+                data-ajax="true"
+                data-ajax-method="GET"
+                data-ajax-mode="replace"
+                data-ajax-update="job-list"
+            </a>
         </div>
 
         <div class="employer-card">
             <div class="employer-logo">
                 <img src="~/images/image3.png" alt="Google">
             </div>
-            <div class="job-count">5 jobs</div>
+            <button class="job-count">5 jobs</button>
+            <a>
+                href="/Home/LoadJobs?company=google"
+                data-ajax="true"
+                data-ajax-method="GET"
+                data-ajax-mode="replace"
+                data-ajax-update="job-list"
+            </a>
         </div>
     </div>
+
+    @* <!-- future change -->
+    <div id="job-results">
+        <!-- Partial View -->
+    </div> *@
 
     <div class="section-footer">
         <a href="#" class="see-more-link">See More</a>

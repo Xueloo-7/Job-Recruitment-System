@@ -10,6 +10,28 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult LoadJobs(string company)
+    {
+        // put database future
+        var jobs = new List<string>();
+
+        switch (company?.ToLower())
+        {
+            case "intel":
+                jobs = new List<string> { "Software Engineer", "QA Tester", "Intern Developer" };
+                break;
+            case "lazada":
+                jobs = new List<string> { "Frontend Developer", "UI/UX Designer", "System Analyst" };
+                break;
+            case "google":
+                jobs = new List<string> { "AI Researcher", "Cloud Architect", "Technical Writer" };
+                break;
+        }
+
+        ViewBag.Company = company;
+        return PartialView("_JobListPartial", jobs);
+    }
+
     public IActionResult Profile()
     {
         ViewBag.Active = "Profile";

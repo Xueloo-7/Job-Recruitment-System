@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Welcome";
     ViewBag.Active = "Profile";
+    ViewData["Title"] = "User Profile";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -14,22 +15,29 @@
 </head>
 <body>
     <div class="profile-container">
-        <div class="tab-container">
-            <button class="tab-button active">Profile</button>
-            <button class="tab-button">Summary</button>
-            <button class="tab-button">Career History</button>
-            <button class="tab-button">Education</button>
+        <div class="tab-buttons">
+            <button class="tab-button active" data-tab="Profile">Profile</button>
+            <button class="tab-button" data-tab="Summary">Summary</button>
+            <button class="tab-button" data-tab="CareerHistory">Career History</button>
+            <button class="tab-button" data-tab="Education">Education</button>
         </div>
 
-        <div class="profile-card">
-            <h2>Xueloo</h2>
-            <div class="profile-info">
-                <div><i class="fas fa-map-marker-alt"></i> Kuala Lumpur</div>
-                <div><i class="fas fa-envelope"></i> example@gmail.com</div>
-                <div><i class="fas fa-phone"></i> 012-3456789</div>
+        <div id="tab-content" class="profile-card">
+            <div class="tab-content-section" id="ProfileTab">
+                @await Html.PartialAsync("~/Views/User/_Profile.cshtml")
             </div>
-            <button class="edit-btn">Edit</button>
+            <div class="tab-content-section" id="SummaryTab" style="display:none;">
+                @await Html.PartialAsync("~/Views/User/_Summary.cshtml")
+            </div>
+            <div class="tab-content-section" id="CareerHistoryTab" style="display:none;">
+                @await Html.PartialAsync("~/Views/User/_CareerHistory.cshtml")
+            </div>
+            <div class="tab-content-section" id="EducationTab" style="display:none;">
+                @await Html.PartialAsync("~/Views/User/_Education.cshtml")
+            </div>
         </div>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="~/js/Profile.js"></script>
 </body>
 </html>

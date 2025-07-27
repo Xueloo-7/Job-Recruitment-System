@@ -2,6 +2,7 @@
 html, body {
     margin: 0;
     padding: 0;
+    min-width: 100%;
     box-sizing: border-box;
     background-color: #f5f3ef;
 }
@@ -305,6 +306,7 @@ footer {
 .job-count {
     color: #666;
     font-size: 14px;
+    text-decoration: none;
 }
 
 .section-footer {
