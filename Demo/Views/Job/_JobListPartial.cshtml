@@ -19,3 +19,16 @@ else
         }
     </ul>
 } *@
+
+
+@model List<string>
+
+<div class="job-list">
+    <h3>Jobs at @ViewBag.Company</h3>
+    <ul>
+        @foreach (var job in Model)
+        {
+            <li>@job</li>
+        }
+    </ul>
+</div>
