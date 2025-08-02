@@ -1,44 +1,68 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Demo.Models;
+using System.Diagnostics;
 
 public class UserController : Controller
 {
+    private readonly DB _context;
 
-    // 模拟数据库读取
-    private UserProfile GetUserProfile()
+    public UserController(DB context)
     {
-        var profile = new UserProfile
+        _context = context;
+    }
+    //要改的
+    private string GetLoggedInUserId()
+    {
+        // 假设你有登录系统
+        // 这里直接示例一个 userId
+        return "1";
+    }
+
+    private User GetUserProfileData()
+    {
+        var userId = GetLoggedInUserId();
+        return _context.Users.FirstOrDefault(u => u.Id == userId);
+    }
+
+
+    // 显示编辑页面
+    public IActionResult Edit()
+    {
+        var user = GetUserProfileData();
+        if (user == null)
         {
-            Name = "Xueloo",
-            Summary = "Software Developer",
-            SelfIntroduction = "I enjoy building web applications.",
-            CareerHistory = "Intern at XYZ",
-            Education = "Bachelor of Computer Science"
-        };
+            ViewBag.Message = "Please fill in your info.";
+            return View(new User());
+        }
 
-        return profile;
-    }
-    public IActionResult Profile()
-    {
-        var model = GetUserProfile();
-        return PartialView("_Profile", model);
+        return View(user);
     }
 
-    public IActionResult Summary()
+    // 保存资料（处理表单提交）
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(User model)
     {
-        var model = GetUserProfile();
-        return PartialView("_Summary", model);
-    }
+        var userId = GetLoggedInUserId();
+        var existingUser = _context.Users.FirstOrDefault(u => u.Id == userId);
 
-    public IActionResult CareerHistory()
-    {
-        var model = GetUserProfile();
-        return PartialView("_CareerHistory", model);
-    }
+        if (existingUser != null)
+        {
+            existingUser.FirstName = model.FirstName;
+            existingUser.LastName = model.LastName;
+            existingUser.Location = model.Location;
+            existingUser.PhoneNumber = model.PhoneNumber;
 
-    public IActionResult Education()
-    {
-        var model = GetUserProfile();
-        return PartialView("_Education", model);
+            _context.Users.Update(existingUser);
+        }
+        else
+        {
+            Debug.WriteLine("sss");
+            model.Id = userId;
+            _context.Users.Add(model);
+        }
+
+        await _context.SaveChangesAsync();
+        return RedirectToAction("Profile");
     }
 }

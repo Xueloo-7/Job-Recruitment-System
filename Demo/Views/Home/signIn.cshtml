@@ -31,11 +31,12 @@
 
         <div class="divider">or</div>
 
-        <form class="email-login">
-            <input type="email" placeholder="Email Address">
-            <label><input type="checkbox"> Remember Me</label>
+        <form asp-controller="Account" asp-action="Login" method="post" class="email-login">
+            <input type="email" name="email" placeholder="Email Address" required />
+            <label><input type="checkbox" name="rememberMe"> Remember Me</label>
             <button type="submit">Login</button>
         </form>
+
 
         <p>Don’t have account? <a href="#">Click me to create!</a></p>
 
