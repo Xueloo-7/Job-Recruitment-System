@@ -1,0 +1,35 @@
+﻿@{
+    ViewBag.Title = "Profile";
+}
+
+<div class="profile-container">
+    <div class="tab-buttons">
+        <button class="tab-button active" data-tab="Profile">Profile</button>
+        <button class="tab-button" data-tab="Summary">Summary</button>
+        <button class="tab-button" data-tab="CareerHistory">Career History</button>
+        <button class="tab-button" data-tab="Education">Education</button>
+    </div>
+
+    <div id="tab-content" class="profile-card">
+        <div class="tab-content-section" id="ProfileTab">
+            @await Html.PartialAsync("~/Views/Profile/_Profile.cshtml")
+        </div>
+        <div class="tab-content-section" id="SummaryTab" style="display:none;">
+            @await Html.PartialAsync("~/Views/Profile/_Summary.cshtml")
+        </div>
+        <div class="tab-content-section" id="CareerHistoryTab" style="display:none;">
+            @await Html.PartialAsync("~/Views/Profile/_CareerHistory.cshtml")
+        </div>
+        <div class="tab-content-section" id="EducationTab" style="display:none;">
+            @await Html.PartialAsync("~/Views/Profile/_Education.cshtml")
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Profile.css" />
+}
+
+@section Scripts {
+    <script src="~/js/Profile.js"></script>
+}

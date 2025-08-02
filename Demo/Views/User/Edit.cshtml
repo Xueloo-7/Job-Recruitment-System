@@ -1,0 +1,25 @@
+﻿@model Demo.Models.User
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-warning">@ViewBag.Message</div>
+}
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<form asp-action="Edit" method="post">
+    <label>Firstname:</label>
+    <input asp-for="FirstName" class="form-control" />
+
+    <label>Lastname:</label>
+    <input asp-for="LastName" class="form-control" />
+
+    <label>Location:</label>
+    <input asp-for="Location" class="form-control" />
+
+    <label>Phone Number:</label>
+    <input asp-for="PhoneNumber" class="form-control" />
+
+    <button type="submit">Save</button>
+</form>

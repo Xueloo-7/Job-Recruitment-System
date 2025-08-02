@@ -1,21 +1,4 @@
-﻿//document.addEventListener('DOMContentLoaded', function () {
-//    const buttons = document.querySelectorAll('.tab-button');
-   
-
-//    buttons.forEach(button => {
-//        button.addEventListener('click', () => {
-//            // change btn success state
-//            buttons.forEach(btn => btn.classList.remove('active'));
-//            button.classList.add('active');
-
-//            // change content
-//            const selectedTab = button.textContent.trim();
-//            content.innerHTML = tabData[selectedTab];
-//        });
-//    });
-//});
-
-$(function () {
+﻿$(function () {
     $('.tab-button').click(function () {
         console.log("sss");
         // 更新按钮状态
@@ -30,7 +13,7 @@ $(function () {
 
         // AJAX 加载对应 Partial View
         $.ajax({
-            url: '/User/' + tab,
+            url: '/Profile/' + tab,
             method: 'GET',
             success: function (data) {
                 $('#tab-content').html(data);

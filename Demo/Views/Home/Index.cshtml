@@ -40,12 +40,11 @@
                 <img src="~/images/image5.png" alt="Intel">
             </div>
             <button class="job-count">15 jobs</button>
-            <a>
-                href="/Home/LoadJobs?company=intel"
+            <a href="/Home/LoadJobs?company=intel"
                 data-ajax="true"
                 data-ajax-method="GET"
                 data-ajax-mode="replace"
-                data-ajax-update="job-list"
+               data-ajax-update="job-list">
             </a>
         </div>
 
@@ -54,12 +53,11 @@
                 <img src="~/images/image4.png" alt="Lazada">
             </div>
             <button class="job-count">20 jobs</button>
-            <a>
-                href="/Home/LoadJobs?company=Lazada"
+            <a href="/Home/LoadJobs?company=Lazada"
                 data-ajax="true"
                 data-ajax-method="GET"
                 data-ajax-mode="replace"
-                data-ajax-update="job-list"
+               data-ajax-update="job-list">
             </a>
         </div>
 
@@ -68,20 +66,18 @@
                 <img src="~/images/image3.png" alt="Google">
             </div>
             <button class="job-count">5 jobs</button>
-            <a>
-                href="/Home/LoadJobs?company=google"
+            <a href="/Home/LoadJobs?company=google"
                 data-ajax="true"
                 data-ajax-method="GET"
                 data-ajax-mode="replace"
-                data-ajax-update="job-list"
+               data-ajax-update="job-list">
             </a>
         </div>
     </div>
 
-    @* <!-- future change -->
-    <div id="job-results">
-        <!-- Partial View -->
-    </div> *@
+    <div id="job-list">
+        @* This is where the job list will be loaded via AJAX *@
+    </div>
 
     <div class="section-footer">
         <a href="#" class="see-more-link">See More</a>

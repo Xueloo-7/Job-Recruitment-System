@@ -1,4 +1,4 @@
-﻿@model Demo.Models.UserProfile
+﻿@model Demo.Models.User
 
 <h2>Xueloo</h2>
 <div class="profile-info">
@@ -6,4 +6,6 @@
     <div><i class="fas fa-envelope"></i> example@gmail.com</div>
     <div><i class="fas fa-phone"></i> 012-3456789</div>
 </div>
-<button class="edit-btn">Edit</button>
+<form asp-controller="User" asp-action="Edit" method="get">
+    <button type="submit" class="edit-btn">Edit</button>
+</form>

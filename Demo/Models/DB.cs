@@ -50,51 +50,6 @@ public class DB : DbContext
 
 }
 
-public class User
-{
-    [Key, Required, MaxLength(6)]  // 【PK】
-    public string Id { get; set; }
-
-    [Required, MaxLength(50)]
-    public string Username { get; set; }
-
-    [Required, MaxLength(100)]
-    public string PasswordHash { get; set; }
-
-    [Required, EmailAddress, MaxLength(100)]
-    public string Email { get; set; }
-
-    [Required, Phone, MaxLength(20)]
-    public string PhoneNumber { get; set; }
-
-    [Required]
-    public Role Role { get; set; }
-
-    public bool IsActive { get; set; } = true;
-
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
-    [MaxLength(100)]
-    public string FirstName { get; set; }
-
-    [MaxLength(100)]
-    public string LastName { get; set; }
-
-    [MaxLength(100)]
-    public string Location { get; set; }
-
-    public bool HasExperience { get; set; }
-
-    // 【导航属性】
-    public ICollection<Education> Educations { get; set; } = new List<Education>();
-    public ICollection<JobExperience> JobExperiences { get; set; } = new List<JobExperience>();
-    public Resume Resume { get; set; }
-    public ICollection<Job> Jobs { get; set; } = new List<Job>();
-    public ICollection<Application> Applications { get; set; } = new List<Application>();
-    public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
-}
-
 public enum Role
 {
     Admin,

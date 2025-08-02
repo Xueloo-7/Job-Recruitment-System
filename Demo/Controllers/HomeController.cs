@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Controllers;
 
@@ -29,30 +30,6 @@ public class HomeController : Controller
         }
 
         ViewBag.Company = company;
-        return PartialView("_JobListPartial", jobs);
-    }
-
-    public IActionResult Profile()
-    {
-        ViewBag.Active = "Profile";
-        return View();
-    }
-
-    public IActionResult Employer()
-    {
-        ViewBag.Active = "Employer";
-        return View();
-    }
-
-    public IActionResult SignIn()
-    {
-        ViewBag.Active = "SignIn";
-        return View();
-    }
-
-    public IActionResult EsignIn()
-    {
-        ViewBag.Active = "EsignIn";
-        return View();
+        return PartialView("~/Views/Job/_JobListPartial.cshtml", jobs);
     }
 }
