@@ -1,13 +1,14 @@
-﻿using Demo.Models;
+﻿using Demo;
+using Demo.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 public class JobController : Controller
 {
-    private readonly DB _context;
+    private readonly DB db;
 
     public JobController(DB context)
     {
-        _context = context;
+        db = context;
     }
 
     public IActionResult Index()
@@ -15,10 +16,16 @@ public class JobController : Controller
         return View();
     }
 
-    public async Task<IActionResult> Subscription()
+    public IActionResult Subscription()
     {
-        var promotions = await _context.Promotions.ToListAsync(); // 从数据库取 Promotion
-        return View(promotions); // ✅ 正确，传入 Model
+        var promotions = db.Promotions.ToList();
+
+        if (Request.isAjax())
+        {
+            return PartialView("_PromotionCard", promotions);
+        }
+
+        return View(promotions);
     }
 }
 
