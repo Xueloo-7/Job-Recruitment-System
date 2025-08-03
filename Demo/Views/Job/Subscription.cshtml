@@ -7,21 +7,7 @@
 <h2>Choose a Promotion Package</h2>
 
 <div class="promotion-container">
-    @foreach (var promo in Model)
-    {
-        <div class="promo-card" data-id="@promo.Id">
-            <h3>@promo.Name</h3>
-            <p class="price">RM @promo.Price</p>
-            <button class="select-btn">Apply</button>
-            <p class="duration">Duration: @promo.DurationDay days</p>
-            <ul class="description">
-                @foreach (var line in promo.Description?.Split("\\n") ?? new string[0])
-                {
-                    <li>@line</li>
-                }
-            </ul>
-        </div>
-    }
+    <partial name="_PromotionCard" model="Model" />
 </div>
 
 <div class="footer-bar">
