@@ -164,103 +164,92 @@ footer {
 
 /* page1 hero section */
 .hero-section {
-    background-image: url('/images/background2.jpg');
+    width: 100%;
+    height: 30vh;
+    background: url('/images/background2.jpg') center center / cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
-    padding: 100px 20px;
-    text-align: center;
-    color: #333;
-    position: relative;
-}
-
-.background2-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
-}
-
-.hero-section::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(255,255,255,0.6);
-    z-index: 0;
 }
 
 .hero-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
+    height: 100%;
+    backdrop-filter: blur(4px);
+    background-color: rgba(255, 255, 255, 0.3);
+    text-align: center;
+    color: #000;
 }
 
     .hero-content h1 {
-        font-size: 42px;
-        font-weight: bold;
-        margin-bottom: 30px;
-        font-family: 'Roboto', sans-serif;
-        position: relative;
-        z-index: 2;
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
     }
 
-/* search job */
-#job-search-form {
+.search-form {
     display: flex;
     flex-wrap: wrap;
+    gap: 1rem;
     justify-content: center;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    max-width: 800px;
-    margin: 2rem auto;
-    position: relative;
-    z-index: 2;
+    align-items: flex-start;
 }
 
 .search-field {
     display: flex;
     flex-direction: column;
+    width: 300px; /* 减小宽度 */
+    height: 70px; /* 增加高度 */
 }
 
-.search-field label {
-    font-weight: bold;
-    margin-bottom: 6px;
-    text-align: left;
-}
+    .search-field label {
+        margin-bottom: 0.4rem;
+        font-weight: 500;
+        color: #fff;
+        text-align: left; /* 明确指定左对齐 */
+    }
 
-.search-field input {
-    padding: 12px;
-    border: 2px solid #005f3f;
-    border-radius: 8px;
-    width: 240px;
-    font-size: 16px;
+    .search-field input {
+        padding: 0.6rem;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        height: 2.4rem;
+    }
+
+.search-button-field {
+    width: auto; /* 覆盖上面的宽度 */
+    flex: 0 0 auto; /* 不可拉伸、不占多余空间 */
 }
 
 .search-btn {
-    background-color: #345c46;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    background-color: #005f3f;
     color: white;
     border: none;
-    margin-bottom: 6px;
-    padding: 12px;
-    margin-bottom: 0;
-    border-radius: 8px;
-    font-size: 16px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background 0.3s;
+    white-space: nowrap;
+    transition: background-color 0.3s ease;
 }
 
-.search-btn:hover {
-    background-color: #274a3a;
+    .search-btn:hover {
+        background-color: #e67300;
+    }
+
+/* 响应式支持：小屏幕竖排显示 */
+@media (max-width: 768px) {
+    .search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-btn {
+        width: 100%;
+    }
 }
 
 

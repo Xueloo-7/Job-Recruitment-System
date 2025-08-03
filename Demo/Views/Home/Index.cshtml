@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Welcome";
+    ViewBag.Title = "Job Seeker";
     ViewBag.Active = "Home";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -8,7 +8,7 @@
     <div class="hero-content">
         <h1>Find your new job</h1>
 
-        <form id="job-search-form">
+        <form id="job-search-form" class="search-form">
             <div class="search-field">
                 <label for="keyword">What</label>
                 <input type="text" id="keyword" name="keyword" placeholder="e.g. Web Developer" />
@@ -19,15 +19,18 @@
                 <input type="text" id="location" name="location" placeholder="e.g. Malaysia" />
             </div>
 
-            <button type="submit" class="search-btn">Search</button>
+            <div class="search-field search-button-field">
+                <label style="visibility: hidden">Search</label>
+                <button type="submit" class="search-btn">Search</button>
+            </div>
         </form>
 
         <div id="job-results">
-            @* search result can insert in AJAX *@
             @* @Html.Partial("_JobListPartial", Model) *@
         </div>
     </div>
 </section>
+
 
 <section class="employer-section">
     <div class="section-header">
@@ -41,9 +44,9 @@
             </div>
             <button class="job-count">15 jobs</button>
             <a href="/Home/LoadJobs?company=intel"
-                data-ajax="true"
-                data-ajax-method="GET"
-                data-ajax-mode="replace"
+               data-ajax="true"
+               data-ajax-method="GET"
+               data-ajax-mode="replace"
                data-ajax-update="job-list">
             </a>
         </div>
@@ -54,9 +57,9 @@
             </div>
             <button class="job-count">20 jobs</button>
             <a href="/Home/LoadJobs?company=Lazada"
-                data-ajax="true"
-                data-ajax-method="GET"
-                data-ajax-mode="replace"
+               data-ajax="true"
+               data-ajax-method="GET"
+               data-ajax-mode="replace"
                data-ajax-update="job-list">
             </a>
         </div>
@@ -67,9 +70,9 @@
             </div>
             <button class="job-count">5 jobs</button>
             <a href="/Home/LoadJobs?company=google"
-                data-ajax="true"
-                data-ajax-method="GET"
-                data-ajax-mode="replace"
+               data-ajax="true"
+               data-ajax-method="GET"
+               data-ajax-mode="replace"
                data-ajax-update="job-list">
             </a>
         </div>
