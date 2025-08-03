@@ -2,12 +2,7 @@
 @model List<Demo.Models.Promotion>
 @{
     ViewBag.Title = "Choose a Promotion Package";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-<link rel="stylesheet" href="~/css/promotion.css" />
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="~/js/promotion.js"></script>
 
 <h2>Choose a Promotion Package</h2>
 
@@ -33,4 +28,10 @@
     <button id="next-btn" disabled>Next</button>
 </div>
 
-@* Subscription Update *@
+@section Styles {
+    <link rel="stylesheet" href="~/css/promotion.css" />
+}
+
+@section Scripts {
+    <script src="~/js/promotion.js"></script>
+}
