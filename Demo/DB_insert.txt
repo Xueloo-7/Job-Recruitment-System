@@ -1,0 +1,140 @@
+Category
+
+C001	IT	NULL
+C002	Web Development	C001
+C003	Network Administration	C001
+C004	Software Testing	C001
+C005	System Architecture	C001
+C006	Frontend Development	C001
+C007	Backend Development	C001
+C008	Database Management	C001
+C009	AI & Machine Learning	C001
+C010	Cloud Computing	C001
+
+C011	Finance	NULL
+C012	Accountancy	C011
+C013	Auditing	C011
+C014	Investment Banking	C011
+C015	Risk Management	C011
+C016	Corporate Finance	C011
+C017	Insurance	C011
+C018	Tax Advisory	C011
+C019	Financial Planning	C011
+C020	FinTech	C011
+
+C021	Healthcare	NULL
+C022	Nursing	C021
+C023	General Medicine	C021
+C024	Pharmacy	C021
+C025	Dentistry	C021
+C026	Public Health	C021
+C027	Medical Research	C021
+C028	Physiotherapy	C021
+C029	Mental Health	C021
+C030	Medical Technology	C021
+
+C031	Education	NULL
+C032	Primary Education	C031
+C033	Secondary Education	C031
+C034	Higher Education	C031
+C035	Education Administration	C031
+C036	Online Teaching	C031
+C037	Language Teaching	C031
+C038	Special Education	C031
+C039	Research & Development	C031
+C040	Training & Development	C031
+
+C041	Engineering	NULL
+C042	Civil Engineering	C041
+C043	Mechanical Engineering	C041
+C044	Electrical Engineering	C041
+C045	Chemical Engineering	C041
+C046	Environmental Engineering	C041
+C047	Software Engineering	C041
+C048	Industrial Design	C041
+C049	Aerospace Engineering	C041
+C050	Robotics	C041
+
+
+
+institution
+
+I001	Harvard University
+I002	Stanford University
+I003	Massachusetts Institute of Technology (MIT)
+I004	University of Cambridge
+I005	University of Oxford
+I006	California Institute of Technology (Caltech)
+I007	University of Chicago
+I008	ETH Zurich ¨C Swiss Federal Institute of Technology
+I009	National University of Singapore (NUS)
+I010	Peking University
+I011	Tsinghua University
+I012	University of Tokyo
+I013	Seoul National University
+I014	University of Melbourne
+I015	University of Toronto
+I016	TAR UMT (Tunku Abdul Rahman University of Management and Technology)
+I017	University of Malaya (UM)
+I018	University of Hong Kong (HKU)
+I019	The University of Sydney
+I020	Technical University of Munich
+
+
+
+qualification
+
+Q001	Diploma in Web Development
+Q002	Diploma in Network Administration
+Q003	Diploma in Software Testing
+Q004	Bachelor of Computer Science
+Q005	Bachelor of Information Systems
+Q006	Bachelor of Frontend Development
+Q007	Bachelor of Backend Engineering
+Q008	Bachelor of Database Administration
+Q009	MSc in Artificial Intelligence
+Q010	MSc in Cloud Computing
+
+Q011	Bachelor of Accounting
+Q012	Chartered Accountant (ACCA)
+Q013	Certified Internal Auditor (CIA)
+Q014	MSc in Finance & Investment
+Q015	Certified Risk Manager (CRM)
+Q016	MBA in Corporate Finance
+Q017	Diploma in Insurance Studies
+Q018	Certified Tax Advisor
+Q019	Diploma in Financial Planning
+Q020	Bachelor of Financial Technology (FinTech)
+
+Q021	Diploma in Nursing
+Q022	MBBS (Bachelor of Medicine, Bachelor of Surgery)
+Q023	Bachelor of Pharmacy
+Q024	BDS (Bachelor of Dental Surgery)
+Q025	Master of Public Health (MPH)
+Q026	PhD in Medical Research
+Q027	Bachelor of Physiotherapy
+Q028	Bachelor of Mental Health Studies
+Q029	Bachelor of Medical Technology
+
+Q030	Bachelor of Education (Primary)
+Q031	Bachelor of Education (Secondary)
+Q032	Master of Education (Higher Ed)
+Q033	Diploma in Education Administration
+Q034	Diploma in Online Teaching
+Q035	Bachelor of Language Education
+Q036	Diploma in Special Education
+Q037	PhD in Education Research
+Q038	Certificate in Training & Development
+
+Q039	Bachelor of Civil Engineering
+Q040	Bachelor of Mechanical Engineering
+Q041	Bachelor of Electrical Engineering
+Q042	Bachelor of Chemical Engineering
+Q043	Bachelor of Environmental Engineering
+Q044	Bachelor of Software Engineering
+Q045	Degree in Industrial Design
+Q046	Bachelor of Aerospace Engineering
+Q047	MSc in Robotics
+
+
+
