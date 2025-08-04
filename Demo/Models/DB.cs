@@ -3,6 +3,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable warnings
 
@@ -214,7 +215,12 @@ public class Category
     [Required, MaxLength(100)]
     public string Name { get; set; }
 
-    public int? ParentId { get; set; }  // 【FK】
+    public string? ParentId { get; set; }
+
+    [ForeignKey("ParentId")]
+    public Category? Parent { get; set; }
+
+    public ICollection<Category>? Children { get; set; }
 }
 
 public class Job

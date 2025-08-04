@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Migrations
 {
     [DbContext(typeof(DB))]
-    [Migration("20250804020433_exp")]
-    partial class exp
+    [Migration("20250804032032_cf2")]
+    partial class cf2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,17 +27,18 @@ namespace Demo.Migrations
 
             modelBuilder.Entity("Demo.Models.Application", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("JobId")
                         .HasColumnType("int");
+
+                    b.Property<string>("JobId1")
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -52,7 +53,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JobId");
+                    b.HasIndex("JobId1");
 
                     b.HasIndex("UserId");
 
@@ -61,21 +62,21 @@ namespace Demo.Migrations
 
             modelBuilder.Entity("Demo.Models.Category", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("ParentId")
-                        .HasColumnType("int");
+                    b.Property<string>("ParentId")
+                        .HasColumnType("nvarchar(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
 
                     b.ToTable("Categories");
                 });
@@ -126,14 +127,16 @@ namespace Demo.Migrations
 
             modelBuilder.Entity("Demo.Models.Job", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("CategoryId1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -189,7 +192,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("CategoryId1");
 
                     b.HasIndex("UserId");
 
@@ -247,11 +250,9 @@ namespace Demo.Migrations
 
             modelBuilder.Entity("Demo.Models.JobPromotion", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -262,8 +263,14 @@ namespace Demo.Migrations
                     b.Property<int>("JobId")
                         .HasColumnType("int");
 
+                    b.Property<string>("JobId1")
+                        .HasColumnType("nvarchar(6)");
+
                     b.Property<int>("PromotionId")
                         .HasColumnType("int");
+
+                    b.Property<string>("PromotionId1")
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -273,20 +280,18 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("JobId");
+                    b.HasIndex("JobId1");
 
-                    b.HasIndex("PromotionId");
+                    b.HasIndex("PromotionId1");
 
                     b.ToTable("JobPromotions");
                 });
 
             modelBuilder.Entity("Demo.Models.Notification", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<string>("Content")
                         .IsRequired()
@@ -317,11 +322,9 @@ namespace Demo.Migrations
 
             modelBuilder.Entity("Demo.Models.Promotion", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -448,9 +451,7 @@ namespace Demo.Migrations
                 {
                     b.HasOne("Demo.Models.Job", "Job")
                         .WithMany("Applications")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("JobId1");
 
                     b.HasOne("Demo.Models.User", "User")
                         .WithMany("Applications")
@@ -461,6 +462,15 @@ namespace Demo.Migrations
                     b.Navigation("Job");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Demo.Models.Category", b =>
+                {
+                    b.HasOne("Demo.Models.Category", "Parent")
+                        .WithMany("Children")
+                        .HasForeignKey("ParentId");
+
+                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("Demo.Models.Education", b =>
@@ -478,7 +488,7 @@ namespace Demo.Migrations
                 {
                     b.HasOne("Demo.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("CategoryId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -508,15 +518,11 @@ namespace Demo.Migrations
                 {
                     b.HasOne("Demo.Models.Job", "Job")
                         .WithMany("JobPromotions")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("JobId1");
 
                     b.HasOne("Demo.Models.Promotion", "Promotion")
                         .WithMany("JobPromotions")
-                        .HasForeignKey("PromotionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("PromotionId1");
 
                     b.Navigation("Job");
 
@@ -543,6 +549,11 @@ namespace Demo.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Demo.Models.Category", b =>
+                {
+                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("Demo.Models.Job", b =>
