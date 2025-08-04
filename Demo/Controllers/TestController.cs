@@ -25,7 +25,8 @@ public class TestController : Controller
             QualificationCount = _db.Qualifications.Count(),
             InstitutionCount = _db.Institutions.Count(),
             NotificationCount = _db.Notifications.Count(),
-            EducationCount = _db.Educations.Count()
+            EducationCount = _db.Educations.Count(),
+            JobExperienceCount = _db.JobExperiences.Count()
             // 你可以继续添加其它表的数据量
         };
 
@@ -736,6 +737,187 @@ public class TestController : Controller
 
     #endregion
 
+    // JobExperience ===================================================================================================== JobExperience
+    #region JobExperience
+    #region GET
+    public IActionResult JobExperiences()
+    {
+        var experiences = _db.JobExperiences.Include(j => j.User).ToList();
+        return View("JobExperience/Index", experiences);
+    }
+
+    public IActionResult CreateJobExperience()
+    {
+        var now = DateTime.Now;
+
+        var vm = new JobExperienceVM
+        {
+            UserOptions = _db.Users.Select(u => new SelectListItem
+            {
+                Value = u.Id,
+                Text = u.Name
+            }).ToList(),
+
+            // ✅ 下拉列表选项
+            YearOptions = GenerateYearOptions(),
+
+            MonthOptions = GenerateMonthOptions(),
+
+            StartYear = now.Year,
+            StartMonth = now.Month,
+            EndYear = now.Year,
+            EndMonth = now.Month,
+        };
+
+        return View("JobExperience/Create", vm);
+    }
+
+    public IActionResult EditJobExperience(string id)
+    {
+        var experience = _db.JobExperiences
+            .Include(j => j.User) // 通过导航属性加载用户
+            .FirstOrDefault(j => j.Id == id);
+        if (experience == null) return NotFound();
+
+        var now = DateTime.Now;
+
+        var vm = new JobExperienceVM
+        {
+            // ✅ 下拉列表选项
+            YearOptions = GenerateYearOptions(),
+            MonthOptions = GenerateMonthOptions(),
+
+            // 用于提交更新
+            Id = experience.Id,
+            UserId = experience.UserId,
+
+            JobTitle = experience.JobTitle,
+            CompanyName = experience.CompanyName,
+            StartYear = experience.StartYear,
+            StartMonth = experience.StartMonth,
+            EndYear = experience.EndYear,
+            EndMonth = experience.EndMonth,
+            StillInRole = experience.StillInRole,
+            UserName = experience.User.Name, // 显示用户名
+        };
+
+        return View("JobExperience/Edit", vm);
+    }
+
+    public IActionResult DeleteJobExperience(string id)
+    {
+        var experience = _db.JobExperiences.Find(id);
+        if (experience == null) return NotFound();
+        return View("JobExperience/Delete", experience);
+    }
+    #endregion
+
+    #region POST
+    [HttpPost]
+    public IActionResult CreateJobExperience(JobExperienceVM vm)
+    {
+        if (ModelState.IsValid)
+        {
+            var je = new JobExperience
+            {
+                Id = GenerateJobExperienceId(),
+                UserId = vm.UserId,
+                JobTitle = vm.JobTitle,
+                CompanyName = vm.CompanyName,
+                StartYear = vm.StartYear,
+                StartMonth = vm.StartMonth,
+                EndYear = vm.EndYear,
+                EndMonth = vm.EndMonth,
+                StillInRole = vm.StillInRole,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            _db.JobExperiences.Add(je);
+            _db.SaveChanges();
+
+            return RedirectToAction(actionName: "JobExperiences");
+        }
+
+        DebugModelStateErrors();
+        return View("JobExperience/Create", vm);
+    }
+
+    [HttpPost]
+    public IActionResult EditJobExperience(JobExperienceVM vm)
+    {
+        if (ModelState.IsValid)
+        {
+            var jobExp = _db.JobExperiences.Find(vm.Id);
+            if (jobExp == null) return NotFound();
+
+            jobExp.UserId = vm.UserId;
+            jobExp.JobTitle = vm.JobTitle;
+            jobExp.CompanyName = vm.CompanyName;
+            jobExp.StartYear = vm.StartYear;
+            jobExp.StartMonth = vm.StartMonth;
+            jobExp.EndYear = vm.EndYear;
+            jobExp.EndMonth = vm.EndMonth;
+            jobExp.StillInRole = vm.StillInRole;
+            jobExp.UpdatedAt = DateTime.UtcNow;
+
+            _db.JobExperiences.Update(jobExp);
+            _db.SaveChanges();
+
+            return RedirectToAction("JobExperiences");
+        }
+
+        DebugModelStateErrors();
+        return View("JobExperience/Edit", vm);
+    }
+
+    [HttpPost, ActionName("DeleteJobExperience")]
+    public IActionResult DeleteJobExperienceConfirmed(string id)
+    {
+        var jobExp = _db.JobExperiences.Find(id);
+        if (jobExp != null)
+        {
+            _db.JobExperiences.Remove(jobExp);
+            _db.SaveChanges();
+        }
+
+        return RedirectToAction("JobExperiences");
+    }
+    #endregion
+
+    #region Functions
+    private string GenerateJobExperienceId()
+    {
+        var last = _db.JobExperiences
+            .Where(j => j.Id.StartsWith("JE"))
+            .OrderByDescending(j => j.Id)
+            .FirstOrDefault();
+
+        int next = 1;
+        if (last != null)
+        {
+            string numberStr = last.Id.Substring(2);
+            if (int.TryParse(numberStr, out int lastNumber))
+            {
+                next = lastNumber + 1;
+            }
+        }
+
+        return $"JE{next.ToString("D3")}";
+    }
+
+    public IActionResult CheckJobExperienceId(string id)
+    {
+        bool exists = _db.JobExperiences.Any(j => j.Id == id);
+        if (exists)
+            return Json($"ID {id} 已存在");
+        return Json(true);
+    }
+    #endregion
+    #endregion
+
+
+
 
 
 
@@ -749,6 +931,23 @@ public class TestController : Controller
             }
         }
     }
+
+    // 生成年份和月份的下拉列表选项
+    private List<SelectListItem> GenerateYearOptions()
+    {
+        var currentYear = DateTime.Now.Year;
+        return Enumerable.Range(currentYear - 50, 50) // 50年前到今年
+            .Select(y => new SelectListItem { Text = y.ToString(), Value = y.ToString() })
+            .Reverse() // 让最新年份排最前
+            .ToList();
+    }
+
+    private List<SelectListItem> GenerateMonthOptions()
+    {
+        return Enumerable.Range(1, 12)
+            .Select(m => new SelectListItem { Text = m.ToString("D2"), Value = m.ToString() })
+            .ToList();
+    }
 }
 
 public class TestDashboardViewModel
@@ -761,5 +960,6 @@ public class TestDashboardViewModel
     public int InstitutionCount { get; set; }
     public int NotificationCount { get; set; }
     public int EducationCount { get; set; }
+    public int JobExperienceCount { get; set; }
 
 }
