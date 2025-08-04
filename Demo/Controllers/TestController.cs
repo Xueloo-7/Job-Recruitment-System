@@ -24,7 +24,8 @@ public class TestController : Controller
             CategoryCount = _db.Categories.Count(),
             QualificationCount = _db.Qualifications.Count(),
             InstitutionCount = _db.Institutions.Count(),
-            NotificationCount = _db.Notifications.Count()
+            NotificationCount = _db.Notifications.Count(),
+            EducationCount = _db.Educations.Count()
             // 你可以继续添加其它表的数据量
         };
 
@@ -285,7 +286,7 @@ public class TestController : Controller
     [HttpPost]
     public IActionResult EditSubCategory(CategoryVM vm)
     {
-        if(vm.Id == null)
+        if (vm.Id == null)
         {
             ModelState.AddModelError("Id", "分类 ID 不能为空");
             return View("Category/EditSub", vm);
@@ -562,6 +563,178 @@ public class TestController : Controller
     #endregion
     #endregion
 
+    // Education =============================================================================================================== Education
+    #region Education
+
+    #region GET
+    public IActionResult Educations()
+    {
+        var educations = _db.Educations
+            .Include(e => e.User) // 通过导航属性加载用户
+            .ToList();
+        return View("Education/Index", educations);
+    }
+
+    public IActionResult CreateEducation()
+    {
+        var vm = new EducationVM
+        {
+            UserOptions = _db.Users.Select(u => new SelectListItem
+            {
+                Value = u.Id,
+                Text = u.Name
+            }).ToList(),
+
+            QualificationOptions = _db.Qualifications.Select(q => new SelectListItem
+            {
+                Value = q.Name,
+                Text = q.Name
+            }).ToList(),
+
+            InstitutionOptions = _db.Institutions.Select(i => new SelectListItem
+            {
+                Value = i.Name,
+                Text = i.Name
+            }).ToList()
+        };
+
+        return View("Education/Create", vm);
+    }
+
+
+    public IActionResult EditEducation(string id)
+    {
+        var education = _db.Educations
+                    .Include(e => e.User)
+                    .FirstOrDefault(e => e.Id == id);
+        if (education == null) return NotFound();
+
+        var vm = new EducationVM
+        {
+            // 用于提交更新
+            Id = education.Id,
+            UserId = education.UserId,
+
+            // 用于显示编辑时默认值
+            UserName = education.User.Name,
+            Qualification = education.Qualification,
+            Institution = education.Institution,
+
+            // 下拉列表选项
+            QualificationOptions = _db.Qualifications.Select(q => new SelectListItem
+            {
+                Value = q.Name,
+                Text = q.Name
+            }).ToList(),
+
+            InstitutionOptions = _db.Institutions.Select(i => new SelectListItem
+            {
+                Value = i.Name,
+                Text = i.Name
+            }).ToList()
+        };
+
+        return View("Education/Edit", vm);
+    }
+
+    public IActionResult DeleteEducation(string id)
+    {
+        var education = _db.Educations.Find(id);
+        if (education == null) return NotFound();
+        return View("Education/Delete", education);
+    }
+    #endregion
+
+    #region POST
+    [HttpPost]
+    public IActionResult CreateEducation(EducationVM vm)
+    {
+        if (ModelState.IsValid)
+        {
+            var education = new Education
+            {
+                Id = GenerateEducationId(),
+                UserId = vm.UserId,
+                Qualification = vm.Qualification,
+                Institution = vm.Institution
+            };
+            _db.Educations.Add(education);
+            _db.SaveChanges();
+            return RedirectToAction("Educations");
+        }
+        return View("Education/Create", vm);
+    }
+
+    [HttpPost]
+    public IActionResult EditEducation(EducationVM vm)
+    {
+        if (vm.Id == null)
+        {
+            ModelState.AddModelError("Id", "ID 不能为空");
+            return View("Education/Edit", vm);
+        }
+        if (ModelState.IsValid)
+        {
+            var education = new Education
+            {
+                Id = vm.Id,
+                UserId = vm.UserId,
+                Qualification = vm.Qualification,
+                Institution = vm.Institution
+            };
+            _db.Educations.Update(education);
+            _db.SaveChanges();
+            return RedirectToAction("Educations");
+        }
+
+        DebugModelStateErrors();
+        return View("Education/Edit", vm);
+    }
+
+    [HttpPost, ActionName("DeleteEducation")]
+    public IActionResult DeleteEducationConfirmed(string id)
+    {
+        var education = _db.Educations.Find(id);
+        if (education != null)
+        {
+            _db.Educations.Remove(education);
+            _db.SaveChanges();
+        }
+        return RedirectToAction("Educations");
+    }
+    #endregion
+
+    #region Functions
+    private string GenerateEducationId()
+    {
+        var lastEducation = _db.Educations
+            .Where(e => e.Id.StartsWith("E"))
+            .OrderByDescending(e => e.Id)
+            .FirstOrDefault();
+
+        int nextNumber = 1;
+        if (lastEducation != null)
+        {
+            string lastNumberStr = lastEducation.Id.Substring(1);
+            if (int.TryParse(lastNumberStr, out int lastNumber))
+            {
+                nextNumber = lastNumber + 1;
+            }
+        }
+
+        return $"E{nextNumber.ToString("D3")}";
+    }
+
+    public IActionResult CheckEducationId(string id)
+    {
+        bool exists = _db.Educations.Any(e => e.Id == id);
+        if (exists)
+            return Json($"ID {id} 已存在");
+        return Json(true);
+    }
+    #endregion
+
+    #endregion
 
 
 
@@ -587,4 +760,6 @@ public class TestDashboardViewModel
     public int QualificationCount { get; set; }
     public int InstitutionCount { get; set; }
     public int NotificationCount { get; set; }
+    public int EducationCount { get; set; }
+
 }
