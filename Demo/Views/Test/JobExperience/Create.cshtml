@@ -1,0 +1,70 @@
+﻿@model Demo.Models.JobExperienceVM
+
+<h2>创建岗位经历</h2>
+
+<form asp-action="CreateJobExperience" method="post">
+    <div class="form-group">
+        <label asp-for="UserId">所属用户</label>
+        <select asp-for="UserId" class="form-control"
+                asp-items="Model.UserOptions">
+            <option value="">请选择用户</option>
+        </select>
+        <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="JobTitle"></label>
+        <input asp-for="JobTitle" class="form-control"/>
+        <span asp-validation-for="JobTitle" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="CompanyName"></label>
+        <input asp-for="CompanyName" class="form-control" />
+        <span asp-validation-for="CompanyName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="StartYear"></label>
+        <select asp-for="StartYear" class="form-control" asp-items="Model.YearOptions"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="StartMonth"></label>
+        <select asp-for="StartMonth" class="form-control" asp-items="Model.MonthOptions"></select>
+    </div>
+
+    <div id="endDateFields">
+        <div class="form-group">
+            <label asp-for="EndYear"></label>
+            <select asp-for="EndYear" class="form-control" asp-items="Model.YearOptions"></select>
+        </div>
+        <div class="form-group">
+            <label asp-for="EndMonth"></label>
+            <select asp-for="EndMonth" class="form-control" asp-items="Model.MonthOptions"></select>
+        </div>
+    </div>
+
+    <div class="form-group form-check">
+        <input asp-for="StillInRole" class="form-check-input" id="stillInRoleCheckbox" />
+        <label asp-for="StillInRole" class="form-check-label"></label>
+    </div>
+
+    <button type="submit" class="btn btn-success">保存</button>
+    <a class="btn btn-secondary" href="/Test/JobExperiences">返回</a>
+</form>
+
+@* still in role按钮隐藏辞职日期 *@
+@section Scripts {
+    <script>
+        function toggleEndDateFields() {
+            const checkbox = document.getElementById("stillInRoleCheckbox");
+            const endDateDiv = document.getElementById("endDateFields");
+            endDateDiv.style.display = checkbox.checked ? "none" : "block";
+        }
+
+        document.getElementById("stillInRoleCheckbox").addEventListener("change", toggleEndDateFields);
+
+        // 初始化时根据勾选状态隐藏
+        toggleEndDateFields();
+    </script>
+}
