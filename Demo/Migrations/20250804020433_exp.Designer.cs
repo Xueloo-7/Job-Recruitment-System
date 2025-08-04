@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Migrations
 {
     [DbContext(typeof(DB))]
-    [Migration("20250802032135_createDB")]
-    partial class createDB
+    [Migration("20250804020433_exp")]
+    partial class exp
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -401,7 +401,6 @@ namespace Demo.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -412,12 +411,10 @@ namespace Demo.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -572,8 +569,7 @@ namespace Demo.Migrations
 
                     b.Navigation("Notifications");
 
-                    b.Navigation("Resume")
-                        .IsRequired();
+                    b.Navigation("Resume");
                 });
 #pragma warning restore 612, 618
         }

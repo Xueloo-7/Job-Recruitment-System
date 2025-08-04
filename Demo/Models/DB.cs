@@ -1,5 +1,6 @@
 ﻿namespace Demo.Models;
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
@@ -52,7 +53,9 @@ public class DB : DbContext
 
 public class User
 {
-    [Key, Required, MaxLength(6)]
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^U\d{3}$", ErrorMessage = "ID 格式应为 U+三位数字")]
+    [Remote(action: "CheckUserId", controller: "Test", ErrorMessage = "ID 已存在")]
     public string Id { get; set; }
 
     [Required, MaxLength(50)]
@@ -74,27 +77,27 @@ public class User
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     [MaxLength(100)]
-    public string FirstName { get; set; }
+    public string? FirstName { get; set; }
 
     [MaxLength(100)]
-    public string LastName { get; set; }
+    public string? LastName { get; set; }
 
     [MaxLength(100)]
-    public string Location { get; set; }
+    public string? Location { get; set; }
 
-    public bool HasExperience { get; set; }
+    public bool HasExperience { get; set; } = false;
 
-    public ICollection<Education> Educations { get; set; }
+    public ICollection<Education>? Educations { get; set; }
 
-    public ICollection<JobExperience> JobExperiences { get; set; }
+    public ICollection<JobExperience>? JobExperiences { get; set; }
 
-    public Resume Resume { get; set; }
+    public Resume? Resume { get; set; }
 
-    public ICollection<Job> Jobs { get; set; }
+    public ICollection<Job>? Jobs { get; set; }
 
-    public ICollection<Application> Applications { get; set; }
+    public ICollection<Application>? Applications { get; set; }
 
-    public ICollection<Notification> Notifications { get; set; }
+    public ICollection<Notification>? Notifications { get; set; }
 }
 
 public enum Role

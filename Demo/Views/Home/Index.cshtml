@@ -1,7 +1,7 @@
-﻿@{
+﻿@model List<Demo.Models.Job>
+@{
     ViewBag.Title = "Job Seeker";
     ViewBag.Active = "Home";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <section class="hero-section">
@@ -31,8 +31,44 @@
     </div>
 </section>
 
+<div class="job-container">
+    <section class="job-left">
+        @foreach (var job in Model)
+        {
+            <div class="job-card" data-id="@job.Id">
+                <h4>@job.Title</h4>
+                <p>@job.Location</p>
+                <p>@job.Summary</p>
+            </div>
+        }
+    </section>
 
-<section class="employer-section">
+    <section class="job-right" id="job-details">
+        <!-- 默认空白区域 -->
+        <p>点击左侧岗位以查看详细信息。</p>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.job-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const jobId = card.getAttribute('data-id');
+                fetch(`/Job/Details/${jobId}`)
+                    .then(res => res.text())
+                    .then(html => {
+                        document.getElementById('job-details').innerHTML = html;
+                    });
+            });
+        });
+    </script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="/css/job.css" />
+}
+
+@* <section class="employer-section">
     <div class="section-header">
         <h2>Find your next employer</h2>
     </div>
@@ -79,11 +115,11 @@
     </div>
 
     <div id="job-list">
-        @* This is where the job list will be loaded via AJAX *@
+        This is where the job list will be loaded via AJAX
     </div>
 
     <div class="section-footer">
         <a href="#" class="see-more-link">See More</a>
         <a href="#" class="view-all-link">View All Jobs</a>
     </div>
-</section>
+</section> *@
