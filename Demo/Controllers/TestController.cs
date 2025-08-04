@@ -1,5 +1,6 @@
 ﻿using Demo.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
@@ -79,20 +80,13 @@ public class TestController : Controller
 
             _db.Users.Add(user);
             _db.SaveChanges();
-            Debug.WriteLine($"User created: {user.Id} - {user.Name}");
-            return RedirectToAction("Users");
         }
         else
         {
-            foreach (var entry in ModelState)
-            {
-                foreach (var error in entry.Value.Errors)
-                {
-                    Debug.WriteLine($"Error in {entry.Key}: {error.ErrorMessage}");
-                }
-            }
-            return View("User/Create", vm);
+            DebugModelStateErrors();
         }
+
+        return RedirectToAction("Users");
     }
 
     [HttpPost]
@@ -133,7 +127,7 @@ public class TestController : Controller
         int nextNumber = 1;
         if (lastUser != null)
         {
-            string lastNumberStr = lastUser.Id.Substring(3); // 去掉 "JOB"
+            string lastNumberStr = lastUser.Id.Substring(3);
             if (int.TryParse(lastNumberStr, out int lastNumber))
             {
                 nextNumber = lastNumber + 1;
@@ -167,141 +161,208 @@ public class TestController : Controller
     #endregion
 
     // Category =============================================================================================================== Category
-    //#region Category
-    //#region GET
-    //public IActionResult Categories()
-    //{
-    //    var categories = _db.Categories.ToList();
-    //    return View("Category/Index", categories);
-    //}
+    #region Category
+    #region GET
+    public IActionResult Categories()
+    {
+        var categories = _db.Categories.ToList();
 
-    //public IActionResult CreateCategory()
-    //{
-    //    return View("Category/Create");
-    //}
+        var categoryVMs = categories.Select(c => new CategoryVM
+        {
+            Id = c.Id,
+            Name = c.Name,
+            ParentName = c.ParentId == null ? null : categories.FirstOrDefault(p => p.Id == c.ParentId)?.Name
+        }).ToList();
 
-    //public IActionResult EditCategory(string id)
-    //{
-    //    var user = _db.Categories.Find(id);
-    //    if (user == null) return NotFound();
-    //    return View("Category/Edit", user);
-    //}
+        return View("Category/Index", categoryVMs);
+    }
 
-    //public IActionResult DeleteCategory(string id)
-    //{
-    //    var user = _db.Categories.Find(id);
-    //    if (user == null) return NotFound();
-    //    return View("Category/Delete", user);
-    //}
+    public IActionResult CreateParentCategory()
+    {
+        return View("Category/CreateParent");
+    }
 
-    //#endregion
+    public IActionResult CreateSubCategory()
+    {
+        var parentCategories = _db.Categories
+                                  .Where(c => c.ParentId == null)
+                                  .Select(c => new SelectListItem
+                                  {
+                                      Value = c.Id,
+                                      Text = c.Name
+                                  }).ToList();
 
-    //#region POST
-    //[HttpPost]
-    //public IActionResult CreateCategory(UserVM vm)
-    //{
-    //    // Model验证
-    //    if (ModelState.IsValid)
-    //    {
-    //        var user = new User
-    //        {
-    //            Id = GenerateUserId(),
-    //            Name = GenerateUsername(vm.Email),
-    //            PasswordHash = vm.PasswordHash,
-    //            Email = vm.Email,
-    //            PhoneNumber = vm.PhoneNumber,
-    //            Role = vm.Role
-    //        };
+        var vm = new CategoryVM
+        {
+            ParentCategoryOptions = parentCategories
+        };
 
-    //        _db.Users.Add(user);
-    //        _db.SaveChanges();
-    //        Debug.WriteLine($"User created: {user.Id} - {user.Name}");
-    //        return RedirectToAction("Users");
-    //    }
-    //    else
-    //    {
-    //        foreach (var entry in ModelState)
-    //        {
-    //            foreach (var error in entry.Value.Errors)
-    //            {
-    //                Debug.WriteLine($"Error in {entry.Key}: {error.ErrorMessage}");
-    //            }
-    //        }
-    //        return View("User/Create", vm);
-    //    }
-    //}
+        return View("Category/CreateSub", vm);
+    }
 
-    //[HttpPost]
-    //public IActionResult EditCategory(User user)
-    //{
-    //    if (ModelState.IsValid)
-    //    {
-    //        _db.Users.Update(user);
-    //        _db.SaveChanges();
-    //        return RedirectToAction("Users");
-    //    }
-    //    return View("User/Edit", user);
-    //}
+    public IActionResult EditParentCategory(string id)
+    {
+        var category = _db.Categories.Find(id);
+        if (category == null) return NotFound();
 
-    //[HttpPost, ActionName("DeleteUser")]
-    //public IActionResult DeleteCategoryConfirmed(string id)
-    //{
-    //    var user = _db.Users.Find(id);
-    //    if (user != null)
-    //    {
-    //        _db.Users.Remove(user);
-    //        _db.SaveChanges();
-    //    }
-    //    return RedirectToAction("Users");
-    //}
+        return View("Category/EditParent", category);
+    }
 
-    //#endregion
+    public IActionResult EditSubCategory(string id)
+    {
+        // 1. 找到当前正在编辑的子分类
+        var category = _db.Categories.Find(id);
+        if (category == null) return NotFound();
 
-    //#region Functions
-    //private string GenerateCategoryId()
-    //{
-    //    // 查询当前已有的最大编号
-    //    var lastCategory = _db.Categories
-    //        .Where(c => c.Id.StartsWith("U"))
-    //        .OrderByDescending(c => c.Id)
-    //        .FirstOrDefault();
+        // 2. 加载所有主分类作为下拉列表选项（即 ParentId == null 的）
+        var parentCategories = _db.Categories
+                                  .Where(c => c.ParentId == null)
+                                  .Select(c => new SelectListItem
+                                  {
+                                      Value = c.Id,
+                                      Text = c.Name
+                                  }).ToList();
 
-    //    int nextNumber = 1;
-    //    if (lastCategory != null)
-    //    {
-    //        string lastNumberStr = lastCategory.Id.Substring(3); // 去掉 "JOB"
-    //        if (int.TryParse(lastNumberStr, out int lastNumber))
-    //        {
-    //            nextNumber = lastNumber + 1;
-    //        }
-    //    }
+        // 3. 构建视图模型并设置默认值
+        var vm = new CategoryVM
+        {
+            Id = category.Id,
+            Name = category.Name,
+            ParentId = category.ParentId, // ✅ 默认选中的值
+            ParentCategoryOptions = parentCategories
+        };
 
-    //    return $"U{nextNumber.ToString("D3")}";  // 例如 JOB001、JOB002
-    //}
+        // 4. 渲染视图
+        return View("Category/EditSub", vm);
+    }
 
-    //private string GenerateUsername(string userEmail)
-    //{
-    //    if (string.IsNullOrEmpty(userEmail))
-    //        return "";
+    public IActionResult DeleteCategory(string id)
+    {
+        var category = _db.Categories.Find(id);
+        if (category == null) return NotFound();
+        return View("Category/Delete", category);
+    }
 
-    //    int atIndex = userEmail.IndexOf('@');
-    //    if (atIndex > 0)
-    //        return userEmail.Substring(0, atIndex);
+    #endregion
 
-    //    return userEmail; // 如果没有@就原样返回
-    //}
+    #region POST
+    [HttpPost]
+    public IActionResult CreateCategory(CategoryVM vm)
+    {
+        // Model验证
+        if (ModelState.IsValid)
+        {
+            var category = new Category
+            {
+                Id = GenerateCategoryId(),
+                Name = vm.Name,
+                ParentId = vm.ParentId // 如果是主分类则ParentId为null
+            };
 
-    //public IActionResult CheckUserId(string id)
-    //{
-    //    bool exists = _db.Users.Any(u => u.Id == id);
-    //    if (exists)
-    //        return Json($"ID {id} 已存在");
-    //    return Json(true);
-    //}
+            _db.Categories.Add(category);
+            _db.SaveChanges();
+        }
+        else
+        {
+            DebugModelStateErrors();
+        }
 
-    //#endregion
-    //#endregion
+        return RedirectToAction("Categories");
+    }
 
+    [HttpPost]
+    public IActionResult EditParentCategory(Category category)
+    {
+        if (ModelState.IsValid)
+        {
+            _db.Categories.Update(category);
+            _db.SaveChanges();
+            return RedirectToAction("Categories");
+        }
+        return View("Category/EditParent");
+    }
+
+    [HttpPost]
+    public IActionResult EditSubCategory(CategoryVM vm)
+    {
+        if(vm.Id == null)
+        {
+            ModelState.AddModelError("Id", "分类 ID 不能为空");
+            return View("Category/EditSub", vm);
+        }
+        if (ModelState.IsValid)
+        {
+            var category = new Category
+            {
+                Id = vm.Id,
+                Name = vm.Name,
+                ParentId = vm.ParentId // 如果是主分类则ParentId为null
+            };
+
+            _db.Categories.Update(category);
+            _db.SaveChanges();
+            return RedirectToAction("Categories");
+        }
+        return View("Category/EditSub", vm);
+    }
+
+    [HttpPost, ActionName("DeleteCategory")]
+    public IActionResult DeleteCategoryConfirmed(string id)
+    {
+        var category = _db.Categories.Find(id);
+        if (category != null)
+        {
+            _db.Categories.Remove(category);
+            _db.SaveChanges();
+        }
+        return RedirectToAction("Categories");
+    }
+
+    #endregion
+
+    #region Functions
+    private string GenerateCategoryId()
+    {
+        // 查询当前已有的最大编号
+        var lastCategory = _db.Categories
+            .Where(c => c.Id.StartsWith("C"))
+            .OrderByDescending(c => c.Id)
+            .FirstOrDefault();
+
+        int nextNumber = 1;
+        if (lastCategory != null)
+        {
+            string lastNumberStr = lastCategory.Id.Substring(3);
+            if (int.TryParse(lastNumberStr, out int lastNumber))
+            {
+                nextNumber = lastNumber + 1;
+            }
+        }
+
+        return $"C{nextNumber.ToString("D3")}";  // 例如 JOB001、JOB002
+    }
+
+    public IActionResult CheckCategoryId(string id)
+    {
+        bool exists = _db.Categories.Any(c => c.Id == id);
+        if (exists)
+            return Json($"ID {id} 已存在");
+        return Json(true);
+    }
+
+    #endregion
+    #endregion
+
+    private void DebugModelStateErrors()
+    {
+        foreach (var entry in ModelState)
+        {
+            foreach (var error in entry.Value.Errors)
+            {
+                Debug.WriteLine($"Error in {entry.Key}: {error.ErrorMessage}");
+            }
+        }
+    }
 }
 
 public class TestDashboardViewModel

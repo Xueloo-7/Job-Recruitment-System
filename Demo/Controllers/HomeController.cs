@@ -47,14 +47,14 @@ public class HomeController : Controller
         return PartialView("~/Views/Job/_JobListPartial.cshtml", jobs);
     }
 
-    public IActionResult JobDetails(int id)
-    {
-        var job = db.Jobs
-            .Include(j => j.Category)
-            .FirstOrDefault(j => j.Id == id);
+    //public IActionResult JobDetails(int id)
+    //{
+    //    var job = db.Jobs
+    //        .Include(j => j.Category)
+    //        .FirstOrDefault(j => j.Id == id);
 
-        if (job == null) return NotFound();
+    //    if (job == null) return NotFound();
 
-        return PartialView("_JobDetails", job);
-    }
+    //    return PartialView("_JobDetails", job);
+    //}
 }
