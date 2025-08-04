@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Demo.Migrations
 {
     /// <inheritdoc />
-    public partial class createDB : Migration
+    public partial class IdChecking : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -77,10 +77,10 @@ namespace Demo.Migrations
                     Role = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    HasExperience = table.Column<bool>(type: "bit", nullable: false)
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    HasExperience = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {

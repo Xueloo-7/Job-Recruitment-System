@@ -1,0 +1,33 @@
+﻿@model List<Demo.Models.User>
+
+<h2>用户列表</h2>
+<a class="btn btn-primary" href="/Test/CreateUser">创建新用户</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>姓名</th>
+            <th>邮箱</th>
+            <th>电话</th>
+            <th>角色</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.Id</td>
+                <td>@u.Name</td>
+                <td>@u.Email</td>
+                <td>@u.PhoneNumber</td>
+                <td>@u.Role</td>
+                <td>
+                    <a href="/Test/EditUser/@u.Id">编辑</a> |
+                    <a href="/Test/DeleteUser/@u.Id">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
