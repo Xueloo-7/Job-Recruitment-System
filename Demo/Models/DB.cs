@@ -201,7 +201,7 @@ public class Institution
     [Remote(action: "CheckInstitutionId", controller: "Test", ErrorMessage = "ID 已存在")]
     public string Id { get; set; }
 
-    [Required, MaxLength(50)]
+    [Required, MaxLength(100)]
     public string Name { get; set; }
 }
 

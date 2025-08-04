@@ -353,6 +353,219 @@ public class TestController : Controller
     #endregion
     #endregion
 
+    // Institution =============================================================================================================== Institution
+    #region Institution
+
+    #region GET
+    public IActionResult Institutions()
+    {
+        var institutions = _db.Institutions.ToList();
+        return View("Institution/Index", institutions);
+    }
+
+    public IActionResult CreateInstitution()
+    {
+        return View("Institution/Create");
+    }
+
+    public IActionResult EditInstitution(string id)
+    {
+        var institution = _db.Institutions.Find(id);
+        if (institution == null) return NotFound();
+        return View("Institution/Edit", institution);
+    }
+
+    public IActionResult DeleteInstitution(string id)
+    {
+        var institution = _db.Institutions.Find(id);
+        if (institution == null) return NotFound();
+        return View("Institution/Delete", institution);
+    }
+    #endregion
+
+    #region POST
+    [HttpPost]
+    public IActionResult CreateInstitution(InstitutionVM vm)
+    {
+        if (ModelState.IsValid)
+        {
+            var institution = new Institution
+            {
+                Id = GenerateInstitutionId(),
+                Name = vm.Name
+            };
+            _db.Institutions.Add(institution);
+            _db.SaveChanges();
+            return RedirectToAction("Institutions");
+        }
+        return View("Institution/Create", vm);
+    }
+
+    [HttpPost]
+    public IActionResult EditInstitution(Institution institution)
+    {
+        if (ModelState.IsValid)
+        {
+            _db.Institutions.Update(institution);
+            _db.SaveChanges();
+            return RedirectToAction("Institutions");
+        }
+        return View("Institution/Edit", institution);
+    }
+
+    [HttpPost, ActionName("DeleteInstitution")]
+    public IActionResult DeleteInstitutionConfirmed(string id)
+    {
+        var institution = _db.Institutions.Find(id);
+        if (institution != null)
+        {
+            _db.Institutions.Remove(institution);
+            _db.SaveChanges();
+        }
+        return RedirectToAction("Institutions");
+    }
+    #endregion
+
+    #region Functions
+    private string GenerateInstitutionId()
+    {
+        // 查询当前已有的最大编号
+        var lastInstitution = _db.Institutions
+            .Where(i => i.Id.StartsWith("I"))
+            .OrderByDescending(i => i.Id)
+            .FirstOrDefault();
+
+        int nextNumber = 1;
+        if (lastInstitution != null)
+        {
+            string lastNumberStr = lastInstitution.Id.Substring(3);
+            if (int.TryParse(lastNumberStr, out int lastNumber))
+            {
+                nextNumber = lastNumber + 1;
+            }
+        }
+
+        return $"I{nextNumber.ToString("D3")}";  // 例如 JOB001、JOB002
+    }
+
+    public IActionResult CheckInstitutionId(string id)
+    {
+        bool exists = _db.Institutions.Any(i => i.Id == id);
+        if (exists)
+            return Json($"ID {id} 已存在");
+        return Json(true);
+    }
+    #endregion
+    #endregion
+
+    // Qualification =============================================================================================================== Qualification
+    #region Qualification
+
+    #region GET
+    public IActionResult Qualifications()
+    {
+        var qualifications = _db.Qualifications.ToList();
+        return View("Qualification/Index", qualifications);
+    }
+
+    public IActionResult CreateQualification()
+    {
+        return View("Qualification/Create");
+    }
+
+    public IActionResult EditQualification(string id)
+    {
+        var qualification = _db.Qualifications.Find(id);
+        if (qualification == null) return NotFound();
+        return View("Qualification/Edit", qualification);
+    }
+
+    public IActionResult DeleteQualification(string id)
+    {
+        var qualification = _db.Qualifications.Find(id);
+        if (qualification == null) return NotFound();
+        return View("Qualification/Delete", qualification);
+    }
+    #endregion
+
+    #region POST
+    [HttpPost]
+    public IActionResult CreateQualification(QualificationVM vm)
+    {
+        if (ModelState.IsValid)
+        {
+            var qualification = new Qualification
+            {
+                Id = GenerateQualificationId(),
+                Name = vm.Name
+            };
+            _db.Qualifications.Add(qualification);
+            _db.SaveChanges();
+            return RedirectToAction("Qualifications");
+        }
+        return View("Qualification/Create", vm);
+    }
+
+    [HttpPost]
+    public IActionResult EditQualification(Qualification qualification)
+    {
+        if (ModelState.IsValid)
+        {
+            _db.Qualifications.Update(qualification);
+            _db.SaveChanges();
+            return RedirectToAction("Qualifications");
+        }
+        return View("Qualification/Edit", qualification);
+    }
+
+    [HttpPost, ActionName("DeleteQualification")]
+    public IActionResult DeleteQualificationConfirmed(string id)
+    {
+        var qualification = _db.Qualifications.Find(id);
+        if (qualification != null)
+        {
+            _db.Qualifications.Remove(qualification);
+            _db.SaveChanges();
+        }
+        return RedirectToAction("Qualifications");
+    }
+    #endregion
+
+    #region Functions
+    private string GenerateQualificationId()
+    {
+        var lastQualification = _db.Qualifications
+            .Where(q => q.Id.StartsWith("Q"))
+            .OrderByDescending(q => q.Id)
+            .FirstOrDefault();
+
+        int nextNumber = 1;
+        if (lastQualification != null)
+        {
+            string lastNumberStr = lastQualification.Id.Substring(1);
+            if (int.TryParse(lastNumberStr, out int lastNumber))
+            {
+                nextNumber = lastNumber + 1;
+            }
+        }
+
+        return $"Q{nextNumber.ToString("D3")}";
+    }
+
+    public IActionResult CheckQualificationId(string id)
+    {
+        bool exists = _db.Qualifications.Any(q => q.Id == id);
+        if (exists)
+            return Json($"ID {id} 已存在");
+        return Json(true);
+    }
+    #endregion
+    #endregion
+
+
+
+
+
     private void DebugModelStateErrors()
     {
         foreach (var entry in ModelState)
