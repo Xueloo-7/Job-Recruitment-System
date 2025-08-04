@@ -138,3 +138,50 @@ Q047	MSc in Robotics
 
 
 
+User
+
+U001	Jacky Loh	123456	jackyloh@gmail.com	0112345678	0	true	2025-08-04T00:00:00Z	Jacky	Loh	Kuala Lumpur	true
+U002	Alice Tan	123456	alicetan@gmail.com	0123456789	1	true	2025-08-04T00:00:00Z	Alice	Tan	Penang	false
+U003	Michael Lee	123456	mlee@example.com	0171111222	0	true	2025-08-04T00:00:00Z	Michael	Lee	Selangor	true
+U004	Sara Wong	123456	sara.wong@example.com	0102222333	1	true	2025-08-04T00:00:00Z	Sara	Wong	Melaka	false
+U005	Ben Lim	123456	benlim@example.com	0163333444	0	true	2025-08-04T00:00:00Z	Ben	Lim	Kuantan	true
+U006	Chloe Ong	123456	chloe.ong@example.com	0135555666	1	true	2025-08-04T00:00:00Z	Chloe	Ong	Johor Bahru	false
+U007	William Teh	123456	wteh@example.com	0186666777	0	true	2025-08-04T00:00:00Z	William	Teh	Kuching	true
+U008	Jane Goh	123456	jane.goh@example.com	0147777888	1	true	2025-08-04T00:00:00Z	Jane	Goh	Ipoh	true
+U009	Daniel Chia	123456	dchia@example.com	0198888999	0	true	2025-08-04T00:00:00Z	Daniel	Chia	Miri	false
+U010	Emily Tan	123456	emilytan@example.com	0159999000	1	true	2025-08-04T00:00:00Z	Emily	Tan	Seremban	true
+
+
+
+Education (“¿¿µ”⁄œ÷”– User, Institution, Qualification)
+
+E001	U001	Diploma in Web Development	Harvard University
+E002	U001	Bachelor of Computer Science	University of Oxford
+E003	U002	Bachelor of Backend Engineering	Stanford University
+E004	U002	MSc in Artificial Intelligence	Massachusetts Institute of Technology (MIT)
+E005	U003	Bachelor of Information Systems	University of Cambridge
+E006	U003	Bachelor of Frontend Development	University of Tokyo
+E007	U004	Chartered Accountant (ACCA)	Tsinghua University
+E008	U004	Bachelor of Accounting	University of Malaya (UM)
+E009	U005	Bachelor of Financial Technology (FinTech)	University of Toronto
+E010	U005	MBA in Corporate Finance	University of Sydney
+E011	U006	MBBS (Bachelor of Medicine, Bachelor of Surgery)	National University of Singapore (NUS)
+E012	U006	Master of Public Health (MPH)	University of Hong Kong (HKU)
+E013	U007	Bachelor of Nursing	Seoul National University
+E014	U007	PhD in Medical Research	California Institute of Technology (Caltech)
+E015	U008	Bachelor of Mental Health Studies	ETH Zurich ®C Swiss Federal Institute of Technology
+E016	U008	Bachelor of Medical Technology	Technical University of Munich
+E017	U009	Bachelor of Education (Primary)	University of Melbourne
+E018	U009	Master of Education (Higher Ed)	University of Chicago
+E019	U010	PhD in Education Research	TAR UMT (Tunku Abdul Rahman University of Management and Technology)
+E020	U010	Diploma in Online Teaching	University of Cambridge
+E021	U001	Bachelor of Civil Engineering	University of Oxford
+E022	U002	Bachelor of Mechanical Engineering	Peking University
+E023	U003	Bachelor of Electrical Engineering	Stanford University
+E024	U004	Bachelor of Software Engineering	Massachusetts Institute of Technology (MIT)
+E025	U005	Bachelor of Aerospace Engineering	University of Toronto
+E026	U006	MSc in Robotics	ETH Zurich ®C Swiss Federal Institute of Technology
+E027	U007	Bachelor of Chemical Engineering	University of Malaya (UM)
+E028	U008	Bachelor of Environmental Engineering	Technical University of Munich
+E029	U009	Degree in Industrial Design	University of Sydney
+E030	U010	Bachelor of Language Education	University of Melbourne

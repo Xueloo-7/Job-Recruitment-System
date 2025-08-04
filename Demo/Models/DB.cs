@@ -121,7 +121,7 @@ public class Education
     [Required, MaxLength(50)]
     public string Qualification { get; set; }
 
-    [Required, MaxLength(50)]
+    [Required, MaxLength(100)]
     public string Institution { get; set; }
 
     // 【导航属性】
