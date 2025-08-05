@@ -1,0 +1,23 @@
+﻿@model Demo.Models.Job
+
+<div class="job-detail-box">
+    <img src="@Model.LogoImageUrl" alt="company image"/>
+    <h2>@Model.Title</h2>
+    <p>@Model.CompanyName</p>
+    <a asp-controller="Home" asp-action="Index" asp-route-jobPostingUserId="@Model.User.Id">View all jobs</a>
+    <p>@Model.Location</p>
+    <p>@Model.Category.Name</p>
+    <p>@Model.WorkType</p>
+    <p>@Model.SalaryMin - @Model.SalaryMax</p>
+    <p>Posted @((DateTime.Now - Model.CreatedAt).Days)d ago</p>
+    <br />
+    <div>
+        <button>Quick apply</button>
+        <button>Save</button>
+    </div>
+    <br />
+    @if(Model.Description != null)
+    {
+        <p>@Html.Raw(Model.Description.Replace("\n", "<br />").Replace("\r", ""))</p>
+    }
+</div>
