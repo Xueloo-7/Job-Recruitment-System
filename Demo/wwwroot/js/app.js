@@ -1,9 +1,9 @@
 ﻿//// Initiate GET request (AJAX-supported)
-//$(document).on('click', '[data-get]', e => {
-//    e.preventDefault();
-//    const url = e.target.dataset.get;
-//    location = url || location;
-//});
+$(document).on('click', '[data-get]', e => {
+    e.preventDefault();
+    const url = e.target.dataset.get;
+    location = url || location;
+});
 
 
 //---Side Menu---
@@ -29,23 +29,23 @@ $(function () {
 });
 
 //---Job Introduction---
-document.getElementById("job-search-form").addEventListener("submit", function (e) {
-    e.preventDefault();
-    const keyword = document.getElementById("keyword").value;
-    const location = document.getElementById("location").value;
+//document.getElementById("job-search-form").addEventListener("submit", function (e) {
+//    e.preventDefault();
+//    const keyword = document.getElementById("keyword").value;
+//    const location = document.getElementById("location").value;
 
-    fetch("/Home/SearchJobs", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: `keyword=${encodeURIComponent(keyword)}&location=${encodeURIComponent(location)}`
-    })
-        .then(res => res.text())
-        .then(html => {
-            document.getElementById("job-results").innerHTML = html;
-        });
-});
+//    fetch("/Home/SearchJobs", {
+//        method: "POST",
+//        headers: {
+//            "Content-Type": "application/x-www-form-urlencoded"
+//        },
+//        body: `keyword=${encodeURIComponent(keyword)}&location=${encodeURIComponent(location)}`
+//    })
+//        .then(res => res.text())
+//        .then(html => {
+//            document.getElementById("job-results").innerHTML = html;
+//        });
+//});
 
 //---Job Details---
 $(document).on('click', '.job-card', function () {

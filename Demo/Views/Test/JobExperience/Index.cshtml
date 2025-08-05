@@ -1,0 +1,48 @@
+﻿@model List<Demo.Models.JobExperience>
+
+<h2>列表</h2>
+<a class="btn btn-primary" href="/Test/CreateJobExperience">创建</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>用户名</th>
+            <th>岗位标题</th>
+            <th>公司名</th>
+            <th>就业日期</th>
+            <th>辞职日期</th>
+            <th>就业状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var je in Model)
+        {
+            <tr>
+                <td>@je.Id</td>
+                <td>@je.User.Name</td>
+                <td>@je.JobTitle</td>
+                <td>@je.CompanyName</td>
+                <td>@je.StartYear - @je.StartMonth</td>
+                <td>
+                    @(je.StillInRole ? "-" : $"{je.EndYear}-{je.EndMonth:D2}")
+                </td>
+                <td>
+                    @if (je.StillInRole)
+                    {
+                        <span class="badge bg-success">在职</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">已离职</span>
+                    }
+                </td>
+                <td>
+                    <a href="/Test/EditJobExperience/@je.Id">编辑</a> |
+                    <a href="/Test/DeleteJobExperience/@je.Id">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

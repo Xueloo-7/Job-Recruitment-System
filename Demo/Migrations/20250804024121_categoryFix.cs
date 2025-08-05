@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Demo.Migrations
 {
     /// <inheritdoc />
-    public partial class createDB : Migration
+    public partial class categoryFix : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -15,14 +15,18 @@ namespace Demo.Migrations
                 name: "Categories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    ParentId = table.Column<int>(type: "int", nullable: true)
+                    ParentId = table.Column<string>(type: "nvarchar(6)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Categories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Categories_Categories_ParentId",
+                        column: x => x.ParentId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -41,8 +45,7 @@ namespace Demo.Migrations
                 name: "Promotions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     DurationDay = table.Column<int>(type: "int", nullable: false),
@@ -77,9 +80,9 @@ namespace Demo.Migrations
                     Role = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     HasExperience = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -138,8 +141,7 @@ namespace Demo.Migrations
                 name: "Jobs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
@@ -153,14 +155,15 @@ namespace Demo.Migrations
                     LogoImageUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     IsOpen = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CategoryId1 = table.Column<string>(type: "nvarchar(6)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Jobs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Jobs_Categories_CategoryId",
-                        column: x => x.CategoryId,
+                        name: "FK_Jobs_Categories_CategoryId1",
+                        column: x => x.CategoryId1,
                         principalTable: "Categories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -176,8 +179,7 @@ namespace Demo.Migrations
                 name: "Notifications",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -220,23 +222,22 @@ namespace Demo.Migrations
                 name: "Applications",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     JobId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    JobId1 = table.Column<string>(type: "nvarchar(6)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Applications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Applications_Jobs_JobId",
-                        column: x => x.JobId,
+                        name: "FK_Applications_Jobs_JobId1",
+                        column: x => x.JobId1,
                         principalTable: "Jobs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Applications_Users_UserId",
                         column: x => x.UserId,
@@ -249,41 +250,45 @@ namespace Demo.Migrations
                 name: "JobPromotions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     JobId = table.Column<int>(type: "int", nullable: false),
                     PromotionId = table.Column<int>(type: "int", nullable: false),
                     StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    JobId1 = table.Column<string>(type: "nvarchar(6)", nullable: true),
+                    PromotionId1 = table.Column<string>(type: "nvarchar(6)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_JobPromotions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_JobPromotions_Jobs_JobId",
-                        column: x => x.JobId,
+                        name: "FK_JobPromotions_Jobs_JobId1",
+                        column: x => x.JobId1,
                         principalTable: "Jobs",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_JobPromotions_Promotions_PromotionId",
-                        column: x => x.PromotionId,
+                        name: "FK_JobPromotions_Promotions_PromotionId1",
+                        column: x => x.PromotionId1,
                         principalTable: "Promotions",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Applications_JobId",
+                name: "IX_Applications_JobId1",
                 table: "Applications",
-                column: "JobId");
+                column: "JobId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Applications_UserId",
                 table: "Applications",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Categories_ParentId",
+                table: "Categories",
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Educations_UserId",
@@ -296,19 +301,19 @@ namespace Demo.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_JobPromotions_JobId",
+                name: "IX_JobPromotions_JobId1",
                 table: "JobPromotions",
-                column: "JobId");
+                column: "JobId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_JobPromotions_PromotionId",
+                name: "IX_JobPromotions_PromotionId1",
                 table: "JobPromotions",
-                column: "PromotionId");
+                column: "PromotionId1");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Jobs_CategoryId",
+                name: "IX_Jobs_CategoryId1",
                 table: "Jobs",
-                column: "CategoryId");
+                column: "CategoryId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Jobs_UserId",

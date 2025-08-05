@@ -1,14 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Demo.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Controllers;
 
 public class HomeController : Controller
 {
-    public IActionResult Index()
+    private readonly DB db;
+
+    public HomeController(DB context)
+    {
+        db = context;
+    }
+
+    public IActionResult Index(string keyword = "")
     {
         ViewBag.Active = "Search";
-        return View();
+
+        var jobs = db.Jobs
+            .Include(j => j.Category)
+            .Where(j => j.IsOpen && (string.IsNullOrEmpty(keyword) || j.Title.Contains(keyword)))
+            .ToList();
+
+        return View(jobs);
     }
 
     public IActionResult LoadJobs(string company)
@@ -32,4 +46,15 @@ public class HomeController : Controller
         ViewBag.Company = company;
         return PartialView("~/Views/Job/_JobListPartial.cshtml", jobs);
     }
+
+    //public IActionResult JobDetails(int id)
+    //{
+    //    var job = db.Jobs
+    //        .Include(j => j.Category)
+    //        .FirstOrDefault(j => j.Id == id);
+
+    //    if (job == null) return NotFound();
+
+    //    return PartialView("_JobDetails", job);
+    //}
 }

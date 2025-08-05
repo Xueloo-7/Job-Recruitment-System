@@ -1,0 +1,22 @@
+﻿@model TestDashboardViewModel
+
+<h2>测试后台首页</h2>
+
+<ul>
+    <li>用户数：@Model.UserCount - <a href="/Test/Users">查看</a></li>
+    <li>职位数：@Model.JobCount - <a href="/Test/Jobs">查看</a></li>
+    <li>申请数：@Model.ApplicationCount - <a href="/Test/Applications">查看</a></li>
+    <li>分类数：@Model.CategoryCount - <a href="/Test/Categories">查看</a></li>
+    <li>学历数：@Model.QualificationCount - <a href="/Test/Qualifications">查看</a></li>
+    <li>学校数：@Model.InstitutionCount - <a href="/Test/Institutions">查看</a></li>
+    <li>用户Education数据：@Model.EducationCount - <a href="/Test/Educations">查看</a></li>
+    <li>用户JobExperience数据：@Model.JobExperienceCount - <a href="/Test/JobExperiences">查看</a></li>
+</ul>
+
+@* <form method="post" asp-action="InitData">
+    <button type="submit">初始化假数据</button>
+</form>
+
+<form method="post" asp-action="Reset" onsubmit="return confirm('确定要清空所有数据？');">
+    <button type="submit">清空所有数据</button>
+</form> *@
