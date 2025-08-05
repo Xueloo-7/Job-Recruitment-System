@@ -195,3 +195,21 @@ JE002	U004	Frontend Developer	PixelHive	2019	3	2021	9	false	2025-08-04T16:00:00Z
 JE003	U006	System Analyst	DataWorks	2018	1	2020	5	false	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
 JE004	U008	Product Manager	Starlink Studio	2022	7			true	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
 JE005	U010	Backend Developer	CodeWeld Inc	2021	11	2023	3	false	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
+
+
+
+Job (依赖于现有 User(仅限Role为Employer的), Category)
+
+J001	U011	C034	Software Engineer	Malacca	1	0	3596.59	5487.08	content	Great opportunity for career growth	/images/uploads/logo/1.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J002	U011	C004	Marketing Manager	Ipoh	1	0	3682.60	6274.35	content	Join our dynamic team	/images/uploads/logo/2.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J003	U013	C018	Data Analyst	Johor Bahru	1	1	3193.00	5393.88	content	Flexible working hours	/images/uploads/logo/3.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J004	U013	C024	UI/UX Designer	Kuala Lumpur	1	0	3169.30	5628.29	content	Competitive salary and benefits	/images/uploads/logo/4.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J005	U013	C029	Project Coordinator	Kuching	1	0	3937.03	5129.86	content	Innovative work environment	/images/uploads/logo/5.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J006	U013	C008	Sales Executive	Kuching	1	1	3099.06	5404.70	content	Work with industry leaders	/images/uploads/logo/6.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J007	U012	C011	Content Writer	Malacca	1	0	3996.07	5253.62	content	Collaborative and inclusive culture	/images/uploads/logo/7.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J008	U011	C046	Customer Support Specialist	Shah Alam	1	0	3283.16	4740.17	content	Challenging and rewarding role	/images/uploads/logo/8.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J009	U011	C007	HR Officer	George Town	0	1	3753.14	6605.30	content	Supportive management	/images/uploads/logo/9.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J010	U011	C046	Finance Associate	Ipoh	1	0	2300.27	4824.35	content	Remote work available	/images/uploads/logo/10.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+
+
+
