@@ -43,7 +43,7 @@ public class JobVM
 
     public bool IsOpen { get; set; } = true;
 
-    public IFormFile? LogoImage { get; set; } // ✅ 新增：用来接收文件上传
+    public IFormFile? LogoFile { get; set; } // ✅ 新增：用来接收文件上传
 
     // ✅ 下拉列表绑定字段
     public List<SelectListItem>? UserOptions { get; set; }

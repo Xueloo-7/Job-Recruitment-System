@@ -213,3 +213,14 @@ J010	U011	C046	Finance Associate	Ipoh	1	0	2300.27	4824.35	content	Remote work av
 
 
 
+Resume (依赖现有 User(仅限Role为Jobseeker的)))
+
+Id	UserId	ImageUrl	CreatedAt	UpdatedAt
+R001	U002	/images/uploads/resume/example.png	2025-08-05T00:00:00Z	2025-08-05T00:00:00Z
+R002	U004	/images/uploads/resume/example.png	2025-08-05T00:00:00Z	2025-08-05T00:00:00Z
+R003	U006	/images/uploads/resume/example.png	2025-08-05T00:00:00Z	2025-08-05T00:00:00Z
+R004	U008	/images/uploads/resume/example.png	2025-08-05T00:00:00Z	2025-08-05T00:00:00Z
+R005	U010	/images/uploads/resume/example.png	2025-08-05T00:00:00Z	2025-08-05T00:00:00Z
+
+
+
