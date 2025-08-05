@@ -1,0 +1,31 @@
+﻿@model List<Demo.Models.Application>
+
+<h2>列表</h2>
+<a class="btn btn-primary" href="/Test/CreateApplication">创建</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="col-id">ID</th>
+            <th>用户</th>
+            <th>申请岗位</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var r in Model)
+        {
+            <tr>
+                <td>@r.Id</td>
+                <td>@r.User.Name</td>
+                <td>@r.Job.Title</td>
+                <td>@r.Status</td>
+                <td>
+                    <a href="/Test/EditApplication/@r.Id">编辑</a> |
+                    <a href="/Test/DeleteApplication/@r.Id">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

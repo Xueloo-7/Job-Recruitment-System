@@ -1382,6 +1382,195 @@ public class TestController : Controller
     #endregion
     #endregion
 
+    #region Application
+    #region GET
+
+    public IActionResult Applications()
+    {
+        var applications = _db.Applications
+            .Include(a => a.User)
+            .Include(a => a.Job)
+            .ToList();
+
+        return View("Application/Index", applications);
+    }
+
+    public IActionResult CreateApplication()
+    {
+        var vm = new ApplicationVM
+        {
+            JobOptions = _db.Jobs.Select(j => new SelectListItem
+            {
+                Value = j.Id.ToString(),
+                Text = j.Title
+            }).ToList(),
+
+            UserOptions = _db.Users
+                .Where(u => u.Role == Role.JobSeeker)
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id,
+                    Text = u.Name
+                }).ToList(),
+
+            StatusOptions = Enum.GetValues(typeof(ApplicationStatus))
+                .Cast<ApplicationStatus>()
+                .Select(s => new SelectListItem
+                {
+                    Value = s.ToString(),
+                    Text = s.ToString()
+                }).ToList()
+        };
+
+        return View("Application/Create", vm);
+    }
+
+    public IActionResult EditApplication(string id)
+    {
+        var application = _db.Applications.Find(id);
+        if (application == null) return NotFound();
+
+        var vm = new ApplicationVM
+        {
+            Id = application.Id,
+            JobId = application.JobId,
+            UserId = application.UserId,
+            Status = application.Status,
+
+            JobOptions = _db.Jobs.Select(j => new SelectListItem
+            {
+                Value = j.Id.ToString(),
+                Text = j.Title
+            }).ToList(),
+
+            UserOptions = _db.Users
+                .Where(u => u.Role == Role.JobSeeker)
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id,
+                    Text = u.Name
+                }).ToList(),
+
+            StatusOptions = Enum.GetValues(typeof(ApplicationStatus))
+                .Cast<ApplicationStatus>()
+                .Select(s => new SelectListItem
+                {
+                    Value = s.ToString(),
+                    Text = s.ToString()
+                }).ToList()
+        };
+
+        return View("Application/Edit", vm);
+    }
+
+    public IActionResult DeleteApplication(string id)
+    {
+        var application = _db.Applications
+            .Include(a => a.Job)
+            .Include(a => a.User)
+            .FirstOrDefault(a => a.Id == id);
+
+        if (application == null) return NotFound();
+        return View("Application/Delete", application);
+    }
+    #endregion
+
+    #region POST
+
+    [HttpPost]
+    public IActionResult CreateApplication(ApplicationVM vm)
+    {
+        if (ModelState.IsValid)
+        {
+            var application = new Application
+            {
+                Id = GenerateApplicationId(),
+                JobId = vm.JobId,
+                UserId = vm.UserId,
+                Status = ApplicationStatus.Pending,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            _db.Applications.Add(application);
+            _db.SaveChanges();
+
+            return RedirectToAction("Applications");
+        }
+
+        DebugModelStateErrors();
+        return View("Application/Create", vm);
+    }
+
+    [HttpPost]
+    public IActionResult EditApplication(ApplicationVM vm)
+    {
+        if (ModelState.IsValid)
+        {
+            var application = _db.Applications.Find(vm.Id);
+            if (application == null) return NotFound();
+
+            application.JobId = vm.JobId;
+            application.UserId = vm.UserId;
+            application.Status = vm.Status;
+            application.UpdatedAt = DateTime.UtcNow;
+
+            _db.Applications.Update(application);
+            _db.SaveChanges();
+
+            return RedirectToAction("Applications");
+        }
+
+        DebugModelStateErrors();
+        return View("Application/Edit", vm);
+    }
+
+    [HttpPost, ActionName("DeleteApplication")]
+    public IActionResult DeleteApplicationConfirmed(string id)
+    {
+        var application = _db.Applications.Find(id);
+        if (application != null)
+        {
+            _db.Applications.Remove(application);
+            _db.SaveChanges();
+        }
+
+        return RedirectToAction("Applications");
+    }
+    #endregion
+
+    #region Functions
+
+    private string GenerateApplicationId()
+    {
+        var last = _db.Applications
+            .Where(a => a.Id.StartsWith("A"))
+            .OrderByDescending(a => a.Id)
+            .FirstOrDefault();
+
+        int next = 1;
+        if (last != null)
+        {
+            string numberStr = last.Id.Substring(1);
+            if (int.TryParse(numberStr, out int lastNumber))
+            {
+                next = lastNumber + 1;
+            }
+        }
+
+        return $"A{next.ToString("D3")}";
+    }
+
+    public IActionResult CheckApplicationId(string id)
+    {
+        bool exists = _db.Applications.Any(a => a.Id == id);
+        if (exists)
+            return Json($"ID {id} 已存在");
+        return Json(true);
+    }
+
+    #endregion
+    #endregion
 
 
 
