@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <title>@ViewBag.Title - Job Seeker</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="~/images/favicon.png" />
+    <link rel="shortcut icon" href="/images/favicon.png" />
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
@@ -16,13 +16,14 @@
 <body>
     <header class="navbar">
         <div class="navbar-left">
-            <img src="~/images/JobSeekerLogo.jpg" alt="Logo" class="logo" />
+            <img src="/images/favicon.png" alt="Logo" class="logo" />
             <h1 class="brand">Job Seeker</h1>
             <nav class="nav-links">
                 <a asp-controller="Home" asp-action="Index" class="@(ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")">Job Search</a>
                 <a asp-controller="Profile" asp-action="Index" class="@(ViewBag.Active == "Profile" ? "active" : "")">Profile</a>
                 <a asp-controller="Home" asp-action="Employer" class="@(ViewBag.Active == "Employer" ? "active" : "")">Employer</a>
                 <a asp-controller="Home" asp-action="SignIn" class="@(ViewBag.Active == "SignIn" ? "active" : "")">Sign In</a>
+                <a asp-controller="Test" asp-action="Index">Test</a>
             </nav>
         </div>
 

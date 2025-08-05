@@ -1,0 +1,10 @@
+﻿@model Demo.Models.Education
+
+<h2>确认删除</h2>
+<p>确定要删除这个用户的Education吗？此操作无法恢复。</p>
+
+<form asp-action="DeleteEducation" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">确认删除</button>
+    <a class="btn btn-secondary" href="/Test/Educations">取消</a>
+</form>

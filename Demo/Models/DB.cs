@@ -1,7 +1,9 @@
 ﻿namespace Demo.Models;
 
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 #nullable disable warnings
 
@@ -52,7 +54,9 @@ public class DB : DbContext
 
 public class User
 {
-    [Key, Required, MaxLength(6)]
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^U\d{3}$", ErrorMessage = "ID 格式应为 U+三位数字")]
+    [Remote(action: "CheckUserId", controller: "Test", ErrorMessage = "ID 已存在")]
     public string Id { get; set; }
 
     [Required, MaxLength(50)]
@@ -74,27 +78,27 @@ public class User
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
     [MaxLength(100)]
-    public string FirstName { get; set; }
+    public string? FirstName { get; set; }
 
     [MaxLength(100)]
-    public string LastName { get; set; }
+    public string? LastName { get; set; }
 
     [MaxLength(100)]
-    public string Location { get; set; }
+    public string? Location { get; set; }
 
-    public bool HasExperience { get; set; }
+    public bool HasExperience { get; set; } = false;
 
-    public ICollection<Education> Educations { get; set; }
+    public ICollection<Education>? Educations { get; set; }
 
-    public ICollection<JobExperience> JobExperiences { get; set; }
+    public ICollection<JobExperience>? JobExperiences { get; set; }
 
-    public Resume Resume { get; set; }
+    public Resume? Resume { get; set; }
 
-    public ICollection<Job> Jobs { get; set; }
+    public ICollection<Job>? Jobs { get; set; }
 
-    public ICollection<Application> Applications { get; set; }
+    public ICollection<Application>? Applications { get; set; }
 
-    public ICollection<Notification> Notifications { get; set; }
+    public ICollection<Notification>? Notifications { get; set; }
 }
 
 public enum Role
@@ -106,7 +110,9 @@ public enum Role
 
 public class Education
 {
-    [Key, Required, MaxLength(6)]  // 【PK】
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^E\d{3}$", ErrorMessage = "ID 格式应为 E+三位数字")]
+    [Remote(action: "CheckEducationId", controller: "Test", ErrorMessage = "ID 已存在")]
     public string Id { get; set; }
 
     [Required, MaxLength(6)]  // 【FK】
@@ -115,7 +121,7 @@ public class Education
     [Required, MaxLength(50)]
     public string Qualification { get; set; }
 
-    [Required, MaxLength(50)]
+    [Required, MaxLength(100)]
     public string Institution { get; set; }
 
     // 【导航属性】
@@ -124,7 +130,9 @@ public class Education
 
 public class JobExperience
 {
-    [Key, Required, MaxLength(6)]  // 【PK】
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^JE\d{3}$", ErrorMessage = "ID 格式应为 JE+三位数字")]
+    [Remote(action: "CheckJobExperienceId", controller: "Test", ErrorMessage = "ID 已存在")]
     public string Id { get; set; }
 
     [Required, MaxLength(6)]  // 【FK】
@@ -157,7 +165,9 @@ public class JobExperience
 
 public class Resume
 {
-    [Key, Required, MaxLength(6)]  // 【PK】
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^R\d{3}$", ErrorMessage = "ID 格式应为 R+三位数字")]
+    [Remote(action: "CheckResumeId", controller: "Test", ErrorMessage = "ID 已存在")]
     public string Id { get; set; }
 
     [Required, MaxLength(6)]  // 【FK】
@@ -175,7 +185,9 @@ public class Resume
 
 public class Qualification
 {
-    [Key, Required, MaxLength(6)]  // 【PK】
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^Q\d{3}$", ErrorMessage = "ID 格式应为 Q+三位数字")]
+    [Remote(action: "CheckQualificationId", controller: "Test", ErrorMessage = "ID 已存在")]
     public string Id { get; set; }
 
     [Required, MaxLength(50)]
@@ -184,34 +196,45 @@ public class Qualification
 
 public class Institution
 {
-    [Key, Required, MaxLength(6)]  // 【PK】
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^I\d{3}$", ErrorMessage = "ID 格式应为 I+三位数字")]
+    [Remote(action: "CheckInstitutionId", controller: "Test", ErrorMessage = "ID 已存在")]
     public string Id { get; set; }
 
-    [Required, MaxLength(50)]
+    [Required, MaxLength(100)]
     public string Name { get; set; }
 }
 
 public class Category
 {
-    [Key]  // 【PK】
-    public int Id { get; set; }
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^C\d{3}$", ErrorMessage = "ID 格式应为 C+三位数字")]
+    [Remote(action: "CheckCategoryId", controller: "Test", ErrorMessage = "ID 已存在")]
+    public string Id { get; set; }
 
     [Required, MaxLength(100)]
     public string Name { get; set; }
 
-    public int? ParentId { get; set; }  // 【FK】
+    public string? ParentId { get; set; }
+
+    [ForeignKey("ParentId")]
+    public Category? Parent { get; set; }
+
+    public ICollection<Category>? Children { get; set; }
 }
 
 public class Job
 {
-    [Key]  // 【PK】
-    public int Id { get; set; }
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^J\d{3}$", ErrorMessage = "ID 格式应为 J+三位数字")]
+    [Remote(action: "CheckJobId", controller: "Test", ErrorMessage = "ID 已存在")]
+    public string Id { get; set; }
 
     [Required, MaxLength(6)]  // 【FK】
     public string UserId { get; set; }
 
     [Required]  // 【FK】
-    public int CategoryId { get; set; }
+    public string CategoryId { get; set; }
 
     [Required, MaxLength(100)]
     public string Title { get; set; }
@@ -225,16 +248,20 @@ public class Job
     [Required]
     public WorkType WorkType { get; set; }
 
-    public decimal? SalaryMin { get; set; }
-    public decimal? SalaryMax { get; set; }
+    [Required]
+    public decimal SalaryMin { get; set; }
 
-    public string Description { get; set; }
+    [Required]
+    public decimal SalaryMax { get; set; }
 
-    [MaxLength(500)]
-    public string Summary { get; set; }
+    [MaxLength(1000)]
+    public string? Description { get; set; }
+
+    [MaxLength(200)]
+    public string? Summary { get; set; }
 
     [MaxLength(255)]
-    public string LogoImageUrl { get; set; }
+    public string? LogoImageUrl { get; set; }
 
     public bool IsOpen { get; set; } = true;
 
@@ -265,8 +292,10 @@ public enum WorkType
 
 public class Application
 {
-    [Key]  // 【PK】
-    public int Id { get; set; }
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^A\d{3}$", ErrorMessage = "ID 格式应为 A+三位数字")]
+    [Remote(action: "CheckApplicationId", controller: "Test", ErrorMessage = "ID 已存在")]
+    public string Id { get; set; }
 
     [Required]  // 【FK】
     public int JobId { get; set; }
@@ -295,8 +324,10 @@ public enum ApplicationStatus
 
 public class Notification
 {
-    [Key]  // 【PK】
-    public int Id { get; set; }
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^N\d{3}$", ErrorMessage = "ID 格式应为 N+三位数字")]
+    [Remote(action: "CheckNotificationId", controller: "Test", ErrorMessage = "ID 已存在")]
+    public string Id { get; set; }
 
     [Required, MaxLength(6)]  // 【FK】
     public string UserId { get; set; }
@@ -316,8 +347,10 @@ public class Notification
 
 public class Promotion
 {
-    [Key]  // 【PK】
-    public int Id { get; set; }
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^P\d{3}$", ErrorMessage = "ID 格式应为 P+三位数字")]
+    [Remote(action: "CheckPromotionId", controller: "Test", ErrorMessage = "ID 已存在")]
+    public string Id { get; set; }
 
     [Required, MaxLength(100)]
     public string Name { get; set; }
@@ -336,8 +369,10 @@ public class Promotion
 
 public class JobPromotion
 {
-    [Key]  // 【PK】
-    public int Id { get; set; }
+    [Key, MaxLength(6)]
+    [RegularExpression(@"^JP\d{3}$", ErrorMessage = "ID 格式应为 JP+三位数字")]
+    [Remote(action: "CheckJobPromotionId", controller: "Test", ErrorMessage = "ID 已存在")]
+    public string Id { get; set; }
 
     [Required]  // 【FK】
     public int JobId { get; set; }

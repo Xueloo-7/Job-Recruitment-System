@@ -1,0 +1,13 @@
+﻿@model Demo.Models.InstitutionVM
+
+<h2>创建</h2>
+
+<form asp-action="CreateInstitution" method="post">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success">保存</button>
+    <a class="btn btn-secondary" href="/Test/Institutions">返回</a>
+</form>

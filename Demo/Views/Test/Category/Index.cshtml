@@ -1,0 +1,55 @@
+﻿@model List<Demo.Models.CategoryVM>
+
+<h2>主要岗位分类列表</h2>
+<a class="btn btn-primary" href="/Test/CreateParentCategory">创建新的主要岗位分类</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model.Where(c => c.ParentName == null))
+        {
+            <tr>
+                <td>@c.Id</td>
+                <td>@c.Name</td>
+                <td>
+                    <a href="/Test/EditParentCategory/@c.Id">编辑</a> |
+                    <a href="/Test/DeleteCategory/@c.Id">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h2>次要岗位分类列表</h2>
+<a class="btn btn-primary" href="/Test/CreateSubCategory">创建新的次要岗位分类</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Parent Name</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model.Where(c => c.ParentName != null))
+        {
+            <tr>
+                <td>@c.Id</td>
+                <td>@c.Name</td>
+                <td>@c.ParentName</td>
+                <td>
+                    <a href="/Test/EditSubCategory/@c.Id">编辑</a> |
+                    <a href="/Test/DeleteCategory/@c.Id">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

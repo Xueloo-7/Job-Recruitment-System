@@ -1,0 +1,27 @@
+﻿@model List<Demo.Models.Institution>
+
+<h2>列表</h2>
+<a class="btn btn-primary" href="/Test/CreateInstitution">创建新机构</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var u in Model)
+        {
+            <tr>
+                <td>@u.Id</td>
+                <td>@u.Name</td>
+                <td>
+                    <a href="/Test/EditInstitution/@u.Id">编辑</a> |
+                    <a href="/Test/DeleteInstitution/@u.Id">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
