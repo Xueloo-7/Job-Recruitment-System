@@ -25,6 +25,11 @@ public class HomeController : Controller
         return View(jobs);
     }
 
+    public IActionResult Employer()
+    {
+        return View();
+    }
+
     public IActionResult LoadJobs(string company)
     {
         // put database future

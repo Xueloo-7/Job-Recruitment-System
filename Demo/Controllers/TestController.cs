@@ -26,7 +26,8 @@ public class TestController : Controller
             InstitutionCount = _db.Institutions.Count(),
             NotificationCount = _db.Notifications.Count(),
             EducationCount = _db.Educations.Count(),
-            JobExperienceCount = _db.JobExperiences.Count()
+            JobExperienceCount = _db.JobExperiences.Count(),
+            ResumeCount = _db.Resumes.Count(),
             // 你可以继续添加其它表的数据量
         };
 
@@ -1046,7 +1047,7 @@ public class TestController : Controller
         {
             //string? logoFileName = SaveUploadedFile(vm.LogoImage!, "images/uploads/logo");
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "uploads", "logo");
-            string? logoFileName = UploadLogo(vm.LogoImage!, uploadsFolder);
+            string? logoFileName = UploadLogo(vm.LogoFile!, uploadsFolder);
 
             var job = new Job
             {
@@ -1090,7 +1091,7 @@ public class TestController : Controller
             // 保存新上传的文件
             //string? logoFileName = SaveUploadedFile(vm.LogoImage!, "images/uploads/logo");
             var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "uploads", "logo");
-            string? logoFileName = UploadLogo(vm.LogoImage!, uploadsFolder);
+            string? logoFileName = UploadLogo(vm.LogoFile!, uploadsFolder);
 
             job.UserId = vm.UserId;
             job.CategoryId = vm.CategoryId;
@@ -1186,6 +1187,183 @@ public class TestController : Controller
     #endregion
     #endregion
 
+    // Resume ============================================================================================================ Resume
+    #region Resume
+    #region GET
+    public IActionResult Resumes()
+    {
+        var resumes = _db.Resumes.Include(r => r.User).ToList();
+        return View("Resume/Index", resumes);
+    }
+
+    public IActionResult CreateResume()
+    {
+        var vm = new ResumeVM
+        {
+            UserOptions = _db.Users
+                .Where(u => u.Role == Role.JobSeeker) // 仅允许求职者创建简历
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id,
+                    Text = u.Name
+                }).ToList()
+        };
+
+        return View("Resume/Create", vm);
+    }
+
+    public IActionResult EditResume(string id)
+    {
+        var resume = _db.Resumes.Include(r => r.User).FirstOrDefault(r => r.Id == id);
+        if (resume == null) return NotFound();
+
+        var vm = new ResumeVM
+        {
+            Id = resume.Id,
+            UserId = resume.UserId,
+            ImageUrl = resume.ImageUrl,
+
+            UserOptions = _db.Users
+                .Where(u => u.Role == Role.JobSeeker)
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id,
+                    Text = u.Name
+                }).ToList()
+        };
+
+        return View("Resume/Edit", vm);
+    }
+
+    public IActionResult DeleteResume(string id)
+    {
+        var resume = _db.Resumes.Find(id);
+        if (resume == null) return NotFound();
+        return View("Resume/Delete", resume);
+    }
+    #endregion
+
+    #region POST
+    [HttpPost]
+    public IActionResult CreateResume(ResumeVM vm)
+    {
+        if (ModelState.IsValid)
+        {
+            string? uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "uploads", "resume");
+            string? imageFileName = UploadLogo(vm.ImageFile!, uploadsFolder);  // 可复用 UploadLogo 方法
+
+            var resume = new Resume
+            {
+                Id = GenerateResumeId(),
+                UserId = vm.UserId,
+                ImageUrl = imageFileName != null ? $"/images/uploads/resume/{imageFileName}" : null,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            _db.Resumes.Add(resume);
+            _db.SaveChanges();
+
+            return RedirectToAction("Resumes");
+        }
+
+        DebugModelStateErrors();
+        return View("Resume/Create", vm);
+    }
+
+    [HttpPost]
+    public IActionResult EditResume(ResumeVM vm)
+    {
+        if (ModelState.IsValid)
+        {
+            var resume = _db.Resumes.Find(vm.Id);
+            if (resume == null) return NotFound();
+
+            string? oldPath = resume.ImageUrl;
+
+            string? uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "uploads", "resume");
+            string? imageFileName = UploadLogo(vm.ImageFile!, uploadsFolder);
+
+            resume.UserId = vm.UserId;
+
+            if (!string.IsNullOrWhiteSpace(vm.ImageUrl))
+            {
+                resume.ImageUrl = vm.ImageUrl;
+            }
+            else if (imageFileName != null)
+            {
+                // 删除旧图（非默认）
+                if (!string.IsNullOrWhiteSpace(oldPath) && !oldPath.Contains("default"))
+                {
+                    string fullOldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", oldPath.TrimStart('/'));
+                    if (System.IO.File.Exists(fullOldPath))
+                    {
+                        System.IO.File.Delete(fullOldPath);
+                    }
+                }
+
+                resume.ImageUrl = $"/images/uploads/resume/{imageFileName}";
+            }
+
+            resume.UpdatedAt = DateTime.UtcNow;
+
+            _db.Resumes.Update(resume);
+            _db.SaveChanges();
+
+            return RedirectToAction("Resumes");
+        }
+
+        DebugModelStateErrors();
+        return View("Resume/Edit", vm);
+    }
+
+    [HttpPost, ActionName("DeleteResume")]
+    public IActionResult DeleteResumeConfirmed(string id)
+    {
+        var resume = _db.Resumes.Find(id);
+        if (resume != null)
+        {
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            DeleteLogo(resume.ImageUrl!, uploadsFolder);
+
+            _db.Resumes.Remove(resume);
+            _db.SaveChanges();
+        }
+
+        return RedirectToAction("Resumes");
+    }
+    #endregion
+
+    #region Functions
+    private string GenerateResumeId()
+    {
+        var last = _db.Resumes
+            .Where(r => r.Id.StartsWith("R"))
+            .OrderByDescending(r => r.Id)
+            .FirstOrDefault();
+
+        int next = 1;
+        if (last != null)
+        {
+            string numberStr = last.Id.Substring(1);
+            if (int.TryParse(numberStr, out int lastNumber))
+            {
+                next = lastNumber + 1;
+            }
+        }
+
+        return $"R{next.ToString("D3")}";
+    }
+
+    public IActionResult CheckResumeId(string id)
+    {
+        bool exists = _db.Resumes.Any(r => r.Id == id);
+        if (exists)
+            return Json($"ID {id} 已存在");
+        return Json(true);
+    }
+    #endregion
+    #endregion
 
 
 
@@ -1291,5 +1469,6 @@ public class TestDashboardViewModel
     public int NotificationCount { get; set; }
     public int EducationCount { get; set; }
     public int JobExperienceCount { get; set; }
+    public int ResumeCount { get; set; }
 
 }
