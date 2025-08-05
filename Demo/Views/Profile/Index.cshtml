@@ -11,18 +11,10 @@
     </div>
 
     <div id="tab-content" class="profile-card">
-        <div class="tab-content-section" id="ProfileTab">
-            @await Html.PartialAsync("~/Views/Profile/_Profile.cshtml")
-        </div>
-        <div class="tab-content-section" id="SummaryTab" style="display:none;">
-            @await Html.PartialAsync("~/Views/Profile/_Summary.cshtml")
-        </div>
-        <div class="tab-content-section" id="CareerHistoryTab" style="display:none;">
-            @await Html.PartialAsync("~/Views/Profile/_CareerHistory.cshtml")
-        </div>
-        <div class="tab-content-section" id="EducationTab" style="display:none;">
-            @await Html.PartialAsync("~/Views/Profile/_Education.cshtml")
-        </div>
+        <partial name="~/Views/Profile/_Profile.cshtml" />
+        <partial name="~/Views/Profile/_Summary.cshtml" />
+        <partial name="~/Views/Profile/_CareerHistory.cshtml" />
+        <partial name="~/Views/Profile/_Education.cshtml" />
     </div>
 </div>
 
