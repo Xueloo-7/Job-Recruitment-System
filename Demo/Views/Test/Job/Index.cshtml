@@ -1,0 +1,103 @@
+﻿@model List<Demo.Models.Job>
+
+<h2>列表</h2>
+<a class="btn btn-primary" href="/Test/CreateJob">创建</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th class="col-id">ID</th>
+            <th>用户名</th>
+            <th>分类</th>
+            <th class="col-title">岗位标题</th>
+            <th class="col-location">地点</th>
+            <th class="col-paytype">支付类型</th>
+            <th class="col-worktype">工作类型</th>
+            <th class="col-salary">薪资范围</th>
+            <th class="col-logo">Logo</th>
+            <th class="col-createdat">创建时间</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var j in Model)
+        {
+            <tr>
+                <td class="col-id">@j.Id</td>
+                <td>@j.User.Name</td>
+                <td>@j.Category.Name</td>
+                <td class="col-title">@j.Title</td>
+                <td class="col-location">@j.Location</td>
+                <td class="col-paytype">@j.PayType</td>
+                <td class="col-worktype">@j.WorkType</td>
+                <td class="col-salary">@j.SalaryMin - @j.SalaryMax</td>
+                <td class="col-logo">
+                    <img alt="company logo" src="@j.LogoImageUrl" style="max-height: 40px;" />
+                </td>
+                <td class="col-createdat">@j.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>
+                    @if (j.IsOpen)
+                    {
+                        <span class="badge bg-success">开放</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">关闭</span>
+                    }
+                </td>
+                <td>
+                    <a href="/Test/EditJob/@j.Id">编辑</a> |
+                    <a href="/Test/DeleteJob/@j.Id">删除</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Styles {
+    <style>
+        .table td, .table th {
+            vertical-align: middle;
+            white-space: normal; /* 允许换行 */
+            word-break: break-word; /* 单词也能在中间断开换行 */
+        }
+
+        .col-id {
+            max-width: 80px;
+        }
+
+        .col-title {
+            max-width: 150px;
+        }
+
+        .col-location {
+            max-width: 300px;
+        }
+
+        .col-paytype {
+            max-width: 100px;
+        }
+
+        .col-worktype {
+            max-width: 100px;
+        }
+
+        .col-salary {
+            max-width: 120px;
+        }
+
+        .col-logo {
+            max-width: 150px;
+        }
+
+            .col-logo img {
+                width: 100%;
+                height: auto;
+            }
+
+        .col-createdat {
+            max-width: 160px;
+        }
+    </style>
+}

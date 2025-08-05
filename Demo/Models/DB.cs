@@ -234,7 +234,7 @@ public class Job
     public string UserId { get; set; }
 
     [Required]  // 【FK】
-    public int CategoryId { get; set; }
+    public string CategoryId { get; set; }
 
     [Required, MaxLength(100)]
     public string Title { get; set; }
@@ -248,16 +248,20 @@ public class Job
     [Required]
     public WorkType WorkType { get; set; }
 
-    public decimal? SalaryMin { get; set; }
-    public decimal? SalaryMax { get; set; }
+    [Required]
+    public decimal SalaryMin { get; set; }
 
-    public string Description { get; set; }
+    [Required]
+    public decimal SalaryMax { get; set; }
 
-    [MaxLength(500)]
-    public string Summary { get; set; }
+    [MaxLength(1000)]
+    public string? Description { get; set; }
+
+    [MaxLength(200)]
+    public string? Summary { get; set; }
 
     [MaxLength(255)]
-    public string LogoImageUrl { get; set; }
+    public string? LogoImageUrl { get; set; }
 
     public bool IsOpen { get; set; } = true;
 

@@ -129,7 +129,7 @@ public class TestController : Controller
         int nextNumber = 1;
         if (lastUser != null)
         {
-            string lastNumberStr = lastUser.Id.Substring(3);
+            string lastNumberStr = lastUser.Id.Substring(1);
             if (int.TryParse(lastNumberStr, out int lastNumber))
             {
                 nextNumber = lastNumber + 1;
@@ -334,7 +334,7 @@ public class TestController : Controller
         int nextNumber = 1;
         if (lastCategory != null)
         {
-            string lastNumberStr = lastCategory.Id.Substring(3);
+            string lastNumberStr = lastCategory.Id.Substring(1);
             if (int.TryParse(lastNumberStr, out int lastNumber))
             {
                 nextNumber = lastNumber + 1;
@@ -440,7 +440,7 @@ public class TestController : Controller
         int nextNumber = 1;
         if (lastInstitution != null)
         {
-            string lastNumberStr = lastInstitution.Id.Substring(3);
+            string lastNumberStr = lastInstitution.Id.Substring(1);
             if (int.TryParse(lastNumberStr, out int lastNumber))
             {
                 nextNumber = lastNumber + 1;
@@ -752,7 +752,9 @@ public class TestController : Controller
 
         var vm = new JobExperienceVM
         {
-            UserOptions = _db.Users.Select(u => new SelectListItem
+            UserOptions = _db.Users
+            .Where(u => u.Role == Role.JobSeeker) // 只选择JobSeeker
+            .Select(u => new SelectListItem
             {
                 Value = u.Id,
                 Text = u.Name
@@ -916,6 +918,276 @@ public class TestController : Controller
     #endregion
     #endregion
 
+    // Job ============================================================================================================== Job
+    #region Job
+    #region GET
+    public IActionResult Jobs()
+    {
+        var jobs = _db.Jobs
+            .Include(j => j.User)
+            .Include(j => j.Category)
+            .ToList();
+        return View("Job/Index", jobs);
+    }
+
+    public IActionResult CreateJob()
+    {
+        var vm = new JobVM
+        {
+            UserOptions = _db.Users
+                .Where(u => u.Role == Role.Employer) // 假设 Employer 才能发布岗位
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id,
+                    Text = u.Name
+                }).ToList(),
+
+            CategoryOptions = _db.Categories
+                .Where(c => c.ParentId != null) // 只选择次分类
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id,
+                    Text = c.Name
+                }).ToList(),
+
+            PayTypeOptions = Enum.GetValues(typeof(PayType))
+                .Cast<PayType>()
+                .Select(p => new SelectListItem
+                {
+                    Value = ((int)p).ToString(),
+                    Text = p.ToString()
+                }).ToList(),
+
+            WorkTypeOptions = Enum.GetValues(typeof(WorkType))
+                .Cast<WorkType>()
+                .Select(w => new SelectListItem
+                {
+                    Value = ((int)w).ToString(),
+                    Text = w.ToString()
+                }).ToList()
+        };
+
+        return View("Job/Create", vm);
+    }
+
+    public IActionResult EditJob(string id)
+    {
+        var job = _db.Jobs
+            .Include(j => j.User)
+            .Include(j => j.Category)
+            .FirstOrDefault(j => j.Id == id);
+        if (job == null) return NotFound();
+
+        var vm = new JobVM
+        {
+            Id = job.Id,
+            UserId = job.UserId,
+            CategoryId = job.CategoryId,
+            Title = job.Title,
+            Location = job.Location,
+            PayType = job.PayType,
+            WorkType = job.WorkType,
+            SalaryMin = job.SalaryMin,
+            SalaryMax = job.SalaryMax,
+            Description = job.Description,
+            Summary = job.Summary,
+            LogoImageUrl = job.LogoImageUrl,
+            IsOpen = job.IsOpen,
+
+            // 下拉选项
+            UserOptions = _db.Users
+                .Where(u => u.Role == Role.Employer)
+                .Select(u => new SelectListItem
+                {
+                    Value = u.Id,
+                    Text = u.Name
+                }).ToList(),
+
+            CategoryOptions = _db.Categories
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id.ToString(),
+                    Text = c.Name
+                }).ToList(),
+
+            PayTypeOptions = Enum.GetValues(typeof(PayType))
+                .Cast<PayType>()
+                .Select(p => new SelectListItem
+                {
+                    Value = ((int)p).ToString(),
+                    Text = p.ToString()
+                }).ToList(),
+
+            WorkTypeOptions = Enum.GetValues(typeof(WorkType))
+                .Cast<WorkType>()
+                .Select(w => new SelectListItem
+                {
+                    Value = ((int)w).ToString(),
+                    Text = w.ToString()
+                }).ToList()
+        };
+
+        return View("Job/Edit", vm);
+    }
+
+    public IActionResult DeleteJob(string id)
+    {
+        var job = _db.Jobs.Find(id);
+        if (job == null) return NotFound();
+        return View("Job/Delete", job);
+    }
+    #endregion
+
+    #region POST
+    [HttpPost]
+    public IActionResult CreateJob(JobVM vm)
+    {
+        if (ModelState.IsValid)
+        {
+            //string? logoFileName = SaveUploadedFile(vm.LogoImage!, "images/uploads/logo");
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "uploads", "logo");
+            string? logoFileName = UploadLogo(vm.LogoImage!, uploadsFolder);
+
+            var job = new Job
+            {
+                Id = GenerateJobId(),
+                UserId = vm.UserId,
+                CategoryId = vm.CategoryId,
+                Title = vm.Title,
+                Location = vm.Location,
+                PayType = vm.PayType,
+                WorkType = vm.WorkType,
+                SalaryMin = vm.SalaryMin,
+                SalaryMax = vm.SalaryMax,
+                Description = vm.Description,
+                Summary = vm.Summary,
+                LogoImageUrl = logoFileName != null ? $"/images/uploads/logo/{logoFileName}" : null,
+                IsOpen = vm.IsOpen,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
+
+            _db.Jobs.Add(job);
+            _db.SaveChanges();
+
+            return RedirectToAction("Jobs");
+        }
+
+        DebugModelStateErrors();
+        return View("Job/Create", vm);
+    }
+
+    [HttpPost]
+    public IActionResult EditJob(JobVM vm)
+    {
+        if (ModelState.IsValid)
+        {
+            var job = _db.Jobs.Find(vm.Id);
+            if (job == null) return NotFound();
+
+            string? oldLogoPath = job.LogoImageUrl;
+
+            // 保存新上传的文件
+            //string? logoFileName = SaveUploadedFile(vm.LogoImage!, "images/uploads/logo");
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "uploads", "logo");
+            string? logoFileName = UploadLogo(vm.LogoImage!, uploadsFolder);
+
+            job.UserId = vm.UserId;
+            job.CategoryId = vm.CategoryId;
+            job.Title = vm.Title;
+            job.Location = vm.Location;
+            job.PayType = vm.PayType;
+            job.WorkType = vm.WorkType;
+            job.SalaryMin = vm.SalaryMin;
+            job.SalaryMax = vm.SalaryMax;
+            job.Description = vm.Description;
+            job.Summary = vm.Summary;
+
+            // 处理 logo 更新逻辑
+            if (!string.IsNullOrWhiteSpace(vm.LogoImageUrl))
+            {
+                job.LogoImageUrl = vm.LogoImageUrl;
+            }
+            else if (logoFileName != null)
+            {
+                // 删除旧 logo（确保不是默认图）
+                if (!string.IsNullOrWhiteSpace(oldLogoPath) && !oldLogoPath.Contains("default"))
+                {
+                    string fullOldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", oldLogoPath.TrimStart('/'));
+                    if (System.IO.File.Exists(fullOldPath))
+                    {
+                        System.IO.File.Delete(fullOldPath);
+                    }
+                }
+
+                // 设置新 logo
+                job.LogoImageUrl = $"/images/uploads/logo/{logoFileName}";
+            }
+
+            job.IsOpen = vm.IsOpen;
+            job.UpdatedAt = DateTime.UtcNow;
+
+            _db.Jobs.Update(job);
+            _db.SaveChanges();
+
+            return RedirectToAction("Jobs");
+        }
+
+        DebugModelStateErrors();
+        return View("Job/Edit", vm);
+    }
+
+    [HttpPost, ActionName("DeleteJob")]
+    public IActionResult DeleteJobConfirmed(string id)
+    {
+        var job = _db.Jobs.Find(id);
+        if (job != null)
+        {
+            // 删除 logo 文件
+            var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            DeleteLogo(job.LogoImageUrl!, uploadsFolder);
+
+            _db.Jobs.Remove(job);
+            _db.SaveChanges();
+        }
+
+        return RedirectToAction("Jobs");
+    }
+    #endregion
+
+    #region Functions
+    private string GenerateJobId()
+    {
+        var last = _db.Jobs
+            .Where(j => j.Id.StartsWith("J"))
+            .OrderByDescending(j => j.Id)
+            .FirstOrDefault();
+
+        int next = 1;
+        if (last != null)
+        {
+            string numberStr = last.Id.Substring(1);
+            if (int.TryParse(numberStr, out int lastNumber))
+            {
+                next = lastNumber + 1;
+            }
+        }
+
+        return $"J{next.ToString("D3")}";
+    }
+
+    public IActionResult CheckJobId(string id)
+    {
+        bool exists = _db.Jobs.Any(j => j.Id == id);
+        if (exists)
+            return Json($"ID {id} 已存在");
+        return Json(true);
+    }
+    #endregion
+    #endregion
+
+
+
 
 
 
@@ -947,6 +1219,64 @@ public class TestController : Controller
         return Enumerable.Range(1, 12)
             .Select(m => new SelectListItem { Text = m.ToString("D2"), Value = m.ToString() })
             .ToList();
+    }
+
+    ///// <summary>
+    ///// 保存上传的文件到指定文件夹，并返回相对路径或文件名。
+    ///// </summary>
+    ///// <param name="file">要上传的文件</param>
+    ///// <param name="subFolder">相对于 wwwroot 的子目录，如 "images/uploads/logo"</param>
+    ///// <returns>文件名（含扩展名），若上传失败则返回 null</returns>
+    //public static string? SaveUploadedFile(IFormFile file, string subFolder)
+    //{
+    //    if (file == null || file.Length == 0)
+    //        return null;
+
+    //    var uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", subFolder);
+    //    if (!Directory.Exists(uploadsFolder))
+    //        Directory.CreateDirectory(uploadsFolder);
+
+    //    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+    //    var filePath = Path.Combine(uploadsFolder, fileName);
+
+    //    using (var stream = new FileStream(filePath, FileMode.Create))
+    //    {
+    //        file.CopyTo(stream);
+    //    }
+
+    //    return fileName;
+    //}
+
+    public static string UploadLogo(IFormFile logoImage, string uploadsFolder)
+    {
+        if (logoImage == null || logoImage.Length == 0)
+            return null!;
+
+        if (!Directory.Exists(uploadsFolder))
+            Directory.CreateDirectory(uploadsFolder);
+
+        var logoFileName = Guid.NewGuid().ToString() + Path.GetExtension(logoImage.FileName);
+        var filePath = Path.Combine(uploadsFolder, logoFileName);
+
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            logoImage.CopyTo(stream);
+        }
+
+        return logoFileName;
+    }
+
+    public static void DeleteLogo(string fileName, string uploadsFolder)
+    {
+        if (string.IsNullOrWhiteSpace(fileName))
+            return;
+
+        var filePath = Path.Combine(uploadsFolder, fileName.TrimStart('/', '\\'));
+
+        if (System.IO.File.Exists(filePath))
+        {
+            System.IO.File.Delete(filePath);
+        }
     }
 }
 

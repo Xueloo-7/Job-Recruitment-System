@@ -185,3 +185,13 @@ E027	U007	Bachelor of Chemical Engineering	University of Malaya (UM)
 E028	U008	Bachelor of Environmental Engineering	Technical University of Munich
 E029	U009	Degree in Industrial Design	University of Sydney
 E030	U010	Bachelor of Language Education	University of Melbourne
+
+
+
+Job Experience (依赖于现有 User(仅限Role为Jobseeker的))
+
+JE001	U002	Software Engineer	TechNova Ltd	2020	6	2022	12	false	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
+JE002	U004	Frontend Developer	PixelHive	2019	3	2021	9	false	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
+JE003	U006	System Analyst	DataWorks	2018	1	2020	5	false	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
+JE004	U008	Product Manager	Starlink Studio	2022	7			true	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
+JE005	U010	Backend Developer	CodeWeld Inc	2021	11	2023	3	false	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
