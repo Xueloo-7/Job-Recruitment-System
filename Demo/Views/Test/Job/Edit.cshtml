@@ -22,6 +22,15 @@
     </div>
 
     <div class="form-group">
+        <label asp-for="PromotionId">套餐</label>
+        <select asp-for="PromotionId" class="form-control"
+                asp-items="Model.PromotionOptions">
+            <option value="">请选择套餐</option>
+        </select>
+        <span asp-validation-for="PromotionId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
         <label asp-for="Title"></label>
         <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title" class="text-danger"></span>

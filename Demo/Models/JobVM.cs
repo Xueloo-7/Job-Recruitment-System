@@ -6,13 +6,16 @@ using System.ComponentModel.DataAnnotations;
 
 public class JobVM
 {
-    public string? Id { get; set; } // 系统生成，不参与验证
+    public string? Id { get; set; }
 
     [Required]
     public string UserId { get; set; }
 
-    [Required]  // 【FK】
+    [Required]
     public string CategoryId { get; set; }
+
+    [Required]
+    public string PromotionId { get; set; }  // ✅ 新增 Promotion 选择字段
 
     [Required, MaxLength(100)]
     public string Title { get; set; }
@@ -43,12 +46,12 @@ public class JobVM
 
     public bool IsOpen { get; set; } = true;
 
-    public IFormFile? LogoFile { get; set; } // ✅ 新增：用来接收文件上传
+    public IFormFile? LogoFile { get; set; }
 
-    // ✅ 下拉列表绑定字段
+    // ✅ 下拉选项
     public List<SelectListItem>? UserOptions { get; set; }
     public List<SelectListItem>? CategoryOptions { get; set; }
     public List<SelectListItem>? PayTypeOptions { get; set; }
     public List<SelectListItem>? WorkTypeOptions { get; set; }
-
+    public List<SelectListItem>? PromotionOptions { get; set; } // ✅ 新增
 }

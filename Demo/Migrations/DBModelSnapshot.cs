@@ -154,6 +154,10 @@ namespace Demo.Migrations
                     b.Property<int>("PayType")
                         .HasColumnType("int");
 
+                    b.Property<string>("PromotionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(6)");
+
                     b.Property<decimal>("SalaryMax")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
@@ -185,6 +189,8 @@ namespace Demo.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
+
+                    b.HasIndex("PromotionId");
 
                     b.HasIndex("UserId");
 
@@ -238,45 +244,6 @@ namespace Demo.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("JobExperiences");
-                });
-
-            modelBuilder.Entity("Demo.Models.JobPromotion", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("JobId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("JobId1")
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<int>("PromotionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PromotionId1")
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId1");
-
-                    b.HasIndex("PromotionId1");
-
-                    b.ToTable("JobPromotions");
                 });
 
             modelBuilder.Entity("Demo.Models.Notification", b =>
@@ -484,6 +451,12 @@ namespace Demo.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Demo.Models.Promotion", "Promotion")
+                        .WithMany("Jobs")
+                        .HasForeignKey("PromotionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Demo.Models.User", "User")
                         .WithMany("Jobs")
                         .HasForeignKey("UserId")
@@ -491,6 +464,8 @@ namespace Demo.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+
+                    b.Navigation("Promotion");
 
                     b.Navigation("User");
                 });
@@ -504,21 +479,6 @@ namespace Demo.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Demo.Models.JobPromotion", b =>
-                {
-                    b.HasOne("Demo.Models.Job", "Job")
-                        .WithMany("JobPromotions")
-                        .HasForeignKey("JobId1");
-
-                    b.HasOne("Demo.Models.Promotion", "Promotion")
-                        .WithMany("JobPromotions")
-                        .HasForeignKey("PromotionId1");
-
-                    b.Navigation("Job");
-
-                    b.Navigation("Promotion");
                 });
 
             modelBuilder.Entity("Demo.Models.Notification", b =>
@@ -551,13 +511,11 @@ namespace Demo.Migrations
             modelBuilder.Entity("Demo.Models.Job", b =>
                 {
                     b.Navigation("Applications");
-
-                    b.Navigation("JobPromotions");
                 });
 
             modelBuilder.Entity("Demo.Models.Promotion", b =>
                 {
-                    b.Navigation("JobPromotions");
+                    b.Navigation("Jobs");
                 });
 
             modelBuilder.Entity("Demo.Models.User", b =>
