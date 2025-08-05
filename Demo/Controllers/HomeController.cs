@@ -1,5 +1,6 @@
 ﻿using Demo.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Demo.Controllers;
@@ -13,19 +14,73 @@ public class HomeController : Controller
         db = context;
     }
 
-    public IActionResult Index(string keyword = "", string jobPostingUserId = "")
+    public IActionResult Index(string keyword = "", string location = "", string? categoryId = null, string? jobPostingUserId = null)
     {
         ViewBag.Active = "Search";
 
-        // 
-
-        var jobs = db.Jobs
+        IQueryable<Job> jobQuery = db.Jobs
             .Include(j => j.Category)
-            .Where(j => j.IsOpen && (string.IsNullOrEmpty(keyword) || j.Title.Contains(keyword)))
-            .ToList();
+            .Include(j => j.User) // 如果页面要显示发布者信息
+            .Where(j => j.IsOpen);
 
-        return View(jobs);
+        if (!string.IsNullOrEmpty(jobPostingUserId))
+        {
+            // 忽略 keyword 和 location，只获取该用户发布的岗位
+            jobQuery = jobQuery.Where(j => j.UserId == jobPostingUserId);
+        }
+        else
+        {
+            // 普通搜索逻辑
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                jobQuery = jobQuery.Where(j =>
+                    j.Title.Contains(keyword) ||
+                    j.CompanyName.Contains(keyword));
+            }
+
+            if (!string.IsNullOrEmpty(location))
+            {
+                jobQuery = jobQuery.Where(j =>
+                    j.Location.Contains(location));
+            }
+
+            if (!string.IsNullOrWhiteSpace(categoryId))
+            {
+                jobQuery = jobQuery.Where(j => j.CategoryId == categoryId);
+            }
+        }
+
+        var jobs = jobQuery.ToList();
+
+        var vm = new HomeVM
+        {
+            CategoryOptions = db.Categories
+                .Where(c => c.ParentId != null) // 过滤非 employer 分类
+                .Select(c => new SelectListItem
+                {
+                    Value = c.Id,
+                    Text = c.Name
+                }).ToList(),
+
+            Jobs = jobs,
+        };
+
+        return View(vm);
     }
+
+    [HttpPost]
+    public IActionResult Index(HomeVM vm)
+    {
+        // 处理表单提交
+        return RedirectToAction("Index", new
+        {
+            keyword = vm.Keyword,
+            location = vm.Location,
+            categoryId = vm.CategoryId,
+            jobPostingUserId = vm.JobPostingUserId
+        });
+    }
+
 
     public IActionResult Employer()
     {

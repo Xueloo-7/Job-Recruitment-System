@@ -1,4 +1,4 @@
-﻿@model List<Demo.Models.Job>
+﻿@model Demo.Models.HomeVM
 @{
     ViewBag.Title = "Job Seeker";
     ViewBag.Active = "Home";
@@ -8,10 +8,17 @@
     <div class="hero-content">
         <h1>Find your new job</h1>
 
-        <form id="job-search-form" class="search-form">
+        <form id="job-search-form" class="search-form" asp-action="Index">
             <div class="search-field">
                 <label for="keyword">What</label>
                 <input type="text" id="keyword" name="keyword" placeholder="e.g. Web Developer" />
+            </div>
+
+            <div class="search-field">
+                <label style="visibility: hidden">Select</label>
+                <select asp-for="@Model.CategoryId" asp-items="Model.CategoryOptions" class="form-control">
+                    <option value="">Any Classification</option>
+                </select>
             </div>
 
             <div class="search-field">
@@ -51,7 +58,7 @@
 
 <div class="job-container">
     <section class="job-left">
-        @foreach (var job in Model)
+        @foreach (var job in Model.Jobs)
         {
             <div class="job-card" data-id="@job.Id">
                 <img src="@job.LogoImageUrl" alt="company image" />
@@ -94,6 +101,7 @@
 
 @section Styles {
     <link rel="stylesheet" href="/css/job.css" />
+    <link rel="stylesheet" href="/css/home.css" />
 }
 
 @* <section class="employer-section">
