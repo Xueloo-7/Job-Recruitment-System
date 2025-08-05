@@ -299,8 +299,8 @@ public class Application
     [Remote(action: "CheckApplicationId", controller: "Test", ErrorMessage = "ID 已存在")]
     public string Id { get; set; }
 
-    [Required]  // 【FK】
-    public int JobId { get; set; }
+    [Required, MaxLength(6)]  // 【FK】
+    public string JobId { get; set; }
 
     [Required, MaxLength(6)]  // 【FK】
     public string UserId { get; set; }
