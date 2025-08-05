@@ -31,7 +31,7 @@
     </div>
 </section>
 
-<div class="job-container">
+@* <div class="job-container">
     <section class="job-left">
         @foreach (var job in Model)
         {
@@ -47,12 +47,40 @@
         <!-- 默认空白区域 -->
         <p>点击左侧岗位以查看详细信息。</p>
     </section>
+</div> *@
+
+<div class="job-container">
+    <section class="job-left">
+        @foreach (var job in Model)
+        {
+            <div class="job-card" data-id="@job.Id">
+                <img src="@job.LogoImageUrl" alt="company image" />
+                <h4>@job.Title</h4>
+                <p>CompanyName: @job.CompanyName</p>
+                <p>Location: @job.Location</p>
+                <p>Salary: RM @job.SalaryMin - RM @job.SalaryMax</p>
+                <p>Summary: @job.Summary</p>
+                <p>@((DateTime.Now - job.CreatedAt).Days) day</p>
+            </div>
+        }
+    </section>
+
+    <section class="job-right" id="job-details">
+        <p>点击左侧岗位以查看详细信息。</p>
+    </section>
 </div>
 
 @section Scripts {
     <script>
         document.querySelectorAll('.job-card').forEach(card => {
             card.addEventListener('click', () => {
+                // 1. 移除所有卡片的 active 类
+                document.querySelectorAll('.job-card').forEach(c => c.classList.remove('active'));
+
+                // 2. 当前卡片添加 active 类
+                card.classList.add('active');
+
+                // 3. 加载详情页面内容
                 const jobId = card.getAttribute('data-id');
                 fetch(`/Job/Details/${jobId}`)
                     .then(res => res.text())
@@ -123,3 +151,4 @@
         <a href="#" class="view-all-link">View All Jobs</a>
     </div>
 </section> *@
+

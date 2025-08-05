@@ -13,9 +13,11 @@ public class HomeController : Controller
         db = context;
     }
 
-    public IActionResult Index(string keyword = "")
+    public IActionResult Index(string keyword = "", string jobPostingUserId = "")
     {
         ViewBag.Active = "Search";
+
+        // 
 
         var jobs = db.Jobs
             .Include(j => j.Category)
@@ -52,14 +54,5 @@ public class HomeController : Controller
         return PartialView("~/Views/Job/_JobListPartial.cshtml", jobs);
     }
 
-    //public IActionResult JobDetails(int id)
-    //{
-    //    var job = db.Jobs
-    //        .Include(j => j.Category)
-    //        .FirstOrDefault(j => j.Id == id);
 
-    //    if (job == null) return NotFound();
-
-    //    return PartialView("_JobDetails", job);
-    //}
 }
