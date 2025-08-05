@@ -22,8 +22,6 @@ public class DB : DbContext
     public DbSet<Application> Applications { get; set; }
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<Promotion> Promotions { get; set; }
-    public DbSet<JobPromotion> JobPromotions { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // decimal 精度配置
@@ -236,6 +234,9 @@ public class Job
     [Required]  // 【FK】
     public string CategoryId { get; set; }
 
+    [Required]  // 【FK】
+    public string PromotionId { get; set; }
+
     [Required, MaxLength(100)]
     public string Title { get; set; }
 
@@ -271,8 +272,9 @@ public class Job
     // 【导航属性】
     public User User { get; set; }
     public Category Category { get; set; }
+    public Promotion Promotion { get; set; }
+
     public ICollection<Application> Applications { get; set; } = new List<Application>();
-    public ICollection<JobPromotion> JobPromotions { get; set; } = new List<JobPromotion>();
 }
 
 public enum PayType
@@ -363,33 +365,6 @@ public class Promotion
 
     public string Description { get; set; }
 
-    // 【导航属性】
-    public ICollection<JobPromotion> JobPromotions { get; set; } = new List<JobPromotion>();
-}
-
-public class JobPromotion
-{
-    [Key, MaxLength(6)]
-    [RegularExpression(@"^JP\d{3}$", ErrorMessage = "ID 格式应为 JP+三位数字")]
-    [Remote(action: "CheckJobPromotionId", controller: "Test", ErrorMessage = "ID 已存在")]
-    public string Id { get; set; }
-
-    [Required]  // 【FK】
-    public int JobId { get; set; }
-
-    [Required]  // 【FK】
-    public int PromotionId { get; set; }
-
-    [Required]
-    public DateTime StartDate { get; set; }
-
-    [Required]
-    public DateTime EndDate { get; set; }
-
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
-    // 【导航属性】
-    public Job Job { get; set; }
-    public Promotion Promotion { get; set; }
+    // 修改导航属性：从 JobPromotion → Job（1对多）
+    public ICollection<Job> Jobs { get; set; } = new List<Job>();
 }

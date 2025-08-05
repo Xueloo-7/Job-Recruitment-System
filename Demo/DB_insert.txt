@@ -150,7 +150,9 @@ U007	William Teh	123456	wteh@example.com	0186666777	0	true	2025-08-04T00:00:00Z	
 U008	Jane Goh	123456	jane.goh@example.com	0147777888	1	true	2025-08-04T00:00:00Z	Jane	Goh	Ipoh	true
 U009	Daniel Chia	123456	dchia@example.com	0198888999	0	true	2025-08-04T00:00:00Z	Daniel	Chia	Miri	false
 U010	Emily Tan	123456	emilytan@example.com	0159999000	1	true	2025-08-04T00:00:00Z	Emily	Tan	Seremban	true
-
+U011	TechNova Ltd	123456	employer1@gmail.com	0111111111	2	true	2025-08-04T00:00:00Z	TechNova	Ltd	Kuala Lumpur	false
+U012	PixelHive	123456	employer2@gmail.com	01212121212	2	true	2025-08-04T00:00:00Z	Pixel	Hive	George Town	false
+U013	Starlink Studio	123456	employer3@gmail.com	01313131313	2	true	2025-08-04T00:00:00Z	Starlink	Studio	Shah Alam	false
 
 
 Education (依赖于现有 User, Institution, Qualification)
@@ -198,24 +200,30 @@ JE005	U010	Backend Developer	CodeWeld Inc	2021	11	2023	3	false	2025-08-04T16:00:
 
 
 
-Job (依赖于现有 User(仅限Role为Employer的), Category)
+Promotion 
 
-J001	U011	C034	Software Engineer	Malacca	1	0	3596.59	5487.08	content	Great opportunity for career growth	/images/uploads/logo/1.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
-J002	U011	C004	Marketing Manager	Ipoh	1	0	3682.60	6274.35	content	Join our dynamic team	/images/uploads/logo/2.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
-J003	U013	C018	Data Analyst	Johor Bahru	1	1	3193.00	5393.88	content	Flexible working hours	/images/uploads/logo/3.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
-J004	U013	C024	UI/UX Designer	Kuala Lumpur	1	0	3169.30	5628.29	content	Competitive salary and benefits	/images/uploads/logo/4.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
-J005	U013	C029	Project Coordinator	Kuching	1	0	3937.03	5129.86	content	Innovative work environment	/images/uploads/logo/5.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
-J006	U013	C008	Sales Executive	Kuching	1	1	3099.06	5404.70	content	Work with industry leaders	/images/uploads/logo/6.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
-J007	U012	C011	Content Writer	Malacca	1	0	3996.07	5253.62	content	Collaborative and inclusive culture	/images/uploads/logo/7.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
-J008	U011	C046	Customer Support Specialist	Shah Alam	1	0	3283.16	4740.17	content	Challenging and rewarding role	/images/uploads/logo/8.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
-J009	U011	C007	HR Officer	George Town	0	1	3753.14	6605.30	content	Supportive management	/images/uploads/logo/9.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
-J010	U011	C046	Finance Associate	Ipoh	1	0	2300.27	4824.35	content	Remote work available	/images/uploads/logo/10.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+P1	Basic Package	600	30	Good visibility\nReports and analytics\n30 days visibility
+P2	Premium Package	1080	30	Excellent visibility\nReports and analytics\n30 days visibility\nAdd company images to boost brand\nPriority listing
+
+
+
+Job (依赖于现有 User(仅限Role为Employer的), Category, Promotion)
+
+J001	U011	C034	P1	Software Engineer	Malacca	1	0	3596.59	5487.08	content	Great opportunity for career growth	/images/uploads/logo/1.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J002	U011	C004	P2	Marketing Manager	Ipoh	1	0	3682.60	6274.35	content	Join our dynamic team	/images/uploads/logo/2.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J003	U013	C018	P1	Data Analyst	Johor Bahru	1	1	3193.00	5393.88	content	Flexible working hours	/images/uploads/logo/3.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J004	U013	C024	P2	UI/UX Designer	Kuala Lumpur	1	0	3169.30	5628.29	content	Competitive salary and benefits	/images/uploads/logo/4.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J005	U013	C029	P1	Project Coordinator	Kuching	1	0	3937.03	5129.86	content	Innovative work environment	/images/uploads/logo/5.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J006	U013	C008	P2	Sales Executive	Kuching	1	1	3099.06	5404.70	content	Work with industry leaders	/images/uploads/logo/6.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J007	U012	C011	P2	Content Writer	Malacca	1	0	3996.07	5253.62	content	Collaborative and inclusive culture	/images/uploads/logo/7.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J008	U011	C046	P2	Customer Support Specialist	Shah Alam	1	0	3283.16	4740.17	content	Challenging and rewarding role	/images/uploads/logo/8.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J009	U011	C007	P1	HR Officer	George Town	0	1	3753.14	6605.30	content	Supportive management	/images/uploads/logo/9.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
+J010	U011	C046	P2	Finance Associate	Ipoh	1	0	2300.27	4824.35	content	Remote work available	/images/uploads/logo/10.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22
 
 
 
 Resume (依赖现有 User(仅限Role为Jobseeker的)))
 
-Id	UserId	ImageUrl	CreatedAt	UpdatedAt
 R001	U002	/images/uploads/resume/example.png	2025-08-05T00:00:00Z	2025-08-05T00:00:00Z
 R002	U004	/images/uploads/resume/example.png	2025-08-05T00:00:00Z	2025-08-05T00:00:00Z
 R003	U006	/images/uploads/resume/example.png	2025-08-05T00:00:00Z	2025-08-05T00:00:00Z

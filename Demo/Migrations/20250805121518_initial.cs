@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Demo.Migrations
 {
     /// <inheritdoc />
-    public partial class categoryFix : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,7 +34,7 @@ namespace Demo.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,7 +97,7 @@ namespace Demo.Migrations
                     Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     Qualification = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Institution = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    Institution = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -143,28 +143,34 @@ namespace Demo.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<string>(type: "nvarchar(6)", nullable: false),
+                    PromotionId = table.Column<string>(type: "nvarchar(6)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PayType = table.Column<int>(type: "int", nullable: false),
                     WorkType = table.Column<int>(type: "int", nullable: false),
-                    SalaryMin = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: true),
-                    SalaryMax = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Summary = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    LogoImageUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    SalaryMin = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
+                    SalaryMax = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Summary = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    LogoImageUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     IsOpen = table.Column<bool>(type: "bit", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CategoryId1 = table.Column<string>(type: "nvarchar(6)", nullable: false)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Jobs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Jobs_Categories_CategoryId1",
-                        column: x => x.CategoryId1,
+                        name: "FK_Jobs_Categories_CategoryId",
+                        column: x => x.CategoryId,
                         principalTable: "Categories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Jobs_Promotions_PromotionId",
+                        column: x => x.PromotionId,
+                        principalTable: "Promotions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -246,35 +252,6 @@ namespace Demo.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "JobPromotions",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
-                    JobId = table.Column<int>(type: "int", nullable: false),
-                    PromotionId = table.Column<int>(type: "int", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    JobId1 = table.Column<string>(type: "nvarchar(6)", nullable: true),
-                    PromotionId1 = table.Column<string>(type: "nvarchar(6)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_JobPromotions", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_JobPromotions_Jobs_JobId1",
-                        column: x => x.JobId1,
-                        principalTable: "Jobs",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_JobPromotions_Promotions_PromotionId1",
-                        column: x => x.PromotionId1,
-                        principalTable: "Promotions",
-                        principalColumn: "Id");
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Applications_JobId1",
                 table: "Applications",
@@ -301,19 +278,14 @@ namespace Demo.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_JobPromotions_JobId1",
-                table: "JobPromotions",
-                column: "JobId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_JobPromotions_PromotionId1",
-                table: "JobPromotions",
-                column: "PromotionId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Jobs_CategoryId1",
+                name: "IX_Jobs_CategoryId",
                 table: "Jobs",
-                column: "CategoryId1");
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Jobs_PromotionId",
+                table: "Jobs",
+                column: "PromotionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Jobs_UserId",
@@ -348,9 +320,6 @@ namespace Demo.Migrations
                 name: "JobExperiences");
 
             migrationBuilder.DropTable(
-                name: "JobPromotions");
-
-            migrationBuilder.DropTable(
                 name: "Notifications");
 
             migrationBuilder.DropTable(
@@ -363,10 +332,10 @@ namespace Demo.Migrations
                 name: "Jobs");
 
             migrationBuilder.DropTable(
-                name: "Promotions");
+                name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Promotions");
 
             migrationBuilder.DropTable(
                 name: "Users");

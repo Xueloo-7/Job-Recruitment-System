@@ -927,6 +927,7 @@ public class TestController : Controller
         var jobs = _db.Jobs
             .Include(j => j.User)
             .Include(j => j.Category)
+            .Include(j => j.Promotion)
             .ToList();
         return View("Job/Index", jobs);
     }
@@ -949,6 +950,13 @@ public class TestController : Controller
                 {
                     Value = c.Id,
                     Text = c.Name
+                }).ToList(),
+
+            PromotionOptions = _db.Promotions
+                .Select(p => new SelectListItem
+                {
+                    Value = p.Id,
+                    Text = p.Name
                 }).ToList(),
 
             PayTypeOptions = Enum.GetValues(typeof(PayType))
@@ -1011,6 +1019,13 @@ public class TestController : Controller
                     Text = c.Name
                 }).ToList(),
 
+            PromotionOptions = _db.Promotions
+                .Select(p => new SelectListItem
+                {
+                    Value = p.Id,
+                    Text = p.Name
+                }).ToList(),
+
             PayTypeOptions = Enum.GetValues(typeof(PayType))
                 .Cast<PayType>()
                 .Select(p => new SelectListItem
@@ -1054,6 +1069,7 @@ public class TestController : Controller
                 Id = GenerateJobId(),
                 UserId = vm.UserId,
                 CategoryId = vm.CategoryId,
+                PromotionId = vm.PromotionId,
                 Title = vm.Title,
                 Location = vm.Location,
                 PayType = vm.PayType,
@@ -1095,6 +1111,7 @@ public class TestController : Controller
 
             job.UserId = vm.UserId;
             job.CategoryId = vm.CategoryId;
+            job.PromotionId = vm.PromotionId;
             job.Title = vm.Title;
             job.Location = vm.Location;
             job.PayType = vm.PayType;

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Migrations
 {
     [DbContext(typeof(DB))]
-    [Migration("20250804032032_cf2")]
-    partial class cf2
+    [Migration("20250805121518_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -89,8 +89,8 @@ namespace Demo.Migrations
 
                     b.Property<string>("Institution")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Qualification")
                         .IsRequired()
@@ -117,8 +117,8 @@ namespace Demo.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("Id");
 
@@ -131,10 +131,7 @@ namespace Demo.Migrations
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CategoryId1")
+                    b.Property<string>("CategoryId")
                         .IsRequired()
                         .HasColumnType("nvarchar(6)");
 
@@ -142,8 +139,8 @@ namespace Demo.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<bool>("IsOpen")
                         .HasColumnType("bit");
@@ -154,25 +151,27 @@ namespace Demo.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("LogoImageUrl")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("PayType")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("SalaryMax")
+                    b.Property<string>("PromotionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(6)");
+
+                    b.Property<decimal>("SalaryMax")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<decimal?>("SalaryMin")
+                    b.Property<decimal>("SalaryMin")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
 
                     b.Property<string>("Summary")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -192,7 +191,9 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CategoryId1");
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("PromotionId");
 
                     b.HasIndex("UserId");
 
@@ -246,45 +247,6 @@ namespace Demo.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("JobExperiences");
-                });
-
-            modelBuilder.Entity("Demo.Models.JobPromotion", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(6)
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("JobId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("JobId1")
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<int>("PromotionId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("PromotionId1")
-                        .HasColumnType("nvarchar(6)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId1");
-
-                    b.HasIndex("PromotionId1");
-
-                    b.ToTable("JobPromotions");
                 });
 
             modelBuilder.Entity("Demo.Models.Notification", b =>
@@ -488,7 +450,13 @@ namespace Demo.Migrations
                 {
                     b.HasOne("Demo.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId1")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Demo.Models.Promotion", "Promotion")
+                        .WithMany("Jobs")
+                        .HasForeignKey("PromotionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -499,6 +467,8 @@ namespace Demo.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+
+                    b.Navigation("Promotion");
 
                     b.Navigation("User");
                 });
@@ -512,21 +482,6 @@ namespace Demo.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Demo.Models.JobPromotion", b =>
-                {
-                    b.HasOne("Demo.Models.Job", "Job")
-                        .WithMany("JobPromotions")
-                        .HasForeignKey("JobId1");
-
-                    b.HasOne("Demo.Models.Promotion", "Promotion")
-                        .WithMany("JobPromotions")
-                        .HasForeignKey("PromotionId1");
-
-                    b.Navigation("Job");
-
-                    b.Navigation("Promotion");
                 });
 
             modelBuilder.Entity("Demo.Models.Notification", b =>
@@ -559,13 +514,11 @@ namespace Demo.Migrations
             modelBuilder.Entity("Demo.Models.Job", b =>
                 {
                     b.Navigation("Applications");
-
-                    b.Navigation("JobPromotions");
                 });
 
             modelBuilder.Entity("Demo.Models.Promotion", b =>
                 {
-                    b.Navigation("JobPromotions");
+                    b.Navigation("Jobs");
                 });
 
             modelBuilder.Entity("Demo.Models.User", b =>
