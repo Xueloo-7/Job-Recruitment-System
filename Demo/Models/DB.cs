@@ -240,6 +240,9 @@ public class Job
     [Required, MaxLength(100)]
     public string Title { get; set; }
 
+    [Required, MaxLength(30)]
+    public string CompanyName { get; set; }
+
     [MaxLength(100)]
     public string Location { get; set; }
 
@@ -255,7 +258,7 @@ public class Job
     [Required]
     public decimal SalaryMax { get; set; }
 
-    [MaxLength(1000)]
+    [MaxLength(2000)]
     public string? Description { get; set; }
 
     [MaxLength(200)]

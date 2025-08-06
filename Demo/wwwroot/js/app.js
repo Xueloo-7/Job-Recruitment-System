@@ -18,15 +18,15 @@ $(document).on('click', '.closeMenu, .overlay', function () {
 });
 
 //---Search Function---
-$(function () {
-    $('#job-search-form').on('submit', function (e) {
-        e.preventDefault();
+//$(function () {
+//    $('#job-search-form').on('submit', function (e) {
+//        e.preventDefault();
 
-        $.get('@Url.Action("SearchAjax", "Job")', $(this).serialize(), function (data) {
-            $('#job-results').html(data);
-        });
-    });
-});
+//        $.get('@Url.Action("SearchAjax", "Job")', $(this).serialize(), function (data) {
+//            $('#job-results').html(data);
+//        });
+//    });
+//});
 
 //---Job Introduction---
 //document.getElementById("job-search-form").addEventListener("submit", function (e) {

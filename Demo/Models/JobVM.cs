@@ -20,6 +20,9 @@ public class JobVM
     [Required, MaxLength(100)]
     public string Title { get; set; }
 
+    [Required, MaxLength(30)]
+    public string CompanyName { get; set; }
+
     [MaxLength(100)]
     public string Location { get; set; }
 
