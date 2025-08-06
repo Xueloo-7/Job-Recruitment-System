@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Demo.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class createDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -229,21 +229,21 @@ namespace Demo.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
-                    JobId = table.Column<int>(type: "int", nullable: false),
+                    JobId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    JobId1 = table.Column<string>(type: "nvarchar(6)", nullable: true)
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Applications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Applications_Jobs_JobId1",
-                        column: x => x.JobId1,
+                        name: "FK_Applications_Jobs_JobId",
+                        column: x => x.JobId,
                         principalTable: "Jobs",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Applications_Users_UserId",
                         column: x => x.UserId,
@@ -253,9 +253,9 @@ namespace Demo.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Applications_JobId1",
+                name: "IX_Applications_JobId",
                 table: "Applications",
-                column: "JobId1");
+                column: "JobId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Applications_UserId",
