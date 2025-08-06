@@ -1,0 +1,165 @@
+﻿/* page1 hero section */
+.hero-section {
+    width: 100%;
+    height: 30vh;
+    background: url('/images/background2.jpg') center center / cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-content {
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(4px);
+    background-color: rgba(255, 255, 255, 0.3);
+    text-align: center;
+    color: #000;
+}
+
+    .hero-content h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 700;
+    }
+
+.search-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.search-field {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    /* 减小宽度 */
+    height: 70px;
+    /* 增加高度 */
+}
+
+    .search-field label {
+        margin-bottom: 0.4rem;
+        font-weight: 500;
+        font-size: 1.5rem;
+        color: black;
+        text-align: left;
+        /* 明确指定左对齐 */
+    }
+
+    .search-field input,
+    .search-field select,
+    .search-field button {
+        box-sizing: border-box;
+        padding: 0.6rem;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        height: 2.4rem;
+        line-height: 1.2rem; /* 添加 line-height 有时能解决 select 偏高问题 */
+    }
+
+.search-button-field {
+    width: auto;
+    /* 覆盖上面的宽度 */
+    flex: 0 0 auto;
+    /* 不可拉伸、不占多余空间 */
+}
+
+.search-btn {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    background-color: #005f3f;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.3s ease;
+}
+
+    .search-btn:hover {
+        background-color: #e67300;
+    }
+/* 响应式支持：小屏幕竖排显示 */
+@media (max-width: 768px) {
+    .search-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-btn {
+        width: 100%;
+    }
+}
+/* page2 employee section */
+.employer-section {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.section-header h2 {
+    font-size: 32px;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+.employer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.employer-card {
+    background: white;
+    border-radius: 8px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+    .employer-card:hover {
+        transform: translateY(-5px);
+    }
+
+.employer-logo img {
+    max-width: 180px;
+    max-height: 80px;
+    margin-bottom: 15px;
+}
+
+.job-count {
+    color: #666;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.section-footer {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.see-more-link, .view-all-link {
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.see-more-link {
+    color: #333;
+    border: 1px solid #ddd;
+}
+
+.view-all-link {
+    background-color: #2563eb;
+    color: white;
+}

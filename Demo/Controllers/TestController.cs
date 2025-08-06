@@ -993,6 +993,7 @@ public class TestController : Controller
             UserId = job.UserId,
             CategoryId = job.CategoryId,
             Title = job.Title,
+            CompanyName = job.CompanyName,
             Location = job.Location,
             PayType = job.PayType,
             WorkType = job.WorkType,
@@ -1071,6 +1072,7 @@ public class TestController : Controller
                 CategoryId = vm.CategoryId,
                 PromotionId = vm.PromotionId,
                 Title = vm.Title,
+                CompanyName = vm.CompanyName,
                 Location = vm.Location,
                 PayType = vm.PayType,
                 WorkType = vm.WorkType,
@@ -1113,6 +1115,7 @@ public class TestController : Controller
             job.CategoryId = vm.CategoryId;
             job.PromotionId = vm.PromotionId;
             job.Title = vm.Title;
+            job.CompanyName = vm.CompanyName;
             job.Location = vm.Location;
             job.PayType = vm.PayType;
             job.WorkType = vm.WorkType;

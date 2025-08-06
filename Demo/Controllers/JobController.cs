@@ -27,5 +27,17 @@ public class JobController : Controller
 
         return View(promotions);
     }
+
+    public IActionResult Details(string id)
+    {
+        var job = db.Jobs
+            .Include(j => j.Category)
+            .Include(j => j.User)
+            .FirstOrDefault(j => j.Id == id);
+
+        if (job == null) return NotFound();
+
+        return PartialView("_JobDetails", job);
+    }
 }
 
