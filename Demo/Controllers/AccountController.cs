@@ -3,14 +3,18 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using Demo.Models;
+using Demo;
+using Microsoft.AspNetCore.Authorization;
 
 public class AccountController : Controller
 {
     private readonly DB _context;
+    private readonly Helper hp;
 
-    public AccountController(DB context)
+    public AccountController(DB context, Helper hp)
     {
-        _context = context;
+        this._context = context;
+        this.hp = hp;
     }
 
     [HttpPost]
@@ -54,5 +58,35 @@ public class AccountController : Controller
     {
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         return RedirectToAction("SignIn");
+    }
+    
+    public IActionResult Register()
+    {
+        return View();
+    }
+    [Authorize(Roles = "Users")]
+    [HttpPost]
+    public IActionResult Register(UserVM vm)
+    {
+
+        if (ModelState.IsValid)
+        {
+            _context.Users.Add(new()
+            {
+                Id = vm.Id,
+                PhoneNumber = vm.PhoneNumber,
+                Email = vm.Email,
+                PasswordHash = hp.HashPassword(vm.PasswordHash),
+                Role = vm.Role,
+
+
+            }
+            );
+            _context.SaveChanges();
+
+            TempData["Info"] = "Register Successfully.";
+            return RedirectToAction("Login");
+        }
+        return View(vm);
     }
 }
