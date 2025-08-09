@@ -11,6 +11,8 @@ public class HomeVM
 
     public List<Job> Jobs { get; set; }
 
+    public int UnreadNotificationCount { get; set; }
+
     // 表单提交
     public string? Keyword { get; set; } = String.Empty;
     public string? Location { get; set; } = String.Empty;

@@ -33,6 +33,14 @@
                 <i class="fa-solid fa-user"></i>
             </a>
 
+            <a asp-controller="Notification" asp-action="Index" class="icon-button">
+                <i class="fa-solid fa-comment-dots"></i>
+                @if (Model.UnreadNotificationCount > 0)
+                {
+                    <span class="badge">@Model.UnreadCount</span>
+                }
+            </a>
+
             <!-- side Menu Button -->
             <button class="menu-toggle icon-button">
                 <i class="fas fa-bars"></i>

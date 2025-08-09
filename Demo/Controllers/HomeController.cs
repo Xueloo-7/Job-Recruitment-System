@@ -8,6 +8,7 @@ namespace Demo.Controllers;
 public class HomeController : Controller
 {
     private readonly DB db;
+    private readonly string currentUserId = "U001"; // 模拟当前用户 ID，实际应用中应从登录状态获取
 
     public HomeController(DB context)
     {
@@ -52,6 +53,11 @@ public class HomeController : Controller
 
         var jobs = jobQuery.ToList();
 
+        // 获取未读通知数量
+        var unreadCount = db.Notifications
+            .Where(n => n.UserId == currentUserId && !n.IsRead)
+            .Count();
+
         var vm = new HomeVM
         {
             CategoryOptions = db.Categories
@@ -63,6 +69,8 @@ public class HomeController : Controller
                 }).ToList(),
 
             Jobs = jobs,
+
+            UnreadNotificationCount = unreadCount,
         };
 
         return View(vm);
