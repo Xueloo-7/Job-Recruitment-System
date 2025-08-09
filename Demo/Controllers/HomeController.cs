@@ -95,6 +95,11 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult SignIn()
+    {
+        return View();
+    }
+
     public IActionResult LoadJobs(string company)
     {
         // put database future

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Migrations
 {
     [DbContext(typeof(DB))]
-    [Migration("20250805131251_removeJobInt")]
-    partial class removeJobInt
+    [Migration("20250806044030_createDB")]
+    partial class createDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,6 +36,7 @@ namespace Demo.Migrations
 
                     b.Property<string>("JobId")
                         .IsRequired()
+                        .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
                     b.Property<int>("Status")
