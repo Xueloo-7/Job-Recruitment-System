@@ -6,6 +6,10 @@
      box-sizing: border-box;
      background-color: #f5f3ef;
 }
+
+/*========================================================================*/
+/* Nav Bar Style */
+/*========================================================================*/
  .navbar {
      display: flex;
      justify-content: space-between;
@@ -51,18 +55,21 @@
      bottom: -4px;
      left: 0;
 }
- .icon-button {
-     background: white;
-     border: 2px solid black;
-     border-radius: 50%;
-     width: 36px;
-     height: 36px;
-     font-size: 16px;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     margin-left: 10px;
-     cursor: pointer;
+.icon-button {
+    background: white;
+    color: black;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    cursor: pointer;
+    -webkit-text-decoration: inherit;
+    text-decoration: inherit;
 }
 /* footer */
  footer {
