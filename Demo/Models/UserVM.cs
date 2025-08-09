@@ -5,6 +5,9 @@ using System.ComponentModel.DataAnnotations;
 
 public class UserVM
 {
+    [MaxLength(6)]
+
+    public string Id { get; set; }
     [Required, MaxLength(100)]
     public string PasswordHash { get; set; }
 
