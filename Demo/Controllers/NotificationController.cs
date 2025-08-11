@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Demo.Models;
+﻿using Demo.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Diagnostics;
 
 public class NotificationController : BaseController
@@ -11,33 +12,44 @@ public class NotificationController : BaseController
         _db = context;
     }
 
-    public IActionResult CreateNotification(string toUserId, string title, string content, string fromUserId = "")
+    public IActionResult Create()
     {
-        var notification = new Notification
-        {
-            Id = GenerateNotificationId(), // 你已有 ID 生成函数
-            UserId = toUserId,
-            FromUserId = fromUserId,
-            Title = title,
-            Content = content,
-            CreatedAt = DateTime.UtcNow,
-            IsRead = false
-        };
+        var users = _db.Users
+                      .Select(u => new { u.Id, u.Name }) // 假设你的User类有 Id 和 UserName
+                      .ToList();
 
-        _db.Notifications.Add(notification);
-        _db.SaveChanges();
-
+        ViewBag.Users = new SelectList(users, "Id", "UserName");
+        
         return View();
     }
 
-    public IActionResult Index()
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Create(Notification notification)
     {
-        var userId = GetCurrentUserId();
+        if (ModelState.IsValid)
+        {
+            notification.CreatedAt = DateTime.Now; // 如果有时间字段
+            _db.Notifications.Add(notification);
+            _db.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        ViewBag.Users = new SelectList(_db.Users, "Id", "UserName", notification.UserId);
+        return View(notification);
+    }
+
+    public IActionResult Index(string? userId = "")
+    {
+        if(userId == null || userId == "")
+            userId = GetCurrentUserId(); // 获取当前用户 ID
 
         var notifications = _db.Notifications
             .Where(n => n.UserId == userId)
             .OrderByDescending(n => n.CreatedAt)
             .ToList();
+
+        ViewBag.UnreadCount = notifications.Count(n => !n.IsRead);
 
         return View(notifications);
     }
