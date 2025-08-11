@@ -4,7 +4,7 @@
     top: 0;
     right: 0;
     left: auto;
-    width: 260px;
+    width: 400px;
     height: 100%;
     background-color: #dedede;
     box-shadow: -2px 0 5px rgba(0,0,0,0.1);
@@ -28,9 +28,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
+    font-size: 2rem;
     font-weight: bold;
+    padding: 10px;
 }
 
 .menu-list {
@@ -42,9 +42,9 @@
     .menu-list .nav-item {
         display: flex;
         align-items: center;
-        padding: 12px 0;
+        padding: 15px 0;
         border-bottom: 1px solid #ddd;
-        font-size: 1rem;
+        font-size: 1.5rem;
         cursor: pointer;
         color: #333;
         transition: background 0.2s;
@@ -59,7 +59,6 @@
             font-size: 1.2rem;
         }
 
-/* overlay */
 .overlay {
     position: fixed;
     top: 0;
@@ -67,10 +66,26 @@
     right: 0;
     bottom: 0;
     background: rgba(0, 0, 0, 0.3);
-    display: none;
+    opacity: 0;
+    visibility: hidden; /* 隐藏但不移除 */
     z-index: 998;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
     .overlay.active {
-        display: block;
+        opacity: 1;
+        visibility: visible;
     }
+
+.sideMenu .menu-list .nav-item i {
+    font-size: 1.5rem;
+    color: #333;
+    padding: 0 10px;
+    width: 20px;
+}
+
+.sideMenu .closeMenu {
+    font-size: 2rem;
+    cursor: pointer;
+    color: #333;
+}

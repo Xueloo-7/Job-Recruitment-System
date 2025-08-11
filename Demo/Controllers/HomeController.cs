@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace Demo.Controllers;
 
-public class HomeController : Controller
+public class HomeController : BaseController
 {
     private readonly DB db;
     private readonly string currentUserId = "U001"; // 模拟当前用户 ID，实际应用中应从登录状态获取

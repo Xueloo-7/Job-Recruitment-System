@@ -1,0 +1,38 @@
+﻿@model List<Demo.Models.Notification>
+
+<div class="notification-list">
+    @foreach (var notification in Model)
+    {
+        <div class="notification-item @(notification.IsRead ? "read" : "unread")">
+            <h4>@notification.Title</h4>
+            <p>@notification.Content</p>
+            <small>@notification.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</small>
+
+            @if (!notification.IsRead)
+            {
+                <form asp-action="MarkAsRead" asp-controller="Notification" method="post" style="display:inline;">
+                    <input type="hidden" name="id" value="@notification.Id" />
+                    <button type="submit" class="btn btn-sm btn-primary">标为已读</button>
+                </form>
+            }
+        </div>
+    }
+</div>
+
+<style>
+    .notification-list {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    .notification-item {
+        border-bottom: 1px solid #ddd;
+        padding: 10px 0;
+    }
+    .notification-item.unread {
+        background-color: #f5f9ff;
+    }
+    .notification-item.read {
+        background-color: #fff;
+        color: #888;
+    }
+</style>
