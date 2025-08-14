@@ -7,15 +7,11 @@ public class ProfileController : Controller
 {
     private readonly DB db;
 
-    User? currentUser = null;
-
-    // 依赖注入
     public ProfileController(DB context)
     {
         db = context;
     }
 
-    // 模拟数据
     private static User demoUser = new User
     {
         FirstName = "Xueloo",
@@ -23,55 +19,57 @@ public class ProfileController : Controller
         Location = "Kuala Lumpur",
         PhoneNumber = "012-3456789"
     };
+
+    private User GetCurrentUser(string? userId)
+    {
+        Debug.WriteLine($"GetCurrentUser called with userId: {userId}");
+        if (string.IsNullOrEmpty(userId))
+            return demoUser;
+
+        var user = db.Users.Find(userId);
+        return user ?? demoUser;
+    }
+
     public IActionResult Index(string? userId = "")
     {
-        var user = db.Users.Find(userId);
-        if(user != null)
-        {
-            currentUser = user;
-        }
-        else
-        {
-            // 如果没有传入 userId，则使用模拟数据
-            currentUser = demoUser;
-        }
+        User user = GetCurrentUser(userId);
 
         return View(user);
     }
 
-    public IActionResult EditPartial()
+    public IActionResult EditPartial(string? userId = "")
     {
-        return PartialView("_Edit", currentUser);
+        return PartialView("_Edit", GetCurrentUser(userId));
     }
 
     [HttpPost]
     public IActionResult Edit(User updatedUser)
     {
-        // 更新逻辑
-        currentUser = updatedUser;
+        // 更新数据库
+        db.Users.Update(updatedUser);
+        db.SaveChanges();
 
-        // 返回更新后的 Profile 视图
-        return PartialView("_Profile", currentUser);
-    }
-     
-    public IActionResult Profile()
-    {
-        Debug.WriteLine(currentUser);
-        return PartialView("_Profile", currentUser);
+        // 返回更新后的 Profile
+        return PartialView("_Profile", updatedUser);
     }
 
-    public IActionResult Summary()
+    public IActionResult Profile(string? userId)
     {
-        return PartialView("_Summary");
+        return PartialView("_Profile", GetCurrentUser(userId));
     }
 
-    public IActionResult CareerHistory()
+    public IActionResult Summary(string? userId)
     {
-        return PartialView("_CareerHistory");
+        return PartialView("_Summary", GetCurrentUser(userId));
     }
 
-    public IActionResult Education()
+    public IActionResult CareerHistory(string? userId)
     {
-        return PartialView("_Education");
+        return PartialView("_CareerHistory", GetCurrentUser(userId));
+    }
+
+    public IActionResult Education(string? userId)
+    {
+        return PartialView("_Education", GetCurrentUser(userId));
     }
 }

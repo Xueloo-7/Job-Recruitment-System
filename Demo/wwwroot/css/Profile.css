@@ -26,6 +26,10 @@ html, body {
     margin-bottom: 20px;
 }
 
+.tab-buttons{
+
+}
+
 .tab-button {
     background-color: #d6ded5;
     border: 2px solid #9eab9e;
@@ -33,6 +37,10 @@ html, body {
     border-radius: 10px 10px 0 0;
     cursor: pointer;
     font-weight: bold;
+    text-decoration: none;
+    color: inherit;
+    height: 60px; /* 假设按钮总高度是60px */
+    line-height: 30px; /* 行高等于高度，文字就垂直居中了 */
 }
 
     .tab-button.active {
