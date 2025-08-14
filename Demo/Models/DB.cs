@@ -308,6 +308,10 @@ public class Application
     [Required, MaxLength(6)]  // 【FK】
     public string UserId { get; set; }
 
+    public string? Source { get; set; } // 申请来源
+
+    public DateTime? HiredDate { get; set; }
+
     [Required]
     public ApplicationStatus Status { get; set; } = ApplicationStatus.Pending;
 
