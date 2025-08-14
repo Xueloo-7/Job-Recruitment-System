@@ -3,90 +3,64 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 style="text-align:center; margin-bottom:20px;">招聘数据报告</h2>
+<div class="page-container">
+    <h2 class="page-title">招聘数据报告</h2>
 
-<div style="display:flex; justify-content:space-between; gap:20px;">
-    <!-- 饼图 -->
-    <div style="flex:1; background:#fff; padding:15px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);">
-        <h3 style="text-align:center;">投递来源占比</h3>
-        <canvas id="sourcePieChart"></canvas>
+    <div class="container">
+        <div class="box">
+            <h3 class="chart-title">投递来源占比</h3>
+            <canvas id="sourcePieChart"></canvas>
+        </div>
+        <div class="box">
+            <h3 class="chart-title">每日投递趋势</h3>
+            <canvas id="applicationsLineChart"></canvas>
+        </div>
     </div>
 
-    <!-- 折线图 -->
-    <div style="flex:1; background:#fff; padding:15px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);">
-        <h3 style="text-align:center;">每日投递趋势</h3>
-        <canvas id="applicationsLineChart"></canvas>
+    <div class="table-wrapper">
+        <h3 class="table-title">职位招聘数据</h3>
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th>岗位名称</th>
+                    <th>申请数量</th>
+                    <th>已发布(天)</th>
+                    <th>招聘状态</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>软件工程师</td>
+                    <td>25</td>
+                    <td>17</td>
+                    <td><span class="status status-open">招聘中</span></td>
+                </tr>
+                <tr>
+                    <td>UI 设计师</td>
+                    <td>12</td>
+                    <td>30</td>
+                    <td><span class="status status-closed">已结束</span></td>
+                </tr>
+                <tr>
+                    <td>项目经理</td>
+                    <td>8</td>
+                    <td>12</td>
+                    <td><span class="status status-open">招聘中</span></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
-<!-- 下方表格 -->
-<div style="margin-top:30px; background:#fff; padding:20px; border-radius:10px; box-shadow:0 0 10px rgba(0,0,0,0.1);">
-    <h3 style="text-align:center;">职位招聘数据</h3>
-    <table style="width:100%; border-collapse:collapse; text-align:center;">
-        <thead style="background:#f5f5f5;">
-            <tr>
-                <th style="padding:10px; border:1px solid #ddd;">职位名称</th>
-                <th style="padding:10px; border:1px solid #ddd;">申请人数</th>
-                <th style="padding:10px; border:1px solid #ddd;">平均招聘用时 (天)</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td style="padding:10px; border:1px solid #ddd;">软件工程师</td>
-                <td style="padding:10px; border:1px solid #ddd;">25</td>
-                <td style="padding:10px; border:1px solid #ddd;">14</td>
-            </tr>
-            <tr>
-                <td style="padding:10px; border:1px solid #ddd;">UI 设计师</td>
-                <td style="padding:10px; border:1px solid #ddd;">15</td>
-                <td style="padding:10px; border:1px solid #ddd;">10</td>
-            </tr>
-            <tr>
-                <td style="padding:10px; border:1px solid #ddd;">市场专员</td>
-                <td style="padding:10px; border:1px solid #ddd;">30</td>
-                <td style="padding:10px; border:1px solid #ddd;">20</td>
-            </tr>
-        </tbody>
-    </table>
-</div>
 
-<!-- 引入 Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-    // 饼图数据（投递来源占比）
-    var pieCtx = document.getElementById('sourcePieChart').getContext('2d');
-    var sourcePieChart = new Chart(pieCtx, {
-        type: 'pie',
-        data: {
-            labels: ['LinkedIn', 'Google Ads', 'Indeed', '招聘会', '内推'],
-            datasets: [{
-                label: '投递来源',
-                data: [50, 10, 20, 10, 10],
-                backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF'],
-                hoverOffset: 10
-            }]
-        }
-    });
 
-    // 折线图数据（每日投递趋势）
-    var lineCtx = document.getElementById('applicationsLineChart').getContext('2d');
-    var applicationsLineChart = new Chart(lineCtx, {
-        type: 'line',
-        data: {
-            labels: ['8月1日', '8月2日', '8月3日', '8月4日', '8月5日', '8月6日', '8月7日'],
-            datasets: [{
-                label: '申请人数',
-                data: [5, 10, 8, 15, 12, 18, 20],
-                fill: false,
-                borderColor: '#36A2EB',
-                tension: 0.3
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: true }
-            }
-        }
-    });
-</script>
+
+@section Styles {
+    <link rel="stylesheet" href="/css/report.css" />
+}
+
+@section Scripts {
+    <!-- 引入 Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/report.js"></script>
+}

@@ -1,51 +1,36 @@
-﻿<script>
-    var applicationsByJob = echarts.init(document.getElementById('applicationsByJob'));
-    applicationsByJob.setOption({
-        tooltip: {},
-        xAxis: { type: 'category', data: @Html.Raw(Json.Encode(ViewBag.JobTitles)) },
-        yAxis: { type: 'value' },
-        series: [{ data: @Html.Raw(Json.Encode(ViewBag.ApplicationsCount)), type: 'bar' }]
-    });
-
-    var sourceChart = echarts.init(document.getElementById('sourceChart'));
-    sourceChart.setOption({
-        tooltip: { trigger: 'item' },
-        series: [{
-            type: 'pie',
-            radius: '70%',
-            data: @Html.Raw(Json.Encode(ViewBag.SourceData))
+﻿// 饼图数据（投递来源占比）
+var pieCtx = document.getElementById('sourcePieChart').getContext('2d');
+var sourcePieChart = new Chart(pieCtx, {
+    type: 'pie',
+    data: {
+        labels: ['LinkedIn', 'Google Ads', 'Indeed', '招聘会', '内推'],
+        datasets: [{
+            label: '投递来源',
+            data: [50, 10, 20, 10, 10],
+            backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF'],
+            hoverOffset: 10
         }]
-    });
+    }
+});
 
-    // ===== 平均招聘周期 =====
-    var timeToHireChart = echarts.init(document.getElementById('timeToHireChart'));
-    timeToHireChart.setOption({
-        tooltip: {},
-        xAxis: { type: 'category', data: @Html.Raw(Json.Encode(ViewBag.JobTitles)) },
-        yAxis: { type: 'value', name: '天' },
-        series: [{ data: @Html.Raw(Json.Encode(ViewBag.TimeToHireData)), type: 'bar', color: '#4caf50' }]
-    });
-
-    // ===== 招聘漏斗 =====
-    var funnelChart = echarts.init(document.getElementById('funnelChart'));
-    funnelChart.setOption({
-        tooltip: { trigger: 'item' },
-        series: [{
-            type: 'funnel',
-            left: '10%',
-            top: 20,
-            bottom: 20,
-            width: '80%',
-            data: @Html.Raw(Json.Encode(ViewBag.FunnelData))
+// 折线图数据（每日投递趋势）
+var lineCtx = document.getElementById('applicationsLineChart').getContext('2d');
+var applicationsLineChart = new Chart(lineCtx, {
+    type: 'line',
+    data: {
+        labels: ['8月1日', '8月2日', '8月3日', '8月4日', '8月5日', '8月6日', '8月7日'],
+        datasets: [{
+            label: '申请人数',
+            data: [5, 10, 8, 15, 12, 18, 20],
+            fill: false,
+            borderColor: '#36A2EB',
+            tension: 0.3
         }]
-    });
-
-    // ===== 投递趋势 =====
-    var trendChart = echarts.init(document.getElementById('trendChart'));
-    trendChart.setOption({
-        tooltip: {},
-        xAxis: { type: 'category', data: @Html.Raw(Json.Encode(ViewBag.Days)) },
-        yAxis: { type: 'value' },
-        series: [{ data: @Html.Raw(Json.Encode(ViewBag.DailyApplications)), type: 'line' }]
-    });
-</script>
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: true }
+        }
+    }
+});
