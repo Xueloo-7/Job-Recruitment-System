@@ -48,6 +48,7 @@
         cursor: pointer;
         color: #333;
         transition: background 0.2s;
+        border-radius: 16px;
     }
 
         .menu-list .nav-item:hover {
