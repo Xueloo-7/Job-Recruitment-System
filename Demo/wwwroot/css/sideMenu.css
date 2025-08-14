@@ -4,7 +4,7 @@
     top: 0;
     right: 0;
     left: auto;
-    width: 400px;
+    width: 300px;
     height: 100%;
     background-color: #dedede;
     box-shadow: -2px 0 5px rgba(0,0,0,0.1);
@@ -26,9 +26,8 @@
 
 .menu-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: bold;
     padding: 10px;
 }
@@ -44,7 +43,7 @@
         align-items: center;
         padding: 15px 0;
         border-bottom: 1px solid #ddd;
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         cursor: pointer;
         color: #333;
         transition: background 0.2s;
@@ -69,7 +68,7 @@
     background: rgba(0, 0, 0, 0.3);
     opacity: 0;
     visibility: hidden; /* 隐藏但不移除 */
-    z-index: 998;
+    z-index: 500; /* header之下 */
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
@@ -89,4 +88,34 @@
     font-size: 2rem;
     cursor: pointer;
     color: #333;
+}
+
+@media (max-width: 768px) {
+    .sideMenu {
+        width: 100%;
+        padding: 10px;
+        display: flex;
+    }
+    .menu-header {
+        font-size: 1.5rem;
+        padding: 10px 50px;
+    }
+
+    .menu-list {
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        margin-left: 20px;
+    }
+
+    .menu-list .nav-item {
+        font-size: 1.2rem;
+        padding: 20px 20px;
+    }
+    .sideMenu .menu-list .nav-item i {
+        font-size: 1.2rem;
+    }
+    .sideMenu .closeMenu {
+        font-size: 1.5rem;
+    }
 }
