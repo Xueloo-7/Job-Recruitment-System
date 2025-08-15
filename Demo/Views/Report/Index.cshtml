@@ -1,6 +1,6 @@
-﻿@{
+﻿@model Demo.Models.ReportVM
+@{
     ViewBag.Title = "Reports";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <div class="page-container">
@@ -13,6 +13,9 @@
         </div>
         <div class="box">
             <h3 class="chart-title">每日投递趋势</h3>
+            开始日期: <input type="date" id="startDate">
+            结束日期: <input type="date" id="endDate">
+            <button id="updateBtn">应用</button>
             <canvas id="applicationsLineChart"></canvas>
         </div>
     </div>
@@ -22,31 +25,34 @@
         <table class="report-table">
             <thead>
                 <tr>
-                    <th>岗位名称</th>
-                    <th>申请数量</th>
-                    <th>已发布(天)</th>
-                    <th>招聘状态</th>
+                    <th>Job Title</th>
+                    <th>Apply</th>
+                    <th>Hired</th>
+                    <th>Recruitment Day</th>
+                    <th>Status</th>
                 </tr>
             </thead>
+            
             <tbody>
-                <tr>
-                    <td>软件工程师</td>
-                    <td>25</td>
-                    <td>17</td>
-                    <td><span class="status status-open">招聘中</span></td>
-                </tr>
-                <tr>
-                    <td>UI 设计师</td>
-                    <td>12</td>
-                    <td>30</td>
-                    <td><span class="status status-closed">已结束</span></td>
-                </tr>
-                <tr>
-                    <td>项目经理</td>
-                    <td>8</td>
-                    <td>12</td>
-                    <td><span class="status status-open">招聘中</span></td>
-                </tr>
+                @foreach (var jr in Model.JobReports)
+                {
+                    <tr>
+                        <td>@jr.Job.Title</td>
+                        <td>@jr.TotalApplications</td>
+                        <td>@jr.TotalHired</td>
+                        <td>@jr.RecruitmentDays.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            @if (jr.IsOpen)
+                            {
+                                <span class="status status-open">招聘中</span>
+                            }
+                            else
+                            {
+                                <span class="status status-closed">已结束</span>
+                            }
+                        </td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
@@ -62,5 +68,10 @@
 @section Scripts {
     <!-- 引入 Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const id = "@Model.UserId";
+    </script>
+
     <script src="~/js/report.js"></script>
 }
