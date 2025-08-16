@@ -6,7 +6,7 @@ function loadCharts(userId, startDate, endDate) {
         start: startDate,
         end: endDate
     }, function (res) {
-        // 饼图
+        // Pie Chart
         const pieCtx = document.getElementById('sourcePieChart').getContext('2d');
         if (pieChart) pieChart.destroy();
         pieChart = new Chart(pieCtx, {
@@ -14,15 +14,15 @@ function loadCharts(userId, startDate, endDate) {
             data: {
                 labels: res.pieLabels,
                 datasets: [{
-                    label: '投递来源',
+                    label: 'Apply Source',
                     data: res.pieData,
-                    backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF'],
+                    backgroundColor: ['#36A2EB', '#FF6384', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40', '#C9CBCF'],
                     hoverOffset: 10
                 }]
             }
         });
 
-        // 折线图
+        // Line Chart
         const lineCtx = document.getElementById('applicationsLineChart').getContext('2d');
         if (lineChart) lineChart.destroy();
         lineChart = new Chart(lineCtx, {
@@ -30,7 +30,7 @@ function loadCharts(userId, startDate, endDate) {
             data: {
                 labels: res.lineLabels,
                 datasets: [{
-                    label: '申请人数',
+                    label: 'Apply Count',
                     data: res.lineData,
                     fill: false,
                     borderColor: '#36A2EB',
@@ -45,15 +45,15 @@ function updateChart(id) {
     const startDate = document.getElementById('startDate').value;
     const endDate = document.getElementById('endDate').value;
     if (!startDate || !endDate) {
-        alert('请选择开始和结束日期');
+        alert('Please select Start - End Date');
         return;
     }
     loadCharts(id, startDate, endDate);
 }
 
-// 页面加载默认显示最近 7 天
+// default show recently one month data
 document.addEventListener("DOMContentLoaded", function () {
-    // bind button
+
     const updateBtn = document.getElementById('updateBtn');
     if (updateBtn) {
         updateBtn.addEventListener('click', function () {

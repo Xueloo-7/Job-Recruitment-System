@@ -4,24 +4,24 @@
 }
 
 <div class="page-container">
-    <h2 class="page-title">招聘数据报告</h2>
+    <h2 class="page-title">Report</h2>
 
     <div class="container">
         <div class="box">
-            <h3 class="chart-title">投递来源占比</h3>
+            <h3 class="chart-title">Apply Source Percentage</h3>
             <canvas id="sourcePieChart"></canvas>
         </div>
         <div class="box">
-            <h3 class="chart-title">每日投递趋势</h3>
-            开始日期: <input type="date" id="startDate">
-            结束日期: <input type="date" id="endDate">
-            <button id="updateBtn">应用</button>
+            <h3 class="chart-title">Daily Apply</h3>
+            Start Date: <input type="date" id="startDate">
+            End Date: <input type="date" id="endDate">
+            <button id="updateBtn">Apply</button>
             <canvas id="applicationsLineChart"></canvas>
         </div>
     </div>
 
     <div class="table-wrapper">
-        <h3 class="table-title">职位招聘数据</h3>
+        <h3 class="table-title">Job Apply Information</h3>
         <table class="report-table">
             <thead>
                 <tr>
@@ -44,11 +44,11 @@
                         <td>
                             @if (jr.IsOpen)
                             {
-                                <span class="status status-open">招聘中</span>
+                                <span class="status status-open">Enable</span>
                             }
                             else
                             {
-                                <span class="status status-closed">已结束</span>
+                                <span class="status status-closed">Disable</span>
                             }
                         </td>
                     </tr>
@@ -66,7 +66,7 @@
 }
 
 @section Scripts {
-    <!-- 引入 Chart.js -->
+    @* import chart *@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
