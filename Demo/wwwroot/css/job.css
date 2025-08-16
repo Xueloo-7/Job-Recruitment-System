@@ -34,31 +34,7 @@
         margin: 20px;
     }
 
-@media (max-width: 768px) {
-    .job-left {
-        display:block;
-        width: 100%;
-    }
 
-        .job-left.hidden {
-            display: none; /* 在小屏幕上隐藏左侧列表 */
-        }
-
-    .job-right {
-        display: none; /* 在小屏幕上隐藏左侧列表 */
-    }
-
-        .job-right.active {
-            width: 100%;
-            display: block;
-        }
-
-    .back-btn {
-        display: block;
-        font-size: 1.5rem;
-        margin: 10px;
-    }
-}
 
 .job-card img {
     height: 100px;
@@ -94,4 +70,30 @@
 
 .back-btn{
     display:none;
+}
+
+@media (max-width: 768px) {
+    .job-left {
+        display: block;
+        width: 100%;
+    }
+
+        .job-left.hidden {
+            display: none; /* 在小屏幕上隐藏左侧列表 */
+        }
+
+    .job-right {
+        display: none; /* 在小屏幕上隐藏左侧列表 */
+    }
+
+        .job-right.active {
+            width: 100%;
+            display: block;
+        }
+
+    .back-btn {
+        display: block;
+        font-size: 1.5rem;
+        margin: 10px;
+    }
 }
