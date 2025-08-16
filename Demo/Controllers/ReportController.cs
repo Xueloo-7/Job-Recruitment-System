@@ -92,17 +92,16 @@ public class ReportController : Controller
         if(user.Role != Role.Employer)
             return Unauthorized("Only employers can access this data");
 
+        //Get All applications for the employer within the date range
         List<Application> applications = _db.Applications
             .Include(a => a.Job)
             .Where(a => a.Job.UserId == userId && a.CreatedAt >= start && a.CreatedAt <= end)
             .ToList();
 
-        Debug.WriteLine($"Found {applications.Count} applications for user {userId} between {start} and {end}");
-
         if (!applications.Any())
             return Json(new { message = "No application data in this date range" });
 
-        // 饼图数据（来源统计）
+        // Pie Data
         var sourceCounts = new Dictionary<ApplicationSource, int>();
         foreach (var app in applications)
         {
@@ -117,12 +116,12 @@ public class ReportController : Controller
             .Select(source => sourceCounts.TryGetValue(source, out int count) ? count : 0)
             .ToArray();
 
-        // 折线图数据（按天或周聚合）
+        // Line Data
         var totalDays = (end - start).TotalDays;
         List<string> lineLabels;
         List<int> lineData;
 
-        if (totalDays <= 14) // 时间跨度 <= 14 天 → 按天
+        if (totalDays <= 14) // Time range <= 14 day → day data
         {
             lineLabels = Enumerable.Range(0, (int)totalDays + 1)
                 .Select(i => start.AddDays(i).ToString("MM-dd"))
@@ -134,7 +133,7 @@ public class ReportController : Controller
                 return applications.Count(a => a.CreatedAt.Date == date.Date);
             }).ToList();
         }
-        else // 时间跨度大 → 按周
+        else // time range is big → week data
         {
             var startWeek = start.Date;
             var endWeek = end.Date;
