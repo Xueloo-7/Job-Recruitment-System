@@ -15,9 +15,46 @@
 </head>
 <body>
     <header class="navbar">
-        <div class="navbar-left">
-            <img src="~/images/favicon.png" alt="Logo" class="logo" />
-            <h1 class="brand">Job Seeker</h1>
+        <div class="navbar-top">
+            <div class="navbar-left">
+                <img src="~/images/favicon.png" alt="Logo" class="logo" />
+                <h1 class="brand">Job Seeker</h1>
+                <nav class="nav-links">
+                    <a asp-controller="Home" asp-action="Index" class="@Html.IsActive("Home", "Index")">Job Search</a>
+                    <a asp-controller="Profile" asp-action="Index" class="@Html.IsActive("Profile")">Profile</a>
+                    <a asp-controller="Home" asp-action="Employer" class="@Html.IsActive("Home", "Employer")">Employer</a>
+                    <a asp-controller="Home" asp-action="SignIn" class="@Html.IsActive("Home", "SignIn")">Sign In</a>
+                    <a asp-controller="Test" asp-action="Index" class="@Html.IsActive("Test", "Index")">Test</a>
+                    <a asp-controller="Report" asp-action="Index" class="@Html.IsActive("Report", "Index")">Report</a>
+                </nav>
+            </div>
+
+            <div class="navbar-right">
+                <!-- Profile logo -->
+                <a asp-controller="Profile" asp-action="Index" class="icon-button">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+
+                <a asp-controller="Notification" asp-action="Index" class="icon-button">
+                    <i class="fa-solid fa-comment-dots"></i>
+                    @if (ViewBag.UnreadCount > 0)
+                    {
+                        <span class="badge">@ViewBag.UnreadCount</span>
+                    }
+                </a>
+
+                <!-- side Menu Button -->
+                <button class="menu-toggle icon-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <partial name="_sideMenu" />
+            </div>
+        </div>
+
+
+
+        <div class="navbar-down">
             <nav class="nav-links">
                 <a asp-controller="Home" asp-action="Index" class="@Html.IsActive("Home", "Index")">Job Search</a>
                 <a asp-controller="Profile" asp-action="Index" class="@Html.IsActive("Profile")">Profile</a>
@@ -28,27 +65,7 @@
             </nav>
         </div>
 
-        <div class="navbar-right">
-            <!-- Profile logo -->
-            <a asp-controller="Profile" asp-action="Index" class="icon-button">
-                <i class="fa-solid fa-user"></i>
-            </a>
 
-            <a asp-controller="Notification" asp-action="Index" class="icon-button">
-                <i class="fa-solid fa-comment-dots"></i>
-                @if (ViewBag.UnreadCount > 0)
-                {
-                    <span class="badge">@ViewBag.UnreadCount</span>
-                }
-            </a>
-
-            <!-- side Menu Button -->
-            <button class="menu-toggle icon-button">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <partial name="_sideMenu" />
-        </div>
     </header>
 
     <main class="main-content">

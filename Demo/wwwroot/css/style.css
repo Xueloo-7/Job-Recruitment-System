@@ -1,62 +1,89 @@
 ﻿/* Reset default margin/padding */
- html, body {
-     margin: 0;
-     padding: 0;
-     min-width: 100%;
-     box-sizing: border-box;
-     background-color: #f5f3ef;
+html, body {
+    margin: 0;
+    padding: 0;
+    min-width: 100%;
+    box-sizing: border-box;
+    background-color: #f5f3ef;
+}
+
+.hidden {
+    display: none;
 }
 
 /*========================================================================*/
 /* Nav Bar Style */
 /*========================================================================*/
+
 .navbar {
     position: relative; /* 让 z-index 生效 */
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
     background-color: #9bae9e;
     padding: 14px 26px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     z-index: 999;
 }
- .navbar-left {
-     display: flex;
-     align-items: center;
-     gap: 20px;
+
+.navbar-top {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
- .navbar-right {
-     display: flex;
-     align-items: center;
-     gap: 0;
+
+.navbar-down .nav-links {
+    display: none;
 }
- .logo {
-     width: 48px;
-     height: 48px;
-     border-radius: 50%;
+
+.navbar-down {
+    margin-top: 10px;
+    width: 100%;
 }
- .brand {
-     font-size: 24px;
-     font-weight: bold;
-     margin: 0;
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
- .nav-links a {
-     margin-right: 16px;
-     text-decoration: none;
-     color: #000;
-     font-weight: 500;
-     position: relative;
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+    gap: 0;
 }
- .nav-links a.active::after {
-     content: '';
-     display: block;
-     height: 3px;
-     background: #000;
-     width: 100%;
-     position: absolute;
-     bottom: -4px;
-     left: 0;
+
+.logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
 }
+
+.brand {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.nav-links a {
+    margin-right: 16px;
+    text-decoration: none;
+    color: #000;
+    font-weight: 500;
+    position: relative;
+}
+
+    .nav-links a.active::after {
+        content: '';
+        display: block;
+        height: 3px;
+        background: #000;
+        width: 100%;
+        position: absolute;
+        bottom: -4px;
+        left: 0;
+    }
+
 .icon-button {
     background: white;
     color: black;
@@ -73,80 +100,115 @@
     -webkit-text-decoration: inherit;
     text-decoration: inherit;
 }
-/* footer */
- footer {
-     background: grey;
-     text-align: center;
-     font-family: 'serif';
-     width: 100%;
-     box-sizing: border-box;
-     border-top: 1px solid #ddd;
-     padding: 40px 20px 0px;
-     font-size: 14px;
-     color: #333;
-     margin-top: auto;
-}
- .footer .social-icons {
-     display: flex;
-     justify-content: center;
-     flex-wrap: wrap;
-     gap: 16px;
-     margin-bottom: 25px;
-}
- .footer .social-icons a {
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     width: 50px;
-     height: 50px;
-     border-radius: 50%;
-     background-color: #fff;
-     color: #555;
-     font-size: 24px;
-     transition: all 0.3s ease;
-     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-     text-decoration: none;
-}
- .footer .social-icons a:hover {
-     transform: scale(1.15);
-     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-}
- .footer .fa-youtube {
-     color: #FF0000;
-}
- .footer .fa-instagram {
-     color: #C13584;
-}
- .footer .fa-facebook {
-     color: #1877F2;
-}
- .footer .fa-whatsapp {
-     color: #25D366;
-}
- .footer .fa-weixin {
-     color: #09B83E;
-}
- .footer .fa-x-twitter {
-     color: #1DA1F2;
-}
- .footer .fa-tiktok {
-     color: #000;
-}
- .footer .fa-envelope {
-     color: #333;
-}
+
 /* black line bookmarks */
- .nav-links a {
-     padding: 10px 15px;
-     text-decoration: none;
-     color: black;
-     border-bottom: 2px solid transparent;
-     transition: border-color 0.3s ease;
+.nav-links a {
+    padding: 10px 15px;
+    text-decoration: none;
+    color: black;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s ease;
 }
- .nav-links a.active {
-     border-bottom: 2px solid black;
-     font-weight: bold;
+
+    .nav-links a.active {
+        border-bottom: 2px solid black;
+        font-weight: bold;
+    }
+
+@media (max-width: 1010px) {
+
+
+    .navbar-top .navbar-left .nav-links {
+        display: none;
+    }
+
+    .navbar-down .nav-links {
+        display: block;
+    }
 }
+
+@media (max-width: 700px) {
+    .navbar-down .nav-links {
+        display: none;
+    }
+}
+
+/*========================================================================*/
+/* Footer Style */
+/*========================================================================*/
+footer {
+    background: grey;
+    text-align: center;
+    font-family: 'serif';
+    width: 100%;
+    box-sizing: border-box;
+    border-top: 1px solid #ddd;
+    padding: 40px 20px 0px;
+    font-size: 14px;
+    color: #333;
+    margin-top: auto;
+}
+
+.footer .social-icons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+    .footer .social-icons a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background-color: #fff;
+        color: #555;
+        font-size: 24px;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        text-decoration: none;
+    }
+
+        .footer .social-icons a:hover {
+            transform: scale(1.15);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+        }
+
+.footer .fa-youtube {
+    color: #FF0000;
+}
+
+.footer .fa-instagram {
+    color: #C13584;
+}
+
+.footer .fa-facebook {
+    color: #1877F2;
+}
+
+.footer .fa-whatsapp {
+    color: #25D366;
+}
+
+.footer .fa-weixin {
+    color: #09B83E;
+}
+
+.footer .fa-x-twitter {
+    color: #1DA1F2;
+}
+
+.footer .fa-tiktok {
+    color: #000;
+}
+
+.footer .fa-envelope {
+    color: #333;
+}
+
 
 /*========================================================================*/
 /* Table Style */
@@ -351,6 +413,6 @@ footer {
             color: #222;
         }
 
-    footer {
-     padding-bottom: 50px;
-    }
+footer {
+    padding-bottom: 50px;
+}
