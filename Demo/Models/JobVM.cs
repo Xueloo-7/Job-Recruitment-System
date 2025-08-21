@@ -17,25 +17,31 @@ public class JobVM
     [Required]
     public string PromotionId { get; set; }  // ✅ 新增 Promotion 选择字段
 
-    [Required, MaxLength(100)]
+    [Required(ErrorMessage = "Title cannot be empty")]
+    [MaxLength(100)]
     public string Title { get; set; }
 
-    [Required, MaxLength(30)]
+    [Required(ErrorMessage = "Company Name cannot be empty")]
+    [MaxLength(30)]
     public string CompanyName { get; set; }
 
-    [MaxLength(100)]
+    
+    [Required, MaxLength(100)]
     public string Location { get; set; }
 
-    [Required]
+
+    [Required(ErrorMessage = "Please select a Pay Type")]
     public PayType PayType { get; set; }
 
-    [Required]
+    [Required(ErrorMessage = "Please select a Work Type")]
     public WorkType WorkType { get; set; }
 
-    [Required]
+    [Range(0.01, 99999.99, ErrorMessage = "Price must be between 0.01 and 99999.99")]
+    [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Invalid Salary format")]
     public decimal SalaryMin { get; set; }
 
-    [Required]
+    [Range(0.01, 99999.99, ErrorMessage = "Price must be between 0.01 and 99999.99")]
+    [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Invalid Salary format")]
     public decimal SalaryMax { get; set; }
 
     [MaxLength(1000)]
@@ -44,8 +50,9 @@ public class JobVM
     [MaxLength(200)]
     public string? Summary { get; set; }
 
+    [Required(ErrorMessage = "Please select a photo.")]
     [MaxLength(255)]
-    public string? LogoImageUrl { get; set; }
+    public IFormFile LogoImageUrl { get; set; }
 
     public bool IsOpen { get; set; } = true;
 

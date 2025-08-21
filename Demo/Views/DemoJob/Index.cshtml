@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Job> // for listing job
+
+@{
+    ViewBag.Title = "Job Board";
+}
+
+@{
+    int index = 0; // initial the index for list the first three variable
+}
+
+<link rel="stylesheet" href="/css/job.css" asp-append-version="true" /> 
+
+<h1>Job Listings</h1>
+
+<table class="table" id="job">
+    <tr>
+        <th>ID</th>
+        <th>TITLE</th>
+        <th>COMPANY NAME</th>
+        <th></th>
+    </tr>
+
+@foreach(var s in Model)
+{
+
+        <tr class="job-row @(index >= 3 ? "hidden" : "")">
+        <td>@s.Id</td>
+        <td>@s.Title</td>
+        <td>@s.CompanyName</td>
+        <td>
+            <button data-get="/DemoJob/Detail/@s.Id">Detail</button>
+        </td>
+        
+        </tr>
+        index++;
+    }
+</table>
+
+<button id="list">List More</button>
+
+@*css*@ 
+<style>
+    .hidden {
+        display: none;
+    }
+</style>
+
+
+<script>
+    document.getElementById("list").addEventListener("click", function () {
+        // show all hidden rows
+        document.querySelectorAll("#job .hidden").forEach(function (row) {
+            row.classList.remove("hidden");
+        });
+
+        // hide the button after showing all
+        this.style.display = "none";
+    });
+</script>
+
