@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Migrations
 {
     [DbContext(typeof(DB))]
-    [Migration("20250806044030_createDB")]
-    partial class createDB
+    [Migration("20250815061716_applicationChange")]
+    partial class applicationChange
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,10 +34,16 @@ namespace Demo.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("HiredDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("JobId")
                         .IsRequired()
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
+
+                    b.Property<int>("Source")
+                        .HasColumnType("int");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -134,12 +140,17 @@ namespace Demo.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(6)");
 
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(1000)
-                        .HasColumnType("nvarchar(1000)");
+                        .HasMaxLength(2000)
+                        .HasColumnType("nvarchar(2000)");
 
                     b.Property<bool>("IsOpen")
                         .HasColumnType("bit");
@@ -261,6 +272,11 @@ namespace Demo.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("FromUserId")
+                        .IsRequired()
+                        .HasMaxLength(6)
+                        .HasColumnType("nvarchar(6)");
+
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
@@ -275,6 +291,8 @@ namespace Demo.Migrations
                         .HasColumnType("nvarchar(6)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("FromUserId");
 
                     b.HasIndex("UserId");
 
@@ -487,11 +505,19 @@ namespace Demo.Migrations
 
             modelBuilder.Entity("Demo.Models.Notification", b =>
                 {
+                    b.HasOne("Demo.Models.User", "FromUser")
+                        .WithMany()
+                        .HasForeignKey("FromUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Demo.Models.User", "User")
                         .WithMany("Notifications")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("FromUser");
 
                     b.Navigation("User");
                 });

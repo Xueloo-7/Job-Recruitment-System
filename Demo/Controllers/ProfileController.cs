@@ -1,31 +1,75 @@
 ﻿using Demo.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace Demo.Controllers;
 public class ProfileController : Controller
 {
-    public IActionResult Index()
+    private readonly DB db;
+
+    public ProfileController(DB context)
     {
-        return View();
+        db = context;
     }
 
-    public IActionResult Profile()
+    private static User demoUser = new User
     {
-        return PartialView("_Profile");
+        FirstName = "Xueloo",
+        LastName = "Chan",
+        Location = "Kuala Lumpur",
+        PhoneNumber = "012-3456789"
+    };
+
+    private User GetCurrentUser(string? userId)
+    {
+        Debug.WriteLine($"GetCurrentUser called with userId: {userId}");
+        if (string.IsNullOrEmpty(userId))
+            return demoUser;
+
+        var user = db.Users.Find(userId);
+        return user ?? demoUser;
     }
 
-    public IActionResult Summary()
+    public IActionResult Index(string? userId = "")
     {
-        return PartialView("_Summary");
+        User user = GetCurrentUser(userId);
+
+        return View(user);
     }
 
-    public IActionResult CareerHistory()
+    public IActionResult EditPartial(string? userId = "")
     {
-        return PartialView("_CareerHistory");
+        return PartialView("_Edit", GetCurrentUser(userId));
     }
 
-    public IActionResult Education()
+    [HttpPost]
+    public IActionResult Edit(User updatedUser)
     {
-        return PartialView("_Education");
+        // 更新数据库
+        db.Users.Update(updatedUser);
+        db.SaveChanges();
+
+        // 返回更新后的 Profile
+        return PartialView("_Profile", updatedUser);
+    }
+
+    public IActionResult Profile(string? userId)
+    {
+        return PartialView("_Profile", GetCurrentUser(userId));
+    }
+
+    public IActionResult Summary(string? userId)
+    {
+        return PartialView("_Summary", GetCurrentUser(userId));
+    }
+
+    public IActionResult CareerHistory(string? userId)
+    {
+        return PartialView("_CareerHistory", GetCurrentUser(userId));
+    }
+
+    public IActionResult Education(string? userId)
+    {
+        return PartialView("_Education", GetCurrentUser(userId));
     }
 }

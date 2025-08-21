@@ -1,20 +1,69 @@
-﻿@{
+﻿@model User
+@{
     ViewBag.Title = "Profile";
 }
 
-<div class="profile-container">
-    <div class="tab-buttons">
-        <button class="tab-button active" data-tab="Profile">Profile</button>
-        <button class="tab-button" data-tab="Summary">Summary</button>
+@* <div id="profile-container" class="profile-container"> 
+    <div class="tab-buttons"> 
+        <button class="tab-button active" data-tab="Profile">Profile</button> 
+        <button class="tab-button" data-tab="Summary">Summary</button> 
         <button class="tab-button" data-tab="CareerHistory">Career History</button>
         <button class="tab-button" data-tab="Education">Education</button>
+    </div> 
+    <div id="tab-content" class="profile-card"> 
+        <partial name="~/Views/Profile/_Profile.cshtml" model="Model" />
+        <partial name="~/Views/Profile/_Summary.cshtml" /> 
+        <partial name="~/Views/Profile/_CareerHistory.cshtml" />
+        <partial name="~/Views/Profile/_Education.cshtml" /> 
+    </div> 
+</div> *@
+
+<div id="profile-container" class="profile-container" data-user-id="@Model.Id">
+    <div class="tab-buttons">
+        <a asp-controller="Profile"
+           asp-action="Profile"
+           asp-route-userId="@Model.Id"
+           data-ajax="true"
+           data-ajax-method="GET"
+           data-ajax-mode="replace"
+           data-ajax-update="#tab-content"
+           class="tab-button active">
+            Profile
+        </a>
+        <a asp-controller="Profile"
+           asp-action="Summary"
+           asp-route-userId="@Model.Id"
+           data-ajax="true"
+           data-ajax-method="GET"
+           data-ajax-mode="replace"
+           data-ajax-update="#tab-content"
+           class="tab-button">
+            Summary
+        </a>
+        <a asp-controller="Profile"
+           asp-action="CareerHistory"
+           asp-route-userId="@Model.Id"
+           data-ajax="true"
+           data-ajax-method="GET"
+           data-ajax-mode="replace"
+           data-ajax-update="#tab-content"
+           class="tab-button">
+            Career History
+        </a>
+        <a asp-controller="Profile"
+           asp-action="Education"
+           asp-route-userId="@Model.Id"
+           data-ajax="true"
+           data-ajax-method="GET"
+           data-ajax-mode="replace"
+           data-ajax-update="#tab-content"
+           class="tab-button">
+            Education
+        </a>
     </div>
 
     <div id="tab-content" class="profile-card">
-        <partial name="~/Views/Profile/_Profile.cshtml" />
-        <partial name="~/Views/Profile/_Summary.cshtml" />
-        <partial name="~/Views/Profile/_CareerHistory.cshtml" />
-        <partial name="~/Views/Profile/_Education.cshtml" />
+        <partial name="_Profile" model=@Model>
     </div>
 </div>
 
@@ -23,5 +72,5 @@
 }
 
 @section Scripts {
-    <script src="~/js/Profile.js"></script>
+    <script src="~/js/profile.js"></script>
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Demo.Migrations
 {
     /// <inheritdoc />
-    public partial class createDB : Migration
+    public partial class create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -146,12 +146,13 @@ namespace Demo.Migrations
                     CategoryId = table.Column<string>(type: "nvarchar(6)", nullable: false),
                     PromotionId = table.Column<string>(type: "nvarchar(6)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    CompanyName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Location = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PayType = table.Column<int>(type: "int", nullable: false),
                     WorkType = table.Column<int>(type: "int", nullable: false),
                     SalaryMin = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
                     SalaryMax = table.Column<decimal>(type: "decimal(10,2)", precision: 10, scale: 2, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: true),
                     Summary = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     LogoImageUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     IsOpen = table.Column<bool>(type: "bit", nullable: false),
@@ -187,6 +188,7 @@ namespace Demo.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
+                    FromUserId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsRead = table.Column<bool>(type: "bit", nullable: false),
@@ -195,6 +197,12 @@ namespace Demo.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Users_FromUserId",
+                        column: x => x.FromUserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Notifications_Users_UserId",
                         column: x => x.UserId,
@@ -231,6 +239,8 @@ namespace Demo.Migrations
                     Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     JobId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
+                    Source = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    HiredDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -291,6 +301,11 @@ namespace Demo.Migrations
                 name: "IX_Jobs_UserId",
                 table: "Jobs",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_FromUserId",
+                table: "Notifications",
+                column: "FromUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Notifications_UserId",

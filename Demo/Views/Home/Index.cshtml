@@ -70,95 +70,23 @@
                 <p>@((DateTime.Now - job.CreatedAt).Days) day</p>
             </div>
         }
+        @if (Model.Jobs.Count == 0)
+        {
+            <p class="not-found">No jobs found.</p>
+        }
     </section>
 
     <section class="job-right" id="job-details">
-        <p>点击左侧岗位以查看详细信息。</p>
+        <p>Click job in left side to view detail.</p>
     </section>
 </div>
 
 @section Scripts {
-
-
-    <script>
-        document.querySelectorAll('.job-card').forEach(card => {
-            card.addEventListener('click', () => {
-                // 1. 移除所有卡片的 active 类
-                document.querySelectorAll('.job-card').forEach(c => c.classList.remove('active'));
-
-                // 2. 当前卡片添加 active 类
-                card.classList.add('active');
-
-                // 3. 加载详情页面内容
-                const jobId = card.getAttribute('data-id');
-                fetch(`/Job/Details/${jobId}`)
-                    .then(res => res.text())
-                    .then(html => {
-                        document.getElementById('job-details').innerHTML = html;
-                    });
-            });
-        });
-    </script>
+    <script src="~/js/job.js"></script>
+    
 }
 
 @section Styles {
     <link rel="stylesheet" href="/css/job.css" />
     <link rel="stylesheet" href="/css/home.css" />
 }
-
-@* <section class="employer-section">
-    <div class="section-header">
-        <h2>Find your next employer</h2>
-    </div>
-
-    <div class="employer-grid">
-        <div class="employer-card">
-            <div class="employer-logo">
-                <img src="~/images/image5.png" alt="Intel">
-            </div>
-            <button class="job-count">15 jobs</button>
-            <a href="/Home/LoadJobs?company=intel"
-               data-ajax="true"
-               data-ajax-method="GET"
-               data-ajax-mode="replace"
-               data-ajax-update="job-list">
-            </a>
-        </div>
-
-        <div class="employer-card">
-            <div class="employer-logo">
-                <img src="~/images/image4.png" alt="Lazada">
-            </div>
-            <button class="job-count">20 jobs</button>
-            <a href="/Home/LoadJobs?company=Lazada"
-               data-ajax="true"
-               data-ajax-method="GET"
-               data-ajax-mode="replace"
-               data-ajax-update="job-list">
-            </a>
-        </div>
-
-        <div class="employer-card">
-            <div class="employer-logo">
-                <img src="~/images/image3.png" alt="Google">
-            </div>
-            <button class="job-count">5 jobs</button>
-            <a href="/Home/LoadJobs?company=google"
-               data-ajax="true"
-               data-ajax-method="GET"
-               data-ajax-mode="replace"
-               data-ajax-update="job-list">
-            </a>
-        </div>
-    </div>
-
-    <div id="job-list">
-        This is where the job list will be loaded via AJAX
-    </div>
-
-    <div class="section-footer">
-        <a href="#" class="see-more-link">See More</a>
-        <a href="#" class="view-all-link">View All Jobs</a>
-    </div>
-</section> *@
-

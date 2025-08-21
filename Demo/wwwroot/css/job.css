@@ -1,52 +1,14 @@
-﻿/*.job-container {
-    display: flex;
-    gap: 2rem;
-    padding: 1rem;
-}
-
-.job-left {
-    width: 40%;
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.job-card {
-    padding: 1rem;
-    border: 1px solid #ccc;
-    cursor: pointer;
-    background-color: #f8f8f8;
-    border-radius: 8px;
-    transition: background 0.2s;
-}
-
-    .job-card:hover {
-        background-color: #eaeaea;
-    }
-
-.job-right {
-    flex: 1;
-    padding: 1rem;
-    border: 1px solid #ddd;
-    min-height: 200px;
-    background-color: #fff;
-    border-radius: 8px;
-}
-*/
-
-.job-container {
+﻿.job-container {
     display: flex;
     align-items: flex-start;
-    gap: 20px;
     /* 使用百分比和最大宽度控制响应式宽度 */
-    width: 80%;
-    max-width: 1600px;
+    max-width: 1200px;
     margin: 0 auto; /* 居中并保留边距空间 */
     padding: 50px 0; /* 去掉固定左右 padding */
 }
-
 /* 左侧岗位列表 */
 .job-left {
+    display: block;
     width: 40%;
     max-height: 1000px; /* 限定高度以便滚动 */
     overflow-y: auto;
@@ -55,6 +17,7 @@
 
 /* 右侧岗位详情 */
 .job-right {
+    display: block;
     width: 60%;
     position: sticky;
     top: 20px; /* 吸附在页面顶部下方 20px */
@@ -66,22 +29,12 @@
     border-radius: 20px;
 }
 
-/* 响应式 */
-@media (max-width: 1200px) {
-    .job-container {
-        width: 94%;
-    }
-}
-
-@media (max-width: 800px) {
-    .job-left {
-        width: 100%;
+    .job-right p {
+        font-size: 1.5rem;
+        margin: 20px;
     }
 
-    .job-right {
-        display: none; 
-    }
-}
+
 
 .job-card img {
     height: 100px;
@@ -110,82 +63,37 @@
 .job-left::-webkit-scrollbar {
     display: none; /* Chrome / Safari / Edge */
 }
+
 .job-right::-webkit-scrollbar {
     display: none; /* Chrome / Safari / Edge */
 }
 
-/* Table ---------------------------------------------------------------------- */ /*YONG 我只是测试用而己 */
-
-.table {
-    border-collapse: collapse;
+.back-btn{
+    display:none;
 }
 
-    .table th,
-    .table td {
-        border: 1px solid #333;
-        padding: 5px;
+@media (max-width: 768px) {
+    .job-left {
+        display: block;
+        width: 100%;
     }
 
-    .table th {
-        background: #666;
-        color: #fff;
+        .job-left.hidden {
+            display: none; /* 在小屏幕上隐藏左侧列表 */
+        }
+
+    .job-right {
+        display: none; /* 在小屏幕上隐藏左侧列表 */
     }
 
-    .table tr:hover td {
-        background: #ccc;
+        .job-right.active {
+            width: 100%;
+            display: block;
+        }
+
+    .back-btn {
+        display: block;
+        font-size: 1.5rem;
+        margin: 10px;
     }
-
-.detail th {
-    text-align: left;
-}
-
-.table th a {
-    color: inherit;
-    display: block;
-}
-
-    .table th a.asc::after {
-        content: ' ▴';
-    }
-
-    .table th a.des::after {
-        content: ' ▾';
-    }
-
-.table tr:has(input:checked) td {
-    background: tomato;
-}
-
-.table td:last-child {
-    position: relative;
-}
-
-.table .popup {
-    background: #fff;
-    border: inherit;
-    padding: inherit;
-    position: absolute;
-    z-index: 1;
-    white-space: nowrap;
-    top: 50%;
-    left: 100%;
-    transform: translate(5px, -50%);
-    display: none;
-}
-
-.table img.popup {
-    padding: 0;
-}
-
-.table tr:hover .popup {
-    display: block;
-}
-/* Table ---------------------------------------------------------------------- */
-.upload img {
-    display: block;
-    border: 1px solid #333;
-    width: 200px;
-    height: 200px;
-    object-fit: cover;
-    cursor: pointer;
 }

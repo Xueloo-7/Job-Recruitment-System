@@ -1,0 +1,106 @@
+﻿.page-container {
+}
+
+/* 大盒子 */
+.container {
+    max-width: 1200px;
+    margin: 20px auto; /* 居中并留白 */
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr)); /* 两列，自适应分配 */
+    gap: 20px;
+    justify-content: center;
+}
+
+/* 格子样式 */
+.box {
+    border-radius: 8px;
+    padding: 20px; /* 内边距让内容不贴边 */
+    background: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+    .box canvas {
+        width: 100% !important;
+        height: auto !important;
+    }
+
+/* 小屏竖直排列 */
+@media (max-width: 600px) {
+    .container {
+        grid-template-columns: 1fr; /* 变成一列 */
+    }
+}
+
+/* 页面标题 */
+.page-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.chart-title {
+    text-align: center;
+}
+
+/* 表格外层 */
+.table-wrapper {
+    max-width: 1200px;
+    margin: 20px auto; /* 居中并留白 */
+    background: #fff;
+    padding: 10px 0 0 0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.table-title {
+    text-align: center;
+}
+
+/* 表格样式 */
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+}
+
+/*     表头背景色 */
+    .report-table thead {
+        background-color: #ffffff;
+    }
+
+/*     表头文字样式 */
+    .report-table th {
+        text-align: left;
+        padding: 10px;
+        border-bottom: 2px solid #ccc;
+    }
+
+/*     表格行灰白相间 */
+    .report-table tbody tr:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+    .report-table tbody tr:nth-child(even) {
+        background-color: #f9f9f9;
+    }
+
+/*     单元格样式（移除直向边框） */
+    .report-table td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+/* 招聘状态样式 */
+.status {
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+}
+
+.status-open {
+    background-color: #28a745;
+}
+
+.status-closed {
+    background-color: #dc3545;
+}
