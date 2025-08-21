@@ -308,6 +308,10 @@ public class Application
     [Required, MaxLength(6)]  // 【FK】
     public string UserId { get; set; }
 
+    public ApplicationSource Source { get; set; } = ApplicationSource.Unknown; // 申请来源
+
+    public DateTime? HiredDate { get; set; }
+
     [Required]
     public ApplicationStatus Status { get; set; } = ApplicationStatus.Pending;
 
@@ -325,6 +329,17 @@ public enum ApplicationStatus
     Interview,
     Hired,
     Rejected
+}
+
+public enum ApplicationSource
+{
+    JobSeeker, // 求职者主动申请
+    LinkedIn, // LinkedIn
+    GoogleAds, // 谷歌广告
+    Indeed, // 招聘网站
+    JobFair, // 招聘会
+    Referral, // 内推
+    Unknown // 未知来源
 }
 
 public class Notification

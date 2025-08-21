@@ -1,0 +1,77 @@
+﻿@model Demo.Models.ReportVM
+@{
+    ViewBag.Title = "Reports";
+}
+
+<div class="page-container">
+    <h2 class="page-title">Report</h2>
+
+    <div class="container">
+        <div class="box">
+            <h3 class="chart-title">Apply Source Percentage</h3>
+            <canvas id="sourcePieChart"></canvas>
+        </div>
+        <div class="box">
+            <h3 class="chart-title">Daily Apply</h3>
+            Start Date: <input type="date" id="startDate">
+            End Date: <input type="date" id="endDate">
+            <button id="updateBtn">Apply</button>
+            <canvas id="applicationsLineChart"></canvas>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <h3 class="table-title">Job Apply Information</h3>
+        <table class="report-table">
+            <thead>
+                <tr>
+                    <th>Job Title</th>
+                    <th>Apply</th>
+                    <th>Hired</th>
+                    <th>Recruitment Day</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                @foreach (var jr in Model.JobReports)
+                {
+                    <tr>
+                        <td>@jr.Job.Title</td>
+                        <td>@jr.TotalApplications</td>
+                        <td>@jr.TotalHired</td>
+                        <td>@jr.RecruitmentDays.ToString("yyyy-MM-dd")</td>
+                        <td>
+                            @if (jr.IsOpen)
+                            {
+                                <span class="status status-open">Enable</span>
+                            }
+                            else
+                            {
+                                <span class="status status-closed">Disable</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
+
+@section Styles {
+    <link rel="stylesheet" href="/css/report.css" />
+}
+
+@section Scripts {
+    @* import chart *@
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const id = "@Model.UserId";
+    </script>
+
+    <script src="~/js/report.js"></script>
+}

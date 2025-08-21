@@ -1,7 +1,7 @@
 ﻿/* page1 hero section */
 .hero-section {
     width: 100%;
-    height: 30vh;
+    height: 35vh;
     background: url('/images/background2.jpg') center center / cover no-repeat;
     display: flex;
     align-items: center;
@@ -31,6 +31,7 @@
     gap: 1rem;
     justify-content: center;
     align-items: flex-start;
+    margin: 20px;
 }
 
 .search-field {
@@ -54,6 +55,7 @@
     .search-field input,
     .search-field select,
     .search-field button {
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         box-sizing: border-box;
         padding: 0.6rem;
         border: none;
@@ -85,78 +87,41 @@
     .search-btn:hover {
         background-color: #e67300;
     }
+
+.not-found {
+    text-align: center;
+    font-size: 1.5rem;
+}
+
 /* 响应式支持：小屏幕竖排显示 */
-@media (max-width: 768px) {
+@media (max-width: 800px) {
     .search-form {
-        flex-direction: column;
-        align-items: stretch;
+        /*        background-color: blue;*/
+        height: 40vh;
+        display: flex;
+        align-items: center;
     }
+
+    .search-field {
+        /*                background-color: orange;*/
+        width: 70%;
+        height: 5rem;
+    }
+
+        .search-field input,
+        .search-field select,
+        .search-field button {
+            height: 3rem;
+        }
 
     .search-btn {
-        width: 100%;
-    }
-}
-/* page2 employee section */
-.employer-section {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    text-align: center;
-}
-
-.section-header h2 {
-    font-size: 32px;
-    margin-bottom: 30px;
-    color: #333;
-}
-
-.employer-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    margin-bottom: 40px;
-}
-
-.employer-card {
-    background: white;
-    border-radius: 8px;
-    padding: 25px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-}
-
-    .employer-card:hover {
-        transform: translateY(-5px);
+        width: 80%;
+        margin: auto;
     }
 
-.employer-logo img {
-    max-width: 180px;
-    max-height: 80px;
-    margin-bottom: 15px;
-}
-
-.job-count {
-    color: #666;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-.section-footer {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-}
-
-.see-more-link, .view-all-link {
-    padding: 12px 24px;
-    border-radius: 4px;
-    font-weight: 500;
-    text-decoration: none;
-}
-
-.see-more-link {
-    color: #333;
-    border: 1px solid #ddd;
+    .hero-section {
+        height: 65vh;
+    }
 }
 
 .view-all-link {
