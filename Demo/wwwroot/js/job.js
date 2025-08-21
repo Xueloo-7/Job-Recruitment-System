@@ -9,3 +9,4 @@ $(document).on('click', '.job-card', function () {
 ready(() => {
     const jobId = 
 })
+

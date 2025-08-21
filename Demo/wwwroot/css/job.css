@@ -113,3 +113,79 @@
 .job-right::-webkit-scrollbar {
     display: none; /* Chrome / Safari / Edge */
 }
+
+/* Table ---------------------------------------------------------------------- */ /*YONG 我只是测试用而己 */
+
+.table {
+    border-collapse: collapse;
+}
+
+    .table th,
+    .table td {
+        border: 1px solid #333;
+        padding: 5px;
+    }
+
+    .table th {
+        background: #666;
+        color: #fff;
+    }
+
+    .table tr:hover td {
+        background: #ccc;
+    }
+
+.detail th {
+    text-align: left;
+}
+
+.table th a {
+    color: inherit;
+    display: block;
+}
+
+    .table th a.asc::after {
+        content: ' ▴';
+    }
+
+    .table th a.des::after {
+        content: ' ▾';
+    }
+
+.table tr:has(input:checked) td {
+    background: tomato;
+}
+
+.table td:last-child {
+    position: relative;
+}
+
+.table .popup {
+    background: #fff;
+    border: inherit;
+    padding: inherit;
+    position: absolute;
+    z-index: 1;
+    white-space: nowrap;
+    top: 50%;
+    left: 100%;
+    transform: translate(5px, -50%);
+    display: none;
+}
+
+.table img.popup {
+    padding: 0;
+}
+
+.table tr:hover .popup {
+    display: block;
+}
+/* Table ---------------------------------------------------------------------- */
+.upload img {
+    display: block;
+    border: 1px solid #333;
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    cursor: pointer;
+}
