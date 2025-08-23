@@ -13,6 +13,7 @@ public class DemoJobController : Controller
     {
         this.db = db;
         this.en = en;
+        this.hp = hp;
     }
 
     // Get: for listing job that u created
