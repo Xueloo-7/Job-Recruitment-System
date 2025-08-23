@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Demo;
@@ -23,5 +24,10 @@ public static class Extension
             return "active";
 
         return "";
+    }
+
+    public static bool IsValid(this ModelStateDictionary ms, string key)
+    {
+        return ms.GetFieldValidationState(key) == ModelValidationState.Valid;
     }
 }

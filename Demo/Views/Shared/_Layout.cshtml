@@ -14,6 +14,9 @@
     @RenderSection("Styles", required: false)
 </head>
 <body>
+
+    <div class="info">@Html.Raw(TempData["Info"])</div>
+
     <header class="navbar">
         <div class="navbar-top">
             <div class="navbar-left">
@@ -23,7 +26,7 @@
                     <a asp-controller="Home" asp-action="Index" class="@Html.IsActive("Home", "Index")">Job Search</a>
                     <a asp-controller="Profile" asp-action="Index" class="@Html.IsActive("Profile")">Profile</a>
                     <a asp-controller="Home" asp-action="Employer" class="@Html.IsActive("Home", "Employer")">Employer</a>
-                    <a asp-controller="Home" asp-action="SignIn" class="@Html.IsActive("Home", "SignIn")">Sign In</a>
+                    <a asp-controller="Account" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
                     <a asp-controller="Test" asp-action="Index" class="@Html.IsActive("Test", "Index")">Test</a>
                     <a asp-controller="Report" asp-action="Index" class="@Html.IsActive("Report", "Index")">Report</a>
                 </nav>
@@ -59,7 +62,7 @@
                 <a asp-controller="Home" asp-action="Index" class="@Html.IsActive("Home", "Index")">Job Search</a>
                 <a asp-controller="Profile" asp-action="Index" class="@Html.IsActive("Profile")">Profile</a>
                 <a asp-controller="Home" asp-action="Employer" class="@Html.IsActive("Home", "Employer")">Employer</a>
-                <a asp-controller="Home" asp-action="SignIn" class="@Html.IsActive("Home", "SignIn")">Sign In</a>
+                <a asp-controller="Account" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
                 <a asp-controller="Test" asp-action="Index" class="@Html.IsActive("Test", "Index")">Test</a>
                 <a asp-controller="Report" asp-action="Index" class="@Html.IsActive("Report", "Index")">Report</a>
             </nav>

@@ -6,11 +6,13 @@ public class DemoJobController : Controller
 {
     private readonly DB db;
     private readonly IWebHostEnvironment en; 
+    private readonly Helper hp;
 
-    public DemoJobController(DB db, IWebHostEnvironment en)
+    public DemoJobController(DB db, IWebHostEnvironment en, Helper hp)
     {
         this.db = db;
         this.en = en;
+        this.hp = hp;
     }
 
     // Get: for listing job that u created
@@ -44,10 +46,10 @@ public class DemoJobController : Controller
         string newid = null;
         Job job = null; // declare job object
 
-        if (ModelState.IsValid("LogoImageUrl"))
+        if (ModelState.IsValid("LogoFile"))
         {
             // TODO
-            var e = hp.ValidatePhoto(vm.LogoImageUrl);
+            var e = hp.ValidatePhoto(vm.LogoFile);
             if (e != "") ModelState.AddModelError("Photo", e);
         }
 

@@ -44,18 +44,18 @@ public class JobVM
     [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Invalid Salary format")]
     public decimal SalaryMax { get; set; }
 
-    [MaxLength(1000)]
+    [MaxLength(2000)]
     public string? Description { get; set; }
 
     [MaxLength(200)]
     public string? Summary { get; set; }
 
-    [Required(ErrorMessage = "Please select a photo.")]
     [MaxLength(255)]
-    public IFormFile LogoImageUrl { get; set; }
+    public string? LogoImageUrl { get; set; }
 
     public bool IsOpen { get; set; } = true;
 
+    [Required(ErrorMessage = "Please select a photo.")]
     public IFormFile? LogoFile { get; set; }
 
     // ✅ 下拉选项
