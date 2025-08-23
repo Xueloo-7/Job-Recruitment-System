@@ -1,13 +1,15 @@
 ﻿using Demo;
 using Demo.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 public class DemoJobController : Controller
 {
     private readonly DB db;
-    private readonly IWebHostEnvironment en; 
+    private readonly IWebHostEnvironment en;
+    private readonly Helper hp;
 
-    public DemoJobController(DB db, IWebHostEnvironment en)
+    public DemoJobController(DB db, IWebHostEnvironment en, Helper hp)
     {
         this.db = db;
         this.en = en;
@@ -33,23 +35,56 @@ public class DemoJobController : Controller
 
     public bool CheckId(string id) // check the data redandency
     {
-        // TODO
+      
         return !db.Jobs.Any(j => j.Id == id);
     }
 
-   
+    // Get method used for jump to insert page 
+    public IActionResult Insert1()
+    {
+        ViewBag.Joblist = new SelectList(db.Jobs, "PayType", "WorkType", "Promotion"); // TODO
+
+        ViewBag.PayTypes = Enum.GetValues(typeof(PayType))// for listing payment method 
+       .Cast<PayType>()
+       .Select(e => new SelectListItem
+       {
+           Value = e.ToString(),
+           Text = e.ToString()
+       });
+
+        ViewBag.WorkTypes = Enum.GetValues(typeof(WorkType))// for listing payment method 
+      .Cast<WorkType>()
+      .Select(e => new SelectListItem
+      {
+          Value = e.ToString(),
+          Text = e.ToString()
+      });
+
+        var insert1 = TempData.Get<JobVM1>("Step1") ?? new JobVM1();
+        return View(insert1);
+
+    }
+
     [HttpPost] // Post: for inserting new job
-    public IActionResult Insert(JobVM vm, IFormFile photo)
+    public IActionResult Insert1(JobVM1 vm, IFormFile? LogoFile)
     {
         string newid = null;
         Job job = null; // declare job object
 
-        if (ModelState.IsValid("LogoImageUrl"))
+        bool TitleDuplicate = db.Jobs.Any(j => j.Title == vm.Title && j.CompanyName == vm.CompanyName);
+
+        if (TitleDuplicate)
         {
-            // TODO
-            var e = hp.ValidatePhoto(vm.LogoImageUrl);
-            if (e != "") ModelState.AddModelError("Photo", e);
+            ModelState.AddModelError("Title", "A job with this title already exists in the same company.");
+            return View(vm); 
         }
+
+        //if (ModelState.IsValid("LogoFile"))
+        //{
+        //    // TODO
+        //    var e = hp.ValidatePhoto(vm.LogoFile);
+        //    if (e != "") ModelState.AddModelError("LogoFile", e);
+        //}
 
         if (ModelState.IsValid) { 
            var jobId = db.Jobs
@@ -66,31 +101,87 @@ public class DemoJobController : Controller
             string newId = "L" + nextNumber.ToString("D3"); // for generate L001, L002 and so on
 
 
-            job = new Job // create a object
-            {
-                Id = newId,
-                Title = vm.Title,
-                CompanyName = vm.CompanyName,
-                Location=vm.Location,
-                PayType= vm.PayType,
-                WorkType = vm.WorkType,
-                SalaryMax= vm.SalaryMax,
-                SalaryMin= vm.SalaryMin,
-                Description = vm.Description,
-                Summary = vm.Summary,
+            //job = new Job // create a object
+            //{
+            //    Id = newId,
+            //    Title = vm.Title,
+            //    CompanyName = vm.CompanyName,
+            //    Location=vm.Location,
+            //    PayType= vm.PayType,
+            //    WorkType = vm.WorkType,
+            //    SalaryMax= vm.SalaryMax,
+            //    SalaryMin= vm.SalaryMin,
+            //    Description = vm.Description,
+            //    Summary = vm.Summary,
+            //    LogoImageUrl = hp.SavePhoto(vm.LogoFile, "~/images/uploads/logo"),
+            //    CreatedAt = DateTime.Now,
+            //    UpdatedAt = DateTime.Now,
 
-            };
+            //};
 
-            db.Jobs.Add(job);
-            db.SaveChanges();
-
-            return RedirectToAction("Index");
+            //db.Jobs.Add(job);
+            //db.SaveChanges();
+            TempData.Put("Insert1", vm);
+            return RedirectToAction("Insert2"); // jumping 
+            
         }
         else
         {
             return View(vm);  // return view with error msg
         }
     }
+
+    public IActionResult Insert2()
+    {
+        var insert2 = TempData.Get<JobVM2>("Insert2") ?? new JobVM2();
+        TempData.Keep("Insert1");
+
+        // Promotion Options
+        var promotions = db.Promotions.ToList();
+        insert2.PromotionOptions = promotions.Select(p => new SelectListItem
+        {
+            Value = p.Id,
+            Text = p.Name
+        }).ToList();
+
+        return View(insert2);
+    }
+
+    [HttpPost]
+    public IActionResult Insert2(JobVM2 vm)
+    {
+        if (ModelState.IsValid)
+        {
+            TempData.Put("Insert2", vm);
+            return RedirectToAction("Insert3");
+        }
+        else
+        {
+            TempData.Keep("Insert1");
+            return View(vm);
+        }
+
+    }
+
+    public IActionResult Insert3()
+    {
+        var insert3 = TempData.Get<JobVM3>("Insert3") ?? new JobVM3();
+        TempData.Keep("Insert1");
+        TempData.Keep("Insert2");
+        return View(insert3);
+    }
+
+    [HttpPost]
+    public IActionResult Insert3(JobVM3 vm)
+    {
+        if (!ModelState.IsValid) {
+            TempData.Keep("Insert1");
+            TempData.Keep("Insert2");
+            return View(vm);
+        }
+
+        var job = new 
+   
     //=======================================================================
     public IActionResult Subscription()
     {

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 #nullable disable warnings
 
-public class JobVM
+public class JobVM1
 {
     public string? Id { get; set; }
 
@@ -14,8 +14,6 @@ public class JobVM
     [Required]
     public string CategoryId { get; set; }
 
-    [Required]
-    public string PromotionId { get; set; }  // ✅ 新增 Promotion 选择字段
 
     [Required(ErrorMessage = "Title cannot be empty")]
     [MaxLength(100)]
@@ -44,24 +42,40 @@ public class JobVM
     [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Invalid Salary format")]
     public decimal SalaryMax { get; set; }
 
-    [MaxLength(1000)]
-    public string? Description { get; set; }
-
-    [MaxLength(200)]
-    public string? Summary { get; set; }
-
-    [Required(ErrorMessage = "Please select a photo.")]
-    [MaxLength(255)]
-    public IFormFile LogoImageUrl { get; set; }
-
     public bool IsOpen { get; set; } = true;
-
-    public IFormFile? LogoFile { get; set; }
 
     // ✅ 下拉选项
     public List<SelectListItem>? UserOptions { get; set; }
     public List<SelectListItem>? CategoryOptions { get; set; }
     public List<SelectListItem>? PayTypeOptions { get; set; }
     public List<SelectListItem>? WorkTypeOptions { get; set; }
+   
+}
+
+public class JobVM2
+{
+    [MaxLength(1000)]
+    public string? Description { get; set; }
+
+    [MaxLength(200)]
+    public string? Summary { get; set; }
+    [Required]
+    public string PromotionId { get; set; }  // ✅ 新增 Promotion 选择字段
+
     public List<SelectListItem>? PromotionOptions { get; set; } // ✅ 新增
+}
+
+public class JobVM3
+{
+    [MaxLength(255)]
+    public string? LogoImageUrl { get; set; }
+
+    public IFormFile? LogoFile { get; set; }
+}
+
+public class combineVM
+{
+    public JobVM1 Insert1 { get; set; }
+    public JobVM2 Insert2 { get; set; }
+    public JobVM3 Insert3 { get; set; }
 }
