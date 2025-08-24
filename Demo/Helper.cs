@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
-using static System.Net.Mime.MediaTypeNames;
+
+
 
 namespace Demo;
 
@@ -39,7 +42,25 @@ public class Helper
         return "";
     }
 
-   
+    public string SavePhoto(IFormFile f, string folder)
+    {
+        // TODO
+        var file = Guid.NewGuid().ToString("n") + ".jpg";
+        var path = Path.Combine(en.WebRootPath, folder, file);
+
+        var options = new ResizeOptions
+        {
+            Size = new(200, 200),
+            Mode = ResizeMode.Crop,
+        };
+
+        using var stream = f.OpenReadStream();
+        using var img = Image.Load(stream);
+        img.Mutate(x => x.Resize(options));
+        img.Save(path);
+        
+        return file;
+    }
 
     public void DeletePhoto(string file, string folder)
     {
