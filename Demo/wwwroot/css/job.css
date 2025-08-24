@@ -97,3 +97,41 @@
         margin: 10px;
     }
 }
+
+/* Table ---------------------------------------------------------------------- */ /*YONG 我只是测试用而己 */
+
+.table {
+    border-collapse: collapse;
+}
+
+    .table th,
+    .table td {
+        border: 1px solid #333;
+        padding: 5px;
+    }
+
+    .table th {
+        background: #666;
+        color: #fff;
+    }
+
+    .table tr:hover td {
+        background: #ccc;
+    }
+
+.detail th {
+    text-align: left;
+}
+
+.table th a {
+    color: inherit;
+    display: block;
+}
+
+    .table th a.asc::after {
+        content: ' ▴';
+    }
+
+    .table th a.des::after {
+        content: ' ▾';
+    }
