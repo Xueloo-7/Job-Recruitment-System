@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.ComponentModel.DataAnnotations;
 #nullable disable warnings
 
-public class JobVM1
+public class JobVM
 {
     public string? Id { get; set; }
 
@@ -43,17 +43,6 @@ public class JobVM1
     public decimal SalaryMax { get; set; }
 
     public bool IsOpen { get; set; } = true;
-
-    // ✅ 下拉选项
-    public List<SelectListItem>? UserOptions { get; set; }
-    public List<SelectListItem>? CategoryOptions { get; set; }
-    public List<SelectListItem>? PayTypeOptions { get; set; }
-    public List<SelectListItem>? WorkTypeOptions { get; set; }
-   
-}
-
-public class JobVM2
-{
     [MaxLength(1000)]
     public string? Description { get; set; }
 
@@ -63,19 +52,43 @@ public class JobVM2
     public string PromotionId { get; set; }  // ✅ 新增 Promotion 选择字段
 
     public List<SelectListItem>? PromotionOptions { get; set; } // ✅ 新增
-}
-
-public class JobVM3
-{
     [MaxLength(255)]
     public string? LogoImageUrl { get; set; }
 
     public IFormFile? LogoFile { get; set; }
+
+    // ✅ 下拉选项
+    public List<SelectListItem>? UserOptions { get; set; }
+    public List<SelectListItem>? CategoryOptions { get; set; }
+    public List<SelectListItem>? PayTypeOptions { get; set; }
+    public List<SelectListItem>? WorkTypeOptions { get; set; }
+   
 }
 
-public class combineVM
-{
-    public JobVM1 Insert1 { get; set; }
-    public JobVM2 Insert2 { get; set; }
-    public JobVM3 Insert3 { get; set; }
-}
+//public class JobVM2
+//{
+//    [MaxLength(1000)]
+//    public string? Description { get; set; }
+
+//    [MaxLength(200)]
+//    public string? Summary { get; set; }
+//    [Required]
+//    public string PromotionId { get; set; }  // ✅ 新增 Promotion 选择字段
+
+//    public List<SelectListItem>? PromotionOptions { get; set; } // ✅ 新增
+//}
+
+//public class JobVM3
+//{
+//    [MaxLength(255)]
+//    public string? LogoImageUrl { get; set; }
+
+//    public IFormFile? LogoFile { get; set; }
+//}
+
+//public class combineVM
+//{
+//    public JobVM1 Insert1 { get; set; }
+//    public JobVM2 Insert2 { get; set; }
+//    public JobVM3 Insert3 { get; set; }
+//}
