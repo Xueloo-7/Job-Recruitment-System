@@ -3,21 +3,6 @@
     ViewBag.Title = "Profile";
 }
 
-@* <div id="profile-container" class="profile-container"> 
-    <div class="tab-buttons"> 
-        <button class="tab-button active" data-tab="Profile">Profile</button> 
-        <button class="tab-button" data-tab="Summary">Summary</button> 
-        <button class="tab-button" data-tab="CareerHistory">Career History</button>
-        <button class="tab-button" data-tab="Education">Education</button>
-    </div> 
-    <div id="tab-content" class="profile-card"> 
-        <partial name="~/Views/Profile/_Profile.cshtml" model="Model" />
-        <partial name="~/Views/Profile/_Summary.cshtml" /> 
-        <partial name="~/Views/Profile/_CareerHistory.cshtml" />
-        <partial name="~/Views/Profile/_Education.cshtml" /> 
-    </div> 
-</div> *@
-
 <div id="profile-container" class="profile-container" data-user-id="@Model.Id">
     <div class="tab-buttons">
         <a asp-controller="Profile"
@@ -72,5 +57,6 @@
 }
 
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/js/profile.js"></script>
 }
