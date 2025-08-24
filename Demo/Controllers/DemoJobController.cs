@@ -61,13 +61,13 @@ public class DemoJobController : Controller
           Text = e.ToString()
       });
 
-        var insert1 = TempData.Get<JobVM1>("Step1") ?? new JobVM1();
+        var insert1 = TempData.Get<JobVM>("Step1") ?? new JobVM();
         return View(insert1);
 
     }
 
     [HttpPost] // Post: for inserting new job
-    public IActionResult Insert1(JobVM1 vm, IFormFile? LogoFile)
+    public IActionResult Insert1(JobVM vm, IFormFile? LogoFile)
     {
         string newid = null;
         Job job = null; // declare job object
@@ -87,21 +87,21 @@ public class DemoJobController : Controller
         //    if (e != "") ModelState.AddModelError("LogoFile", e);
         //}
 
-        if (ModelState.IsValid) { 
-           var jobId = db.Jobs
-                        .Where(j => j.Id.StartsWith("L")) // filtering
-                        .OrderByDescending(j => j.Id) // sorting
-                        .FirstOrDefault(); //  to get the largest number then + 1 
+        //if (ModelState.IsValid) {
+        //    var jobId = db.Jobs
+        //                 .Where(j => j.Id.StartsWith("L")) // filtering
+        //                 .OrderByDescending(j => j.Id) // sorting
+        //                 .FirstOrDefault(); //  to get the largest number then + 1 
 
-            int nextNumber = 1; // default value (if have not any record)
-            if(jobId != null)
-            {
-                nextNumber = int.Parse(jobId.Id.Substring(1)) +1; // remove "L" and parse the number
-            }
+        //    int nextNumber = 1; // default value (if have not any record)
+        //    if (jobId != null)
+        //    {
+        //        nextNumber = int.Parse(jobId.Id.Substring(1)) + 1; // remove "L" and parse the number
+        //    }
 
-            string newId = "L" + nextNumber.ToString("D3"); // for generate L001, L002 and so on
+        //    string newId = "L" + nextNumber.ToString("D3"); // for generate L001, L002 and so on
 
-
+        //}
             //job = new Job // create a object
             //{
             //    Id = newId,
@@ -122,67 +122,67 @@ public class DemoJobController : Controller
 
             //db.Jobs.Add(job);
             //db.SaveChanges();
-            TempData.Put("Insert1", vm);
-            return RedirectToAction("Insert2"); // jumping 
+    //        TempData.Put("Insert1", vm);
+    //        return RedirectToAction("Insert2"); // jumping 
             
-        }
-        else
-        {
-            return View(vm);  // return view with error msg
-        }
+    //    }
+    //    else
+    //    {
+    //        return View(vm);  // return view with error msg
+    //    }
+    //}
+
+    //public IActionResult Insert2()
+    //{
+    //    var insert2 = TempData.Get<JobVM2>("Insert2") ?? new JobVM2();
+    //    TempData.Keep("Insert1");
+
+    //    // Promotion Options
+    //    var promotions = db.Promotions.ToList();
+    //    insert2.PromotionOptions = promotions.Select(p => new SelectListItem
+    //    {
+    //        Value = p.Id,
+    //        Text = p.Name
+    //    }).ToList();
+
+       return View();
     }
 
-    public IActionResult Insert2()
-    {
-        var insert2 = TempData.Get<JobVM2>("Insert2") ?? new JobVM2();
-        TempData.Keep("Insert1");
+    //[HttpPost]
+    //public IActionResult Insert2(JobVM2 vm)
+    //{
+    //    if (ModelState.IsValid)
+    //    {
+    //        TempData.Put("Insert2", vm);
+    //        return RedirectToAction("Insert3");
+    //    }
+    //    else
+    //    {
+    //        TempData.Keep("Insert1");
+    //        return View(vm);
+    //    }
 
-        // Promotion Options
-        var promotions = db.Promotions.ToList();
-        insert2.PromotionOptions = promotions.Select(p => new SelectListItem
-        {
-            Value = p.Id,
-            Text = p.Name
-        }).ToList();
+    //}
 
-        return View(insert2);
-    }
+    //public IActionResult Insert3()
+    //{
+    //    var insert3 = TempData.Get<JobVM3>("Insert3") ?? new JobVM3();
+    //    TempData.Keep("Insert1");
+    //    TempData.Keep("Insert2");
+    //    return View(insert3);
+    //}
 
-    [HttpPost]
-    public IActionResult Insert2(JobVM2 vm)
-    {
-        if (ModelState.IsValid)
-        {
-            TempData.Put("Insert2", vm);
-            return RedirectToAction("Insert3");
-        }
-        else
-        {
-            TempData.Keep("Insert1");
-            return View(vm);
-        }
+   // [HttpPost]
+   // public IActionResult Insert3(JobVM3 vm)
+   // {
+   //     if (!ModelState.IsValid) {
+   //         TempData.Keep("Insert1");
+   //         TempData.Keep("Insert2");
+   //         return View(vm);
+   //     }
 
-    }
-
-    public IActionResult Insert3()
-    {
-        var insert3 = TempData.Get<JobVM3>("Insert3") ?? new JobVM3();
-        TempData.Keep("Insert1");
-        TempData.Keep("Insert2");
-        return View(insert3);
-    }
-
-    [HttpPost]
-    public IActionResult Insert3(JobVM3 vm)
-    {
-        if (!ModelState.IsValid) {
-            TempData.Keep("Insert1");
-            TempData.Keep("Insert2");
-            return View(vm);
-        }
-
-        var job = new 
-   
+   //     //var job = new
+   //}
     //=======================================================================
     public IActionResult Subscription()
     {

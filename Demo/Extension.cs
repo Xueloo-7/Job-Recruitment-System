@@ -28,6 +28,13 @@ public static class Extension
         return "";
     }
 
+
+    public static bool IsValid(this ModelStateDictionary ms, string key)
+    {
+        return ms.GetFieldValidationState(key) == ModelValidationState.Valid;
+    }
+
+
     public static void Put<T>(this ITempDataDictionary tempData, string key, T value) // for keeping data between requests
     {
         tempData[key] = JsonSerializer.Serialize(value);
