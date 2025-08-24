@@ -28,3 +28,9 @@
     $('.tab-button.active').trigger('click');
 });
 
+$(document).on('click', '#edit-btn', function () {
+    var userId = $(this).data('user-id');
+    $.get('/Profile/EditProfilePartial', { userId: userId }, function (html) {
+        $('#tab-content').html(html);
+    });
+});

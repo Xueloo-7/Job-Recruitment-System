@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Demo.Migrations
 {
     /// <inheritdoc />
-    public partial class create : Migration
+    public partial class userChange : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -77,6 +77,7 @@ namespace Demo.Migrations
                     PasswordHash = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Summary = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -239,7 +240,7 @@ namespace Demo.Migrations
                     Id = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     JobId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
-                    Source = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Source = table.Column<int>(type: "int", nullable: false),
                     HiredDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),

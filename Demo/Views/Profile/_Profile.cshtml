@@ -1,38 +1,17 @@
-﻿@* @model Demo.Models.User
-
-<h2>Xueloo</h2>
-<div class="profile-info">
-    <div><i class="fas fa-map-marker-alt"></i> Kuala Lumpur</div>
-    <div><i class="fas fa-envelope"></i> example@gmail.com</div>
-    <div><i class="fas fa-phone"></i> 012-3456789</div>
-</div>
-<form asp-controller="User" asp-action="Edit" method="get">
-    <button type="submit" class="edit-btn">Edit</button>
-</form> *@
-
-@model Demo.Models.User
+﻿@model Demo.Models.User
 
 @if (Model != null)
 {
 <h2>@Model.FirstName @Model.LastName</h2>
 <div class="profile-info">
     <div><i class="fas fa-map-marker-alt"></i> @Model.Location</div>
-    <div><i class="fas fa-envelope"></i> example@gmail.com</div>
+        <div><i class="fas fa-envelope"></i> @Model.Email</div>
     <div><i class="fas fa-phone"></i> @Model.PhoneNumber</div>
 </div>
 
-<button id="edit-btn" class="edit-btn">Edit</button>
+    <button id="edit-btn" class="edit-btn" data-user-id="@Model.Id">Edit</button>
 }
 else
 {
     <h2>No profile data.</h2>
 }
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $('#edit-btn').on('click', function () {
-        $.get('/Profile/EditPartial', function (data) {
-            $('#profile-container').html(data);
-        });
-    });
-</script>
