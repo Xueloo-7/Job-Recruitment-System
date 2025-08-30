@@ -2,10 +2,6 @@
 
 <h2>Career History</h2>
 
-<div id="eCareerHistoryContainer">
-    @await Html.PartialAsync("_CareerHistory", Model)
-</div>
-
 @if (Model != null && Model.Any())
 {
     <div id="careerHistoryContainer" class="career-history-box">
