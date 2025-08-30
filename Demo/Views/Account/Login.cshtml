@@ -1,7 +1,6 @@
 ﻿@model Demo.Models.LoginVM
 
 
-<h1 class="logo">Job Seeker</h1>
 <div class="signIn-container">
     <h1>Sign In</h1>
 
@@ -27,17 +26,9 @@
         <button type="submit">Login</button>
     </form>
 
-
-    <p>Don’t have account? <a href="#">Click me to create!</a></p>
+    <a asp-controller="Account" asp-action="Register">Don’t have account?</a>
 
 </div>
-
-<footer>
-    <a href="#">Security & Privacy</a> -
-    <a href="#">Terms & Conditions</a> -
-    <a href="#">Contact</a>
-    <p>Developed by ROXY'S • © 2025</p>
-</footer>
 
 @section Styles {
     <link rel="stylesheet" href="/css/signIn.css" />

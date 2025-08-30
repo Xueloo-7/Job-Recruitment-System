@@ -4,41 +4,59 @@
     ViewBag.Title = "Account | Register";
 }
 
-<form class="form" method="post" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly"></div>
+<div class="signIn-container">
+    <div class="signIn-header">
+        <h1>Register</h1>
+        <p class="employer-prompt">
+            Already have an account? <a asp-controller="Account" asp-action="Login">Sign In</a>
+        </p>
+    </div>
 
-    <label asp-for="Email"></label>
-    <input asp-for="Email" autofocus>
-    <span asp-validation-for="Email"></span>
+    <form class="email-login" method="post" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
 
-    <label asp-for="Password"></label>
-    <input asp-for="Password">
-    <span asp-validation-for="Password"></span>
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" type="email" required>
+            <span asp-validation-for="Email" class="error"></span>
+        </div>
 
-    <label asp-for="Confirm"></label>
-    <input asp-for="Confirm">
-    <span asp-validation-for="Confirm"></span>
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" type="password" required>
+            <span asp-validation-for="Password" class="error"></span>
+        </div>
 
-    <label asp-for="Name"></label>
-    <input asp-for="Name">
-    <span asp-validation-for="Name"></span>
+        <div class="form-group">
+            <label asp-for="Confirm"></label>
+            <input asp-for="Confirm" type="password" required>
+            <span asp-validation-for="Confirm" class="error"></span>
+        </div>
 
-    <label asp-for="Photo"></label>
-    <label class="upload">
-        <small>Select Photo...</small>
-        <input asp-for="Photo" accept="image/jpeg,image/png" hidden>
-        <img src="/images/photo.jpg">
-    </label>
-    <span asp-validation-for="Photo"></span>
+        <div class="form-group">
+            <label asp-for="Name"></label>
+            <input asp-for="Name" type="text" required>
+            <span asp-validation-for="Name" class="error"></span>
+        </div>
 
-    <section>
-        <button>Register</button>
-        <button type="reset">Reset</button>
-    </section>
-</form>
+        <div class="form-group">
+            <label asp-for="Photo"></label>
+            <label class="upload">
+                <small>Select Photo...</small>
+                <input asp-for="Photo" accept="image/jpeg,image/png" hidden>
+                <img src="/images/photo.jpg" alt="Preview" />
+            </label>
+            <span asp-validation-for="Photo" class="error"></span>
+        </div>
 
-@* @section foot {
-    <script>
-        $.validator.setDefaults({ ignore: '' });
-    </script>
-} *@
+        <div class="form-actions">
+            <button type="submit" class="login-btn">Register</button>
+            <button type="reset" class="reset-btn">Reset</button>
+        </div>
+    </form>
+</div>
+
+
+@section Styles {
+    <link rel="stylesheet" href="/css/signIn.css" />
+}
