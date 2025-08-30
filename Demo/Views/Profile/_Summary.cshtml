@@ -2,10 +2,6 @@
 
 <h2>Self Introduction</h2>
 
-<div id="SummaryContainer">
-    @await Html.PartialAsync("_Summary", Model)
-</div>
-
 @if (Model != null && !string.IsNullOrEmpty(Model.Id))
 {
     <!-- 显示已有内容 -->
