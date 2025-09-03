@@ -1,11 +1,15 @@
 ﻿using Demo.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using System.Diagnostics;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Diagnostics;
 
 
 
@@ -142,5 +146,22 @@ public class Helper
         }
 
         return password;
+    }
+}
+
+// ------------------------------------------------------------------------
+// Debug Functions
+// ------------------------------------------------------------------------
+public static class ModelStateExtensions
+{
+    public static void DebugErrors(this ModelStateDictionary modelState)
+    {
+        foreach (var entry in modelState)
+        {
+            foreach (var error in entry.Value.Errors)
+            {
+                Debug.WriteLine($"❌ Error in {entry.Key}: {error.ErrorMessage}");
+            }
+        }
     }
 }
