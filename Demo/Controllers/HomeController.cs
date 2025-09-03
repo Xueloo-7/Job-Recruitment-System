@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace Demo.Controllers;
 
@@ -93,6 +94,11 @@ public class HomeController : BaseController
 
     public IActionResult Employer()
     {
+        // if already logged in, redirect to EmployerInfo
+        if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("EmployerInfo", "Home");
+        }
         return View();
     }
 
@@ -124,8 +130,10 @@ public class HomeController : BaseController
     }
 
     // EmployerInfo
-    public IActionResult EmployerInfo(string? userId)
+    public IActionResult EmployerInfo()
     {
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
         var user = db.Users
                      .Where(u => u.Id == userId && u.Role == Role.Employer)
                      .FirstOrDefault();

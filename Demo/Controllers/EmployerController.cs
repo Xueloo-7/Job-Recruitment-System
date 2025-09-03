@@ -76,8 +76,7 @@ public class EmployerController : Controller
     {
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
-            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return RedirectToAction("EmployerInfo", "Home", new { userId = userId });
+            return RedirectToAction("EmployerInfo", "Home");
         }
         ViewBag.ReturnURL = returnURL;
         return View();
@@ -100,7 +99,7 @@ public class EmployerController : Controller
 
             if (string.IsNullOrEmpty(returnURL))
             {
-                return RedirectToAction("EmployerInfo", "Home", new { userId = user.Id });
+                return RedirectToAction("EmployerInfo", "Home");
             }
         }
 
