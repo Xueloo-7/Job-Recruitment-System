@@ -1,14 +1,14 @@
 ﻿@model RegisterVM
 
 @{
-    ViewBag.Title = "Account | Register";
+    ViewBag.Title = "Employer | Register";
 }
 
 <div class="signIn-container">
     <div class="signIn-header">
         <h1>Register</h1>
         <p class="employer-prompt">
-            Already have an account? <a asp-controller="Account" asp-action="Login">Sign In</a>
+            Already have an account? <a asp-controller="Employer" asp-action="Login">Sign In</a>
         </p>
     </div>
 
@@ -41,11 +41,13 @@
 
         <div class="form-group">
             <label asp-for="Photo"></label>
-            <label class="upload">
-                <small>Select Photo...</small>
-                <input asp-for="Photo" accept="image/jpeg,image/png" hidden>
-                <img src="" alt="Preview" />
-            </label>
+            <div class="upload-box">
+                <input asp-for="Photo" type="file" accept="image/jpeg,image/png" hidden id="photoInput" />
+                <label for="photoInput" class="upload-label">
+                    <img id="photoPreview" src="/images/default_avatar.jpg" />
+                    <div class="upload-text">Upload Image</div>
+                </label>
+            </div>
             <span asp-validation-for="Photo" class="error"></span>
         </div>
 

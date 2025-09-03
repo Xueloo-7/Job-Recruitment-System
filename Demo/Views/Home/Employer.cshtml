@@ -2,8 +2,8 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<link rel="stylesheet" href="~/css/Employer.css" />
-<script src="~/js/Employer.js"></script>
+
+
 
 <div class="employer-container">
     <div class="employer-card">
@@ -19,7 +19,8 @@
             free services charge only!
         </div>
 
-        <form id="employer-form">
+        @* submit then go to register page (send email to it for showing email) *@
+        <form action="/Employer/Register" method="get" id="employer-form">
             <label for="email">Enter Your Business Email</label>
             <div class="email-input-group">
                 <input type="email" id="email" name="email" placeholder="example@domain.com" required />
@@ -63,3 +64,11 @@
     </div>
     <a href="~/Home/EsignIn" class="create-btn">Create account</a>
 </div>
+
+@section Scripts {
+    <script src="~/js/Employer.js"></script>
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Employer.css" />
+}
