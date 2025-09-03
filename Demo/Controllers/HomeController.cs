@@ -183,6 +183,6 @@ public class HomeController : BaseController
         db.Update(employer);
         db.SaveChanges();
 
-        return RedirectToAction("EmployerInfo", new { userId = employer.Id });
+        return PartialView("EmployerInfo", employer);
     }
 }
