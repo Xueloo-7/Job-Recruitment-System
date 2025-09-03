@@ -69,7 +69,7 @@ public class User
     [Required, Phone, MaxLength(20)]
     public string PhoneNumber { get; set; }
 
-    public string Summary { get; set; }
+    public string? Summary { get; set; }
 
     [Required]
     public Role Role { get; set; }
