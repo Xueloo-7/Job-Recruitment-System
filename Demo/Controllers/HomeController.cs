@@ -123,5 +123,66 @@ public class HomeController : BaseController
         return PartialView("~/Views/Job/_JobListPartial.cshtml", jobs);
     }
 
+    // EmployerInfo
+    public IActionResult EmployerInfo(string? userId)
+    {
+        var user = db.Users
+                     .Where(u => u.Id == userId && u.Role == Role.Employer)
+                     .FirstOrDefault();
 
+        if (user == null)
+        {
+            return NotFound("Employer not found.");
+        }
+
+        return View(user); // 传给 EmployerInfo.cshtml
+    }
+
+    // ---------------- Edit Employer ----------------
+
+    [HttpGet]
+    public IActionResult EditEmployer(string id)
+    {
+        var employer = db.Users
+            .Include(u => u.Jobs)
+            .Include(u => u.Applications)
+            .FirstOrDefault(u => u.Id == id && u.Role == Role.Employer);
+
+        if (employer == null)
+        {
+            return NotFound();
+        }
+
+        return PartialView("_EditEmployer", employer);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult EditEmployer(User model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return PartialView("_EditEmployer", model);
+        }
+
+        var employer = db.Users.FirstOrDefault(u => u.Id == model.Id);
+        if (employer == null)
+        {
+            return NotFound();
+        }
+
+        // 更新
+        employer.FirstName = model.FirstName;
+        employer.LastName = model.LastName;
+        employer.Location = model.Location;
+        employer.Email = model.Email;
+        employer.PhoneNumber = model.PhoneNumber;
+        employer.IsActive = model.IsActive;
+        employer.UpdatedAt = DateTime.Now;
+
+        db.Update(employer);
+        db.SaveChanges();
+
+        return RedirectToAction("EmployerInfo", new { userId = employer.Id });
+    }
 }
