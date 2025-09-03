@@ -212,6 +212,8 @@ form label {
 }
 
 .edit-btn {
+    display: block;
+    margin: 20px auto 0;
     margin-top: 20px;
     padding: 8px 20px;
     background-color: #2d4731;
@@ -220,6 +222,7 @@ form label {
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
+    text-align: center;
 }
 
     .edit-btn:hover {
