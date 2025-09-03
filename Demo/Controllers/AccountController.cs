@@ -85,12 +85,12 @@ public class AccountController : Controller
         {
             ModelState.AddModelError("", "Invalid credentials");
         }
-
-        if (ModelState.IsValid)
+        else if (ModelState.IsValid)
         {
             TempData["Info"] = "Login Successfully.";
 
-            hp.SignIn(user!.Email, user.Role.ToString(), vm.RememberMe);
+            //hp.SignIn(user!.Email, user.Role.ToString(), vm.RememberMe);
+            hp.SignIn(user, user!.Email, user.Role.ToString(), vm.RememberMe);
 
             if (string.IsNullOrEmpty(returnURL))
             {

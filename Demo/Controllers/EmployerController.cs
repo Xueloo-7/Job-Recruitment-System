@@ -1,6 +1,7 @@
 ﻿using Demo.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 public class EmployerController : Controller
 {
@@ -55,7 +56,7 @@ public class EmployerController : Controller
                 PasswordHash = hp.HashPassword(vm.Password),
                 Email = vm.Email,
                 PhoneNumber = "",
-                Role = Role.JobSeeker,
+                Role = Role.Employer,
             });
 
             db.SaveChanges();
@@ -75,7 +76,8 @@ public class EmployerController : Controller
     {
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
-            return RedirectToAction("Index", "Home");
+            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return RedirectToAction("EmployerInfo", "Home", new { userId = userId });
         }
         ViewBag.ReturnURL = returnURL;
         return View();
@@ -90,16 +92,15 @@ public class EmployerController : Controller
         {
             ModelState.AddModelError("", "Invalid credentials");
         }
-
-        if (ModelState.IsValid)
+        else if (ModelState.IsValid)
         {
             TempData["Info"] = "Login Successfully.";
 
-            hp.SignIn(user!.Email, user.Role.ToString(), vm.RememberMe);
+            hp.SignIn(user, user!.Email, user.Role.ToString(), vm.RememberMe);
 
             if (string.IsNullOrEmpty(returnURL))
             {
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("EmployerInfo", "Home", new { userId = user.Id });
             }
         }
 
