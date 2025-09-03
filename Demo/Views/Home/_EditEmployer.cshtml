@@ -1,9 +1,13 @@
-﻿@model Demo.Models.User
+﻿@model Demo.Models.EditEmployerVM
 
 <div class="employer-info">
     <h2>Edit Employer Information</h2>
 
     <form id="editEmployerForm" asp-action="EditEmployer" asp-controller="Home" method="post">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="Id" />
+
         <table class="info-table">
             <tr>
                 <th>First Name</th>

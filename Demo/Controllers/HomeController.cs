@@ -149,48 +149,69 @@ public class HomeController : BaseController
     // ---------------- Edit Employer ----------------
 
     [HttpGet]
-    public IActionResult EditEmployer(string id)
+    public IActionResult EditEmployer()
     {
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
         var employer = db.Users
-            .Include(u => u.Jobs)
-            .Include(u => u.Applications)
-            .FirstOrDefault(u => u.Id == id && u.Role == Role.Employer);
+            .FirstOrDefault(u => u.Id == userId && u.Role == Role.Employer);
 
         if (employer == null)
         {
             return NotFound();
         }
 
-        return PartialView("_EditEmployer", employer);
+        var vm = new EditEmployerVM
+        {
+            Id = employer.Id,
+            FirstName = employer.FirstName,
+            LastName = employer.LastName,
+            Location = employer.Location,
+            Email = employer.Email,
+            PhoneNumber = employer.PhoneNumber,
+            IsActive = employer.IsActive
+        };
+
+        return PartialView("_EditEmployer", vm);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult EditEmployer(User model)
+    public IActionResult EditEmployer(EditEmployerVM vm)
     {
         if (!ModelState.IsValid)
         {
-            return PartialView("_EditEmployer", model);
+            DebugModelStateErrors();
+            return PartialView("_EditEmployer", vm);
         }
 
-        var employer = db.Users.FirstOrDefault(u => u.Id == model.Id);
-        if (employer == null)
-        {
-            return NotFound();
-        }
+        var employer = db.Users.FirstOrDefault(u => u.Id == vm.Id);
+        if (employer == null) return NotFound();
 
-        // 更新
-        employer.FirstName = model.FirstName;
-        employer.LastName = model.LastName;
-        employer.Location = model.Location;
-        employer.Email = model.Email;
-        employer.PhoneNumber = model.PhoneNumber;
-        employer.IsActive = model.IsActive;
+        // 映射
+        employer.FirstName = vm.FirstName;
+        employer.LastName = vm.LastName;
+        employer.Location = vm.Location;
+        employer.Email = vm.Email;
+        employer.PhoneNumber = vm.PhoneNumber;
+        employer.IsActive = vm.IsActive;
         employer.UpdatedAt = DateTime.Now;
 
         db.Update(employer);
         db.SaveChanges();
 
         return PartialView("EmployerInfo", employer);
+    }
+
+
+    private void DebugModelStateErrors()
+    {
+        foreach (var entry in ModelState)
+        {
+            foreach (var error in entry.Value.Errors)
+            {
+                Debug.WriteLine($"Error in {entry.Key}: {error.ErrorMessage}");
+            }
+        }
     }
 }
