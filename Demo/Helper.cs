@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using Demo.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SixLabors.ImageSharp;
@@ -91,15 +92,16 @@ public class Helper
             == PasswordVerificationResult.Success;
     }
 
-    public void SignIn(string email, string role, bool rememberMe)
+    public void SignIn(User user, string email, string role, bool rememberMe)
     {
         // (1) Claim, identity and principal
         // TODO
         List<Claim> claims =
-         [
-            new(ClaimTypes.Name, email),
-            new(ClaimTypes.Role, role),
-         ];
+        [
+            new(ClaimTypes.NameIdentifier, user.Id.ToString()), // 用户唯一ID
+            new(ClaimTypes.Name, user.Email),                  // 显示名（常用邮箱）
+            new(ClaimTypes.Role, user.Role.ToString()),        // 角色
+        ];
 
         // TODO
         ClaimsIdentity identity = new(claims, "Cookies");

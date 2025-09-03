@@ -131,9 +131,9 @@ public class HomeController : BaseController
                      .FirstOrDefault();
 
         if (user == null)
-        {
             return NotFound("Employer not found.");
-        }
+        if(user.Role != Role.Employer)
+            return BadRequest("User is not an employer.");
 
         return View(user); // 传给 EmployerInfo.cshtml
     }
