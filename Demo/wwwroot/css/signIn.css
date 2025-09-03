@@ -1,27 +1,11 @@
-﻿/* sign in style */
-html, body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
-    margin: 0;
-    padding: 0;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    color: #333;
-}
-
+﻿
 .signIn-container {
-    width: 100%;
-    max-width: 420px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    padding: 2.5rem;
-    margin: 2rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    background-color: #fff;
+    width: 350px;
+    margin: 100px auto; /* 上下 100px，左右 auto → 水平居中 */
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 /* Header Styles */
@@ -192,3 +176,72 @@ html, body {
     margin: 0;
 }
 
+/* Register Page Styles (extends signin) */
+
+/* form validation */
+.validation-summary {
+    color: #dc2626;
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+/* error messages */
+.error {
+    font-size: 0.8rem;
+    color: #dc2626;
+    margin-top: 0.25rem;
+}
+
+/* upload photo */
+.upload {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 1px dashed #d1d5db;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s, background-color 0.2s;
+}
+
+    .upload:hover {
+        border-color: #2563eb;
+        background-color: #f9fafb;
+    }
+
+    .upload small {
+        color: #6b7280;
+        font-size: 0.85rem;
+    }
+
+    .upload img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 6px;
+        border: 1px solid #e5e7eb;
+    }
+
+/* actions */
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.reset-btn {
+    padding: 0.75rem;
+    background-color: #e5e7eb;
+    color: #374151;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+    .reset-btn:hover {
+        background-color: #d1d5db;
+    }
