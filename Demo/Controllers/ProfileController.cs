@@ -1,9 +1,11 @@
 ﻿using Demo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace Demo.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly DB db;
