@@ -4,6 +4,7 @@ using Demo.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Migrations
 {
     [DbContext(typeof(DB))]
-    partial class DBModelSnapshot : ModelSnapshot
+    [Migration("20250905132415_addAuditLogsUpdate")]
+    partial class addAuditLogsUpdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -190,6 +193,9 @@ namespace Demo.Migrations
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
 
+                    b.Property<bool>("IsOpen")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -213,9 +219,6 @@ namespace Demo.Migrations
                     b.Property<decimal>("SalaryMin")
                         .HasPrecision(10, 2)
                         .HasColumnType("decimal(10,2)");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<string>("Summary")
                         .HasMaxLength(200)

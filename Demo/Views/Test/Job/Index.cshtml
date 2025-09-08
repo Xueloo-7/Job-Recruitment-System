@@ -40,16 +40,7 @@
                     <img alt="company logo" src="@j.LogoImageUrl" style="max-height: 40px;" />
                 </td>
                 <td class="col-createdat">@j.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                <td>
-                    @if (j.IsOpen)
-                    {
-                        <span class="badge bg-success">开放</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-danger">关闭</span>
-                    }
-                </td>
+                <td>@j.Status</td>
                 <td>
                     <a href="/Test/EditJob/@j.Id">编辑</a> |
                     <a href="/Test/DeleteJob/@j.Id">删除</a>

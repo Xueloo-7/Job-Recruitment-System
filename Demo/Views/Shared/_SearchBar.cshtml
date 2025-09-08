@@ -1,0 +1,38 @@
+﻿@model Demo.Models.SearchViewModel
+
+<form asp-controller="@Model.Controller"
+      asp-action="@Model.Action"
+      method="@Model.Method"
+      class="search-form">
+
+    <input type="text" name="query"
+           value="@Model.Query"
+           placeholder="@Model.Placeholder"
+           class="search-input" />
+
+    <button type="submit" class="search-btn">搜索</button>
+</form>
+
+<style>
+    .search-form {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+
+    .search-input {
+        flex: 1;
+        padding: 6px 10px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+    }
+
+    .search-btn {
+        padding: 6px 12px;
+        background: #007bff;
+        border: none;
+        border-radius: 6px;
+        color: white;
+        cursor: pointer;
+    }
+</style>

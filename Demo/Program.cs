@@ -1,4 +1,4 @@
-global using Demo;
+﻿global using Demo;
 global using Demo.Models;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -11,7 +11,15 @@ builder.Services.AddSqlServer<DB>($@"
 ");
 builder.Services.AddScoped<Helper>();
 
-builder.Services.AddAuthentication().AddCookie();
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = "DefaultCookie";
+    options.DefaultSignInScheme = "DefaultCookie";
+    options.DefaultChallengeScheme = "DefaultCookie";
+})
+.AddCookie("DefaultCookie", options => { options.LoginPath = "/Account/Login"; })
+.AddCookie("AdminCookie", options => { options.LoginPath = "/Admin/Login"; });
+
 builder.Services.AddHttpContextAccessor();
 
 

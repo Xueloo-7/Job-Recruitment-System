@@ -22,8 +22,5 @@ public class RegisterVM
     [Display(Name = "Confirm Password")]
     public string Confirm { get; set; }
 
-    [StringLength(100)]
-    public string Name { get; set; }
-
     public IFormFile? Photo { get; set; }
 }
