@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace Demo;
@@ -44,5 +45,10 @@ public static class Extension
     {
         tempData.TryGetValue(key, out var o);
         return o == null ? default : JsonSerializer.Deserialize<T>((string)o);
+    }
+
+    public static string GetUserId(this ClaimsPrincipal user)
+    {
+        return user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unkown User";
     }
 }

@@ -2,14 +2,12 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System.Diagnostics;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Diagnostics;
 
 
 
@@ -19,11 +17,14 @@ public class Helper
 {
     private readonly IWebHostEnvironment en;
     private readonly IHttpContextAccessor ct;
+    private readonly DB _db;
+
     // TODO
-    public Helper(IWebHostEnvironment en, IHttpContextAccessor ct)
+    public Helper(IWebHostEnvironment en, IHttpContextAccessor ct, DB _content)
     {
         this.en = en;
         this.ct = ct;
+        _db = _content;
     }
 
     // ------------------------------------------------------------------------
@@ -63,7 +64,7 @@ public class Helper
         using var img = Image.Load(stream);
         img.Mutate(x => x.Resize(options));
         img.Save(path);
-        
+
         return file;
     }
 
@@ -96,40 +97,38 @@ public class Helper
             == PasswordVerificationResult.Success;
     }
 
-    public void SignIn(User user, string email, string role, bool rememberMe)
+    public void SignIn(User user, bool rememberMe)
     {
-        // (1) Claim, identity and principal
-        // TODO
-        List<Claim> claims =
-        [
-            new(ClaimTypes.NameIdentifier, user.Id.ToString()), // 用户唯一ID
-            new(ClaimTypes.Name, user.Email),                  // 显示名（常用邮箱）
-            new(ClaimTypes.Role, user.Role.ToString()),        // 角色
-        ];
+        var scheme = user.Role == Role.Admin ? "AdminCookie" : "DefaultCookie";
 
-        // TODO
-        ClaimsIdentity identity = new(claims, "Cookies");
-
-        // TODO
-        ClaimsPrincipal principal = new(identity);
-
-        // (2) Remember me (authentication properties)
-        // TODO
-        AuthenticationProperties properties = new()
+        var claims = new List<Claim>
         {
-            IsPersistent = rememberMe,
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Email),
+            new Claim(ClaimTypes.Role, user.Role.ToString())
         };
 
-        // (3) Sign in
-        // TODO
-        ct.HttpContext!.SignInAsync(principal, properties);
+        var identity = new ClaimsIdentity(claims, scheme);
+        var principal = new ClaimsPrincipal(identity);
+
+        var properties = new AuthenticationProperties
+        {
+            IsPersistent = rememberMe
+        };
+
+        ct.HttpContext!.SignInAsync(scheme, principal, properties);
     }
+
+
 
     public void SignOut()
     {
-        // Sign out
-        // TODO
-        ct.HttpContext!.SignOutAsync();
+        ct.HttpContext!.SignOutAsync("DefaultCookie");
+    }
+
+    public void AdminSignOut()
+    {
+        ct.HttpContext!.SignOutAsync("AdminCookie");
     }
 
     public string RandomPassword()
@@ -147,6 +146,49 @@ public class Helper
 
         return password;
     }
+
+
+    // ------------------------------------------------------------------------
+    // DB Functions
+    // ------------------------------------------------------------------------
+
+    /// <summary>
+    /// 生成通用的流水号 ID
+    /// </summary>
+    /// <typeparam name="TEntity">实体类型，必须有 Id 属性</typeparam>
+    /// <param name="dbSet">EF 的 DbSet</param>
+    /// <param name="prefix">前缀，比如 "A" / "N"</param>
+    /// <param name="length">数字部分长度，默认 3 => A001</param>
+    public static string GenerateId<TEntity>(DbSet<TEntity> dbSet, string prefix, int length = 3)
+        where TEntity : class, IHasId
+    {
+        var last = dbSet
+            .Where(t => t.Id.StartsWith(prefix))
+            .OrderByDescending(u => u.Id)
+            .FirstOrDefault();
+
+        int next = 1;
+        if (last != null)
+        {
+            string numberStr = last.Id.Substring(prefix.Length);
+            if (int.TryParse(numberStr, out int lastNumber))
+            {
+                next = lastNumber + 1;
+            }
+        }
+
+        return $"{prefix}{next.ToString($"D{length}")}";
+    }
+
+
+}
+
+/// <summary>
+/// 保证实体有 Id 属性
+/// </summary>
+public interface IHasId
+{
+    string Id { get; set; }
 }
 
 // ------------------------------------------------------------------------

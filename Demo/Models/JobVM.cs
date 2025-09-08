@@ -42,7 +42,7 @@ public class JobVM
     [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Invalid Salary format")]
     public decimal SalaryMax { get; set; }
 
-    public bool IsOpen { get; set; } = true;
+    public JobStatus Status { get; set; }
     [MaxLength(1000)]
     public string? Description { get; set; }
 

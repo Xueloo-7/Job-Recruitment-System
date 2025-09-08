@@ -41,16 +41,7 @@
                         <td>@jr.TotalApplications</td>
                         <td>@jr.TotalHired</td>
                         <td>@jr.RecruitmentDays.ToString("yyyy-MM-dd")</td>
-                        <td>
-                            @if (jr.IsOpen)
-                            {
-                                <span class="status status-open">Enable</span>
-                            }
-                            else
-                            {
-                                <span class="status status-closed">Disable</span>
-                            }
-                        </td>
+                        <td>@jr.Status</td>
                     </tr>
                 }
             </tbody>

@@ -90,12 +90,12 @@ public class AccountController : Controller
             TempData["Info"] = "Login Successfully.";
 
             //hp.SignIn(user!.Email, user.Role.ToString(), vm.RememberMe);
-            hp.SignIn(user, user!.Email, user.Role.ToString(), vm.RememberMe);
+            hp.SignIn(user, vm.RememberMe);
 
             if (string.IsNullOrEmpty(returnURL))
-            {
                 return RedirectToAction("Index", "Home");
-            }
+            else
+                return Redirect(returnURL);
         }
 
         return View(vm);
@@ -120,140 +120,6 @@ public class AccountController : Controller
             }
         }
     }
-
-    //// GET: Account/UpdatePassword
-    //// TODO
-    //public IActionResult UpdatePassword()
-    //{
-    //    return View();
-    //}
-
-    //// POST: Account/UpdatePassword
-    //// TODO
-    //[HttpPost]
-    //public IActionResult UpdatePassword(UpdatePasswordVM vm)
-    //{
-    //    // Get user (admin or member) record based on email (PK)
-    //    // TODO
-    //    var u = db.Users.Find("TODO");
-    //    if (u == null) return RedirectToAction("Index", "Home");
-
-    //    // If current password not matched
-    //    // TODO
-    //    if (true)
-    //    {
-    //        ModelState.AddModelError("Current", "Current Password not matched.");
-    //    }
-
-    //    if (ModelState.IsValid)
-    //    {
-    //        // Update user password (hash)
-    //        // TODO
-
-    //        TempData["Info"] = "Password updated.";
-    //        return RedirectToAction();
-    //    }
-
-    //    return View();
-    //}
-
-    //// GET: Account/UpdateProfile
-    //// TODO
-    //public IActionResult UpdateProfile()
-    //{
-    //    // Get member record based on email (PK)
-    //    // TODO
-    //    var m = db.Members.Find("TODO");
-    //    if (m == null) return RedirectToAction("Index", "Home");
-
-    //    var vm = new UpdateProfileVM
-    //    {
-    //        // TODO
-    //        Email = "TODO",
-    //        Name = "TODO",
-    //        PhotoURL = m.PhotoURL,
-    //    };
-
-    //    return View(vm);
-    //}
-
-    //// POST: Account/UpdateProfile
-    //// TODO
-    //[HttpPost]
-    //public IActionResult UpdateProfile(UpdateProfileVM vm)
-    //{
-    //    // Get member record based on email (PK)
-    //    // TODO
-    //    var m = db.Members.Find("TODO");
-    //    if (m == null) return RedirectToAction("Index", "Home");
-
-    //    if (vm.Photo != null)
-    //    {
-    //        var err = hp.ValidatePhoto(vm.Photo);
-    //        if (err != "") ModelState.AddModelError("Photo", err);
-    //    }
-
-    //    if (ModelState.IsValid)
-    //    {
-    //        // TODO
-    //        var TODO = vm.Name;
-
-    //        if (vm.Photo != null)
-    //        {
-    //            hp.DeletePhoto(m.PhotoURL, "photos");
-    //            m.PhotoURL = hp.SavePhoto(vm.Photo, "photos");
-    //        }
-
-    //        db.SaveChanges();
-
-    //        TempData["Info"] = "Profile updated.";
-    //        return RedirectToAction();
-    //    }
-
-    //    // TODO
-    //    vm.Email = "TODO";
-    //    vm.PhotoURL = m.PhotoURL;
-    //    return View(vm);
-    //}
-
-    //// GET: Account/ResetPassword
-    //public IActionResult ResetPassword()
-    //{
-    //    return View();
-    //}
-
-    //// POST: Account/ResetPassword
-    //[HttpPost]
-    //public IActionResult ResetPassword(ResetPasswordVM vm)
-    //{
-    //    var u = db.Users.Find(vm.Email);
-
-    //    if (u == null)
-    //    {
-    //        ModelState.AddModelError("Email", "Email not found.");
-    //    }
-
-    //    if (ModelState.IsValid)
-    //    {
-    //        // Generate random password
-    //        // TODO
-    //        string password = "TODO";
-
-    //        // Update user (admin or member) record
-    //        // TODO
-
-    //        // TODO: Send reset password email
-
-    //        TempData["Info"] = $"Password reset to <b>{password}</b>.";
-    //        return RedirectToAction();
-    //    }
-
-    //    return View();
-    //}
-
-
-
-
 
 
 
