@@ -1002,7 +1002,7 @@ public class TestController : Controller
             Description = job.Description,
             Summary = job.Summary,
             LogoImageUrl = job.LogoImageUrl,
-            IsOpen = job.IsOpen,
+            Status = job.Status,
 
             // 下拉选项
             UserOptions = _db.Users
@@ -1081,7 +1081,7 @@ public class TestController : Controller
                 Description = vm.Description,
                 Summary = vm.Summary,
                 LogoImageUrl = logoFileName != null ? $"/images/uploads/logo/{logoFileName}" : null,
-                IsOpen = vm.IsOpen,
+                Status = vm.Status,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
@@ -1145,7 +1145,7 @@ public class TestController : Controller
                 job.LogoImageUrl = $"/images/uploads/logo/{logoFileName}";
             }
 
-            job.IsOpen = vm.IsOpen;
+            job.Status = vm.Status;
             job.UpdatedAt = DateTime.UtcNow;
 
             _db.Jobs.Update(job);

@@ -73,7 +73,7 @@ public class ReportController : Controller
                     TotalApplications = _db.Applications.Count(a => a.JobId == j.Id),
                     TotalHired = _db.Applications.Count(a => a.JobId == j.Id && a.Status == ApplicationStatus.Hired),
                     RecruitmentDays = (DateTime.Now - j.CreatedAt).Days,
-                    IsOpen = j.IsOpen
+                    Status = j.Status
                 })
                 .ToList()
         };

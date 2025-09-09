@@ -95,7 +95,7 @@ public class EmployerController : Controller
         {
             TempData["Info"] = "Login Successfully.";
 
-            hp.SignIn(user, user!.Email, user.Role.ToString(), vm.RememberMe);
+            hp.SignIn(user, vm.RememberMe);
 
             if (string.IsNullOrEmpty(returnURL))
             {

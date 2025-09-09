@@ -15,5 +15,5 @@ public class JobReportVM
     public int TotalApplications { get; set; }
     public int TotalHired { get; set; }
     public int RecruitmentDays { get; set; }
-    public bool IsOpen { get; set; }
+    public JobStatus Status { get; set; }
 }

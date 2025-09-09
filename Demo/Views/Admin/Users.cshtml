@@ -1,0 +1,56 @@
+﻿@* @using Demo.Models.ViewModels *@
+@model IEnumerable<Demo.Models.User>
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<h1>User Management</h1>
+
+<partial name="_SearchBar" 
+         model="@(new SearchViewModel { 
+             Placeholder = "Search user name", 
+             Action = "Users", 
+             Controller = "Admin", 
+             Query = Context.Request.Query["query"].ToString(),
+             Method = "GET"
+         })" />
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>姓名</th>
+            <th>Email</th>
+            <th>Updated At</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.Id</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(user.FirstName) || !string.IsNullOrEmpty(user.LastName))
+                    {
+                        @($"{user.FirstName} {user.LastName}".Trim())
+                    }
+                    else
+                    {
+                        @user.Name
+                    }
+                </td>
+                <td>@user.Email</td>
+                <td>@user.UpdatedAt</td>
+                <td>
+                    <a class="btn-edit" asp-controller="Admin" asp-action="UserEdit" asp-route-id="@user.Id">Manage</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Styles{
+    
+}

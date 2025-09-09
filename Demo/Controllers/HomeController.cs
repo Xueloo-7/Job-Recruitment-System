@@ -24,7 +24,7 @@ public class HomeController : BaseController
         IQueryable<Job> jobQuery = db.Jobs
             .Include(j => j.Category)
             .Include(j => j.User) // 如果页面要显示发布者信息
-            .Where(j => j.IsOpen);
+            .Where(j => j.Status == JobStatus.Approved);
 
         if (!string.IsNullOrEmpty(jobPostingUserId))
         {

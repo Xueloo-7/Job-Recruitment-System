@@ -1,0 +1,115 @@
+﻿@model Demo.Models.JobEditViewModel
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<div class="card">
+    <h1>Job Management</h1>
+
+    <form asp-action="JobEdit" asp-controller="Admin" method="post">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="form-group">
+            <label>Status</label>
+            <select asp-for="Status" asp-items="Model.StatusOptions" class="form-control"></select>
+        </div>
+
+        <div class="form-group">
+            <label>Latest Update:</label>
+            <p class="readonly">@Model.UpdatedAt.ToString("yyyy-MM-dd HH:mm:ss")</p>
+        </div>
+
+        <div class="button-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Jobs" asp-controller="Admin" class="btn btn-secondary">Back</a>
+        </div>
+    </form>
+</div>
+
+<div class="card danger">
+    <h1>Delete this Job?</h1>
+    <form asp-action="JobDelete" asp-controller="Admin" method="post" onsubmit="return confirm('Are you sure?')">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+</div>
+
+
+@section Styles {
+    <style>
+
+
+        /* 表单项 */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+            .form-group label {
+                display: block;
+                font-weight: bold;
+                margin-bottom: 6px;
+            }
+
+            .form-group select,
+            .form-group input[type="text"],
+            .form-group input[type="email"],
+            .form-group p.readonly {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ddd;
+                border-radius: 6px;
+                background-color: #f9f9f9;
+            }
+
+        /* 只读文本 */
+        p.readonly {
+            margin: 0;
+            background-color: #f1f1f1;
+        }
+
+        /* 按钮 */
+        .btn {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.95rem;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: #4a6cf7;
+            color: #fff;
+        }
+
+            .btn-primary:hover {
+                background-color: #3755d3;
+            }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+            .btn-secondary:hover {
+                background-color: #565e64;
+            }
+
+        .btn-danger {
+            background-color: #e63946;
+            color: #fff;
+        }
+
+            .btn-danger:hover {
+                background-color: #c72d39;
+            }
+
+        /* 按钮组 */
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+}

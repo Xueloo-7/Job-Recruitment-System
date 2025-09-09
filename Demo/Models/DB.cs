@@ -22,6 +22,7 @@ public class DB : DbContext
     public DbSet<Application> Applications { get; set; }
     public DbSet<Notification> Notifications { get; set; }
     public DbSet<Promotion> Promotions { get; set; }
+    public DbSet<AuditLog> AuditLogs { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // decimal 精度配置
@@ -269,10 +270,10 @@ public class Job
     [MaxLength(255)]
     public string? LogoImageUrl { get; set; }
 
-    public bool IsOpen { get; set; } = true;
-
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    public JobStatus Status { get; set; } = JobStatus.Pending;
 
     // 【导航属性】
     public User User { get; set; }
@@ -280,6 +281,13 @@ public class Job
     public Promotion Promotion { get; set; }
 
     public ICollection<Application> Applications { get; set; } = new List<Application>();
+}
+
+public enum JobStatus
+{
+    Approved, // 已审核通过，会被显示
+    Rejected, // 已审核拒绝，不会被显示
+    Pending // 待审核
 }
 
 public enum PayType
@@ -344,7 +352,7 @@ public enum ApplicationSource
     Unknown // 未知来源
 }
 
-public class Notification
+public class Notification : IHasId
 {
     [Key, MaxLength(6)]
     [RegularExpression(@"^N\d{3}$", ErrorMessage = "ID 格式应为 N+三位数字")]
@@ -391,4 +399,29 @@ public class Promotion
 
     // 修改导航属性：从 JobPromotion → Job（1对多）
     public ICollection<Job> Jobs { get; set; } = new List<Job>();
+}
+
+public class AuditLog
+{
+    [Key]
+    public int Id { get; set; }
+
+    [Required, MaxLength(6)]  // 接收者 ID
+    public string UserId { get; set; }
+
+    [Required, MaxLength(100)]
+    public string TableName { get; set; }  // 被操作的数据表，比如 Job
+
+    [Required, MaxLength(50)]
+    public string ActionType { get; set; }  // 操作类型: Create, Update, Delete
+
+    [MaxLength(100)]
+    public string RecordId { get; set; }  // 被操作记录的主键，比如 Job.Id
+
+    public string? Changes { get; set; }  // 保存变更详情（JSON 格式比较常见）
+
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+
+    // 导航属性
+    public User User { get; set; }
 }

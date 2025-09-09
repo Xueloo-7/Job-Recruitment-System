@@ -1,0 +1,117 @@
+﻿@model StatisticsViewModel
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<div class="admin-stats-container">
+    <!-- KPI 卡片 -->
+    <div class="admin-stats-kpi">
+        <div class="admin-stats-card users">
+            <h4>@Model.TotalUsers</h4>
+            <p>Total User</p>
+        </div>
+        <div class="admin-stats-card jobs">
+            <h4>@Model.TotalJobs</h4>
+            <p>Total Job</p>
+        </div>
+        <div class="admin-stats-card applications">
+            <h4>@Model.TotalApplications</h4>
+            <p>Total Application</p>
+        </div>
+        <div class="admin-stats-card topjob">
+            <h4>@Model.TopJobCategory</h4>
+            <p>Top Job</p>
+        </div>
+        <div class="admin-stats-card income">
+            <h4>¥ @Model.TotalIncome</h4>
+            <p>Business Income</p>
+        </div>
+    </div>
+
+    <div class="date-filter">
+        <form method="get" asp-controller="Admin" asp-action="Statistics">
+            <label>开始日期:</label>
+            <input type="month" name="startDate" value="@DateTime.Now.AddMonths(-5).ToString("yyyy-MM")" />
+
+            <label>结束日期:</label>
+            <input type="month" name="endDate" value="@DateTime.Now.ToString("yyyy-MM")" />
+
+            <button type="submit">筛选</button>
+        </form>
+    </div>
+
+
+    <!-- 图表区 -->
+    <div class="admin-stats-charts">
+        <div class="admin-stats-charts-card"><canvas id="userGrowth"></canvas></div>
+        <div class="admin-stats-charts-card"><canvas id="jobType"></canvas></div>
+        <div class="admin-stats-charts-card"><canvas id="applicationTrend"></canvas></div>
+        <div class="admin-stats-charts-card"><canvas id="income"></canvas></div>
+        <div class="admin-stats-charts-card"><canvas id="income"></canvas></div>
+    </div>
+
+    <!-- 热门行业排行榜 -->
+    <div class="admin-stats-top-industries">
+        <h3>Top Industries</h3>
+        <canvas id="topIndustries"></canvas>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .date-filter {
+            margin-bottom: 15px;
+        }
+
+        /* 统一日期选择器外观 */
+        .date-filter input[type="month"] {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #333;
+            background-color: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+            /* 聚焦时高亮 */
+            .date-filter input[type="month"]:focus {
+                border-color: #4a90e2;
+                box-shadow: 0 0 4px rgba(74, 144, 226, 0.5);
+                outline: none;
+            }
+
+        /* 表单按钮 */
+        .date-filter button {
+            padding: 8px 16px;
+            margin-left: 8px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            background: #4a90e2;
+            color: #fff;
+            transition: background 0.2s;
+        }
+
+            .date-filter button:hover {
+                background: #357ab8;
+            }
+
+    </style>
+}
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="~/js/admin-stats.js"></script>
+    <script>
+        // 把服务器端的 Model 序列化成 JSON 传给 JS
+        var adminStatsModel = @Html.Raw(Json.Serialize(Model));
+
+        // 调用外部 js 的方法
+        $(document).ready(function () {
+            renderCharts(adminStatsModel);
+        });
+    </script>
+}

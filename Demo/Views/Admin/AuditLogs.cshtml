@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Demo.Models.AuditLog>
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<h1>Audit Logs</h1>
+
+<partial name="_SearchBar" 
+         model="@(new SearchViewModel { 
+             Placeholder = "Search table | action | id | changes", 
+             Action = "AuditLogs", 
+             Controller = "Admin", 
+             Query = Context.Request.Query["query"].ToString(),
+             Method = "GET"
+         })" />
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Table</th>
+            <th>Action</th>
+            <th>Changes</th>
+            <th>Performed By</th>
+            <th>Time stamp</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var log in Model)
+        {
+            <tr>
+                <td>@log.Id</td>
+                <td>@log.TableName</td>
+                <td>@log.ActionType</td>
+                <td>@log.Changes</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(log.User.FirstName) || !string.IsNullOrEmpty(log.User.LastName))
+                    {
+                        @($"{log.User.FirstName} {log.User.LastName}".Trim())
+                    }
+                    else
+                    {
+                        @log.User.Name
+                    }
+                </td>
+                <td>@log.Timestamp</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Styles{
+    
+}
