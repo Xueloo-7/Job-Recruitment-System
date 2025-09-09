@@ -1,0 +1,44 @@
+﻿@model IEnumerable<Demo.Models.Job>
+
+@{
+    Layout = "_AdminLayout";
+}
+
+<h1>Job Approval</h1>
+
+<partial name="_SearchBar"
+         model="@(new SearchViewModel {
+             Placeholder = "Search title | company name",
+             Action = "JobApprovals",
+             Controller = "Admin",
+             Query = Context.Request.Query["query"].ToString(),
+             Method = "GET"
+         })" />
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Recruiter</th>
+            <th>Company</th>
+            <th>Submitted At</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var job in Model)
+        {
+            <tr>
+                <td>@job.Id</td>
+                <td>@job.Title</td>
+                <td>@job.User.Name</td>
+                <td>@job.CompanyName</td>
+                <td>@job.UpdatedAt</td>
+                <td>
+                    <a class="btn-edit" asp-controller="Admin" asp-action="JobApprovalDetail" asp-route-id="@job.Id">Review</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

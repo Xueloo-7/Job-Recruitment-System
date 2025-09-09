@@ -42,9 +42,9 @@ using System.ComponentModel.DataAnnotations;
         [RegularExpression(@"\d+(\.\d{1,2})?", ErrorMessage = "Invalid Salary format")]
         public decimal SalaryMax { get; set; }
 
-        public bool IsOpen { get; set; } = true;
-        [MaxLength(1000)]
-        public string? Description { get; set; }
+    public JobStatus Status { get; set; }
+    [MaxLength(1000)]
+    public string? Description { get; set; }
 
         [MaxLength(200)]
         public string? Summary { get; set; }

@@ -5,7 +5,7 @@ using System.Diagnostics;
 
 namespace Demo.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "DefaultCookie")]
     public class ProfileController : Controller
     {
         private readonly DB db;
