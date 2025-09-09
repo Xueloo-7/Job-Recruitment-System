@@ -1,4 +1,4 @@
-﻿@model Demo.Models.JobVM
+﻿@model Demo.Models.JobVM1
 
 @{
     ViewBag.Title = "Job Posting";
@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="~/css/test.css" asp-append-version="true" />
 }
 
-<form asp-action="Insert" asp-controller="DemoJob"  enctype="multipart/form-data" method="post">
+<form asp-action="Insert1" asp-controller="DemoJob"  enctype="multipart/form-data" method="post">
+
     <div class="form-group">
         <label asp-for="Title">Job Title</label>
         <input asp-for="Title" class="form-control" autofocus />
@@ -39,7 +40,7 @@
     <div class="form-group">
             <label asp-for="PayType">Pay Type</label>
             <select asp-for="PayType" class="form-control" asp-items="ViewBag.PayTypes">
-                <option value="">-- Select Payment Method --</option>
+                <option value="" selected>-- Select Payment Method --</option>
             </select>
             <span asp-validation-for="PayType" class="text-danger"></span>
         </div>
@@ -66,6 +67,6 @@
         </div>
     </div>
 
-   
+    <button type="submit">Next</button>
 
 </form>
