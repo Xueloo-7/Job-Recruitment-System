@@ -72,3 +72,5 @@ $(document).on('click', '[data-post]', e => {
     f.action = url || location;
     f.submit();
 });
+
+

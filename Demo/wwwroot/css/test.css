@@ -8,6 +8,8 @@ form {
     border: 1px solid #ccc;
     border-radius: 10px;
     background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Form headings */
@@ -45,21 +47,19 @@ textarea {
 
 /* Buttons */
 button[type="submit"] {
-    display: block;
-    width: 100%;
-    padding: 10px;
+    padding: 10px 16px;
     background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+    margin-left: auto; /* 🔑 推到最右边 */
 }
 
     button[type="submit"]:hover {
         background-color: #0056b3;
     }
-
 /* Validation errors */
 .text-danger {
     color: red;
