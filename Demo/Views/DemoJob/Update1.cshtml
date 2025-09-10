@@ -1,7 +1,7 @@
 ﻿@model Demo.Models.JobVM1
 
 @{
-    ViewBag.Title = "Job Posting";
+    ViewBag.Title = "Update Job Posting";
 }
 
 @section Scripts {
@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="~/css/test.css" asp-append-version="true" />
 }
 
-<form asp-action="Insert1" asp-controller="DemoJob" enctype="multipart/form-data" method="post">
+<form asp-action="Update1" asp-controller="DemoJob" enctype="multipart/form-data" method="post">
+    @* 隐藏字段保存 Id *@
+    <input type="hidden" asp-for="Id" />
 
     <div class="form-group">
         <label asp-for="Title">Job Title</label>
@@ -31,22 +33,19 @@
 
     <div class="form-group">
         <label asp-for="UserId">Owner</label>
-        <select asp-for="UserId" class="form-control"
-                asp-items="Model.UserOptions">
-            <option value="">--- Please select an onwer ---</option>
+        <select asp-for="UserId" class="form-control" asp-items="Model.UserOptions">
+            <option value="">--- Please select an owner ---</option>
         </select>
         <span asp-validation-for="UserId" class="text-danger"></span>
     </div>
 
     <div class="form-group">
         <label asp-for="CategoryId">Category</label>
-        <select asp-for="CategoryId" class="form-control"
-                asp-items="Model.CategoryOptions">
+        <select asp-for="CategoryId" class="form-control" asp-items="Model.CategoryOptions">
             <option value="">--- Please select a Category ---</option>
         </select>
         <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
-
 
     <div class="form-group">
         <label asp-for="WorkType">Work Type</label>
@@ -59,11 +58,10 @@
     <div class="form-group">
         <label asp-for="PayType">Pay Type</label>
         <select asp-for="PayType" class="form-control" asp-items="ViewBag.PayTypes">
-            <option value="" selected>-- Select Payment Method --</option>
+            <option value="">-- Select Payment Method --</option>
         </select>
         <span asp-validation-for="PayType" class="text-danger"></span>
     </div>
-
 
     <div class="form-group salary-group">
         <div class="salary-field">
@@ -74,7 +72,6 @@
             </div>
             <span asp-validation-for="SalaryMin" class="text-danger"></span>
         </div>
-
 
         <div class="salary-field">
             <label asp-for="SalaryMax">Salary Max</label>
@@ -87,5 +84,4 @@
     </div>
 
     <button type="submit">Next</button>
-
 </form>
