@@ -1,0 +1,63 @@
+﻿@model Demo.Models.JobVM3
+
+@{
+    ViewBag.Title = "Update Job Posting - Step 3";
+}
+
+@section Scripts {
+    <script src="~/js/app.js"></script>
+    <link rel="stylesheet" href="~/css/test.css" asp-append-version="true" />
+}
+
+<form asp-action="Update3" asp-controller="DemoJob" enctype="multipart/form-data" method="post">
+
+    <label asp-for="LogoFile">Please Upload a Company LOGO</label>
+    <label class="upload">
+        <input asp-for="LogoFile" accept="image/jpeg,image/png" hidden>
+        <img src="@(string.IsNullOrEmpty(Model.ExistingLogoUrl)// 判断数据库里是否有已有的 Logo 路径
+                                           ? Url.Content("~/images/default_logo.png")// 如果没有，则使用默认图片
+                          : Url.Content("~/" + Model.ExistingLogoUrl))" @*如果有，则在路径前加 "~/" 转成正确的绝对路径 *@
+             alt="Company Logo"
+             style="max-width:150px; max-height:150px;">
+    </label>
+    <span asp-validation-for="LogoFile" class="text-danger"></span>
+
+    <div class="form-actions">
+        <a asp-action="Update2" class="back-btn">Back</a>
+        <button type="submit" class="next-btn">Submit</button>
+    </div>
+
+    <style>
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #007bff;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+
+            .back-btn:hover {
+                background-color: #0056b3;
+            }
+
+        .next-btn {
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
+            .next-btn:hover {
+                background-color: #1e7e34;
+            }
+    </style>
+</form>
