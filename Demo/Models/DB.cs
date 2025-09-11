@@ -51,7 +51,7 @@ public class DB : DbContext
 
 }
 
-public class User
+public class User : IHasId
 {
     [Key, MaxLength(6)]
     [RegularExpression(@"^U\d{3}$", ErrorMessage = "ID 格式应为 U+三位数字")]
@@ -109,7 +109,7 @@ public enum Role
     Employer
 }
 
-public class Education
+public class Education : IHasId
 {
     [Key, MaxLength(6)]
     [RegularExpression(@"^E\d{3}$", ErrorMessage = "ID 格式应为 E+三位数字")]
@@ -129,7 +129,7 @@ public class Education
     public User User { get; set; }
 }
 
-public class JobExperience
+public class JobExperience : IHasId
 {
     [Key, MaxLength(6)]
     [RegularExpression(@"^JE\d{3}$", ErrorMessage = "ID 格式应为 JE+三位数字")]
@@ -164,7 +164,7 @@ public class JobExperience
     public User User { get; set; }
 }
 
-public class Resume
+public class Resume : IHasId
 {
     [Key, MaxLength(6)]
     [RegularExpression(@"^R\d{3}$", ErrorMessage = "ID 格式应为 R+三位数字")]
@@ -184,7 +184,7 @@ public class Resume
     public User User { get; set; }
 }
 
-public class Qualification
+public class Qualification : IHasId
 {
     [Key, MaxLength(6)]
     [RegularExpression(@"^Q\d{3}$", ErrorMessage = "ID 格式应为 Q+三位数字")]
@@ -195,7 +195,7 @@ public class Qualification
     public string Name { get; set; }
 }
 
-public class Institution
+public class Institution : IHasId
 {
     [Key, MaxLength(6)]
     [RegularExpression(@"^I\d{3}$", ErrorMessage = "ID 格式应为 I+三位数字")]
@@ -206,7 +206,7 @@ public class Institution
     public string Name { get; set; }
 }
 
-public class Category
+public class Category : IHasId
 {
     [Key, MaxLength(6)]
     [RegularExpression(@"^C\d{3}$", ErrorMessage = "ID 格式应为 C+三位数字")]
@@ -224,7 +224,7 @@ public class Category
     public ICollection<Category>? Children { get; set; }
 }
 
-public class Job
+public class Job : IHasId
 {
     [Key, MaxLength(6)]
     [RegularExpression(@"^J\d{3}$", ErrorMessage = "ID 格式应为 J+三位数字")]
@@ -305,7 +305,7 @@ public enum WorkType
     Casual
 }
 
-public class Application
+public class Application : IHasId
 {
     [Key, MaxLength(6)]
     [RegularExpression(@"^A\d{3}$", ErrorMessage = "ID 格式应为 A+三位数字")]
@@ -379,7 +379,7 @@ public class Notification : IHasId
     public User FromUser { get; set; } // 可选
 }
 
-public class Promotion
+public class Promotion : IHasId
 {
     [Key, MaxLength(6)]
     [RegularExpression(@"^P\d{3}$", ErrorMessage = "ID 格式应为 P+三位数字")]

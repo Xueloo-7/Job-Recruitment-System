@@ -1,0 +1,117 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title - Job Seeker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="/images/favicon.png" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/employer-style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/sideMenu.css" asp-append-version="true" />
+
+    @RenderSection("Styles", required: false)
+</head>
+<body>
+
+    <div class="info">@Html.Raw(TempData["Info"])</div>
+
+    <header class="navbar">
+        <div class="navbar-top">
+            <div class="navbar-left">
+                <img src="~/images/favicon.png" alt="Logo" class="logo" />
+                <h1 class="brand">Job Seeker</h1>
+                <nav class="nav-links">
+                    <a asp-controller="Profile" asp-action="Index" class="@Html.IsActive("Profile")">Profile</a>
+                    <a asp-controller="Account" asp-action="Logout" class="@Html.IsActive("Account", "Logout")">Sign Out</a>
+                    <a asp-controller="Report" asp-action="Index" class="@Html.IsActive("Report", "Index")">Report</a>
+                    <a asp-controller="DemoJob" asp-action="Index" class="@Html.IsActive("DemoJob", "Index")">DemoJob</a> @*for testing only *@
+                </nav>
+            </div>
+
+            <div class="navbar-right">
+                <!-- Profile logo -->
+                <a asp-controller="Profile" asp-action="Index" class="icon-button">
+                    <i class="fa-solid fa-user"></i>
+                </a>
+
+                <a asp-controller="Notification" asp-action="Index" class="icon-button">
+                    <i class="fa-solid fa-comment-dots"></i>
+                    @if (ViewBag.UnreadCount > 0)
+                    {
+                        <span class="badge">@ViewBag.UnreadCount</span>
+                    }
+                </a>
+
+                <!-- side Menu Button -->
+                <button class="menu-toggle icon-button">
+                    <i class="fas fa-bars"></i>
+                </button>
+
+                <partial name="_sideMenu" />
+            </div>
+        </div>
+
+
+
+        <div class="navbar-down">
+            <nav class="nav-links">
+                <a asp-controller="Home" asp-action="Index" class="@Html.IsActive("Home", "Index")">Job Search</a>
+                <a asp-controller="Profile" asp-action="Index" class="@Html.IsActive("Profile")">Profile</a>
+                <a asp-controller="Home" asp-action="Employer" class="@Html.IsActive("Home", "Employer")">Employer</a>
+                <a asp-controller="Account" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
+                <a asp-controller="Test" asp-action="Index" class="@Html.IsActive("Test", "Index")">Test</a>
+                <a asp-controller="Report" asp-action="Index" class="@Html.IsActive("Report", "Index")">Report</a>
+            </nav>
+        </div>
+
+
+    </header>
+
+    <main class="main-content">
+        @RenderBody()
+    </main>
+
+    <footer>
+        <!-- Social Media Icons -->
+        <div class="social-icons">
+            <a href="https://www.youtube.com" target="_blank" title="YouTube" class="tooltip" data-tooltip="YouTube">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://www.instagram.com" target="_blank" title="Instagram" class="tooltip" data-tooltip="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://www.facebook.com" target="_blank" title="Facebook" class="tooltip" data-tooltip="Facebook">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <a href="https://wa.me" target="_blank" title="WhatsApp" class="tooltip" data-tooltip="WhatsApp">
+                <i class="fab fa-whatsapp"></i>
+            </a>
+            <a href="https://www.wechat.com" target="_blank" title="WeChat" class="tooltip" data-tooltip="WeChat">
+                <i class="fab fa-weixin"></i>
+            </a>
+            <a href="https://www.twitter.com" target="_blank" title="X" class="tooltip" data-tooltip="X (Twitter)">
+                <i class="fab fa-x-twitter"></i>
+            </a>
+            <a href="https://www.tiktok.com" target="_blank" title="TikTok" class="tooltip" data-tooltip="TikTok">
+                <i class="fab fa-tiktok"></i>
+            </a>
+            <a href="https://youtu.be/dQw4w9WgXcQ?si=EoXUgR4ibdl9-5d8" target="_blank" title="Contact Us" class="tooltip" data-tooltip="Contact Us">
+                <i class="fas fa-envelope"></i>
+            </a>
+        </div>
+        <p>
+            Developed by <b>ROXY'S</b> &middot; &copy; @DateTime.Now.Year
+       </p>
+    </footer>
+
+    <script src="~/js/jquery.min.js"></script>
+    <script src="~/js/jquery.validate.min.js"></script>
+    <script src="~/js/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/js/app.js"></script>
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>
