@@ -229,10 +229,10 @@ public class Job : IHasId
     [Key, MaxLength(6)]
     [RegularExpression(@"^J\d{3}$", ErrorMessage = "ID 格式应为 J+三位数字")]
     [Remote(action: "CheckJobId", controller: "Test", ErrorMessage = "ID 已存在")]
-    public string Id { get; set; }
+    public string Id { get; set; } 
 
     [Required, MaxLength(6)]  // 【FK】
-    public string UserId { get; set; }
+    public string UserId { get; set; } 
 
     [Required]  // 【FK】
     public string CategoryId { get; set; }
