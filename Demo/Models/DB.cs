@@ -93,7 +93,7 @@ public class User : IHasId
 
     public ICollection<JobExperience>? JobExperiences { get; set; }
 
-    public Resume? Resume { get; set; }
+    public ICollection<Resume>? Resumes { get; set; }
 
     public ICollection<Job>? Jobs { get; set; }
 

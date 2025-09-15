@@ -1,61 +1,92 @@
 ﻿@model User
 @{
-    ViewBag.Title = "Profile";
+    ViewData["Title"] = "My Profile";
 }
 
-<div id="profile-container" class="profile-container" data-user-id="@Model.Id">
-    <div class="tab-buttons">
-        <a asp-controller="Profile"
-           asp-action="Profile"
-           asp-route-userId="@Model.Id"
-           data-ajax="true"
-           data-ajax-method="GET"
-           data-ajax-mode="replace"
-           data-ajax-update="#tab-content"
-           class="tab-button active">
-            Profile
-        </a>
-        <a asp-controller="Profile"
-           asp-action="Summary"
-           asp-route-userId="@Model.Id"
-           data-ajax="true"
-           data-ajax-method="GET"
-           data-ajax-mode="replace"
-           data-ajax-update="#tab-content"
-           class="tab-button">
-            Summary
-        </a>
-        <a asp-controller="Profile"
-           asp-action="CareerHistory"
-           asp-route-userId="@Model.Id"
-           data-ajax="true"
-           data-ajax-method="GET"
-           data-ajax-mode="replace"
-           data-ajax-update="#tab-content"
-           class="tab-button">
-            Career History
-        </a>
-        <a asp-controller="Profile"
-           asp-action="Education"
-           asp-route-userId="@Model.Id"
-           data-ajax="true"
-           data-ajax-method="GET"
-           data-ajax-mode="replace"
-           data-ajax-update="#tab-content"
-           class="tab-button">
-            Education
-        </a>
+<div class="profile-page">
+    <div class="profile-nav">
+        <a asp-action="Index" class="active">Dashboard</a>
+        <a asp-action="Info" class="">Information</a>
+        <a asp-action="Summary" class="" )">Summary</a>
+        <a asp-action="CareerHistory" class="">Career History</a>
+        <a asp-action="Education" class="">Education</a>
+        <a asp-action="Resume" class="">Resume</a>
     </div>
 
-    <div id="tab-content" class="profile-card">
-        <partial name="_Profile" model=@Model />
+    <div class="profile-card">
+        <h2 class="profile-title">基本信息</h2>
+        <p><b>First Name:</b> @Model.FirstName</p>
+        <p><b>Last Name:</b> @Model.LastName</p>
+        <p><b>Email:</b> @Model.Email</p>
+        <p><b>Mobile Phone:</b> @Model.PhoneNumber</p>
+        <p><b>Location:</b> @Model.Location</p>
+        <p><b>Summary:</b> @Model.Summary</p>
+    </div>
+
+    <div class="profile-card">
+        <h2 class="profile-title">教育经历</h2>
+        @if (Model.Educations?.Any() == true)
+        {
+            <ul class="profile-edu-grid">
+                @foreach (var edu in Model.Educations)
+                {
+                    <li class="profile-edu-item">
+                        <span class="profile-edu-qualification">@edu.Qualification</span> -
+                        <span class="profile-edu-institution">@edu.Institution</span>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>暂无教育记录</p>
+        }
+    </div>
+
+    <div class="profile-card">
+        <h2 class="profile-title">职业经历</h2>
+        @if (Model.JobExperiences?.Any() == true)
+        {
+            <div class="profile-career-list">
+                @foreach (var job in Model.JobExperiences)
+                {
+                    <div class="profile-career-item">
+                        <div class="profile-career-title">@job.JobTitle</div>
+                        <div class="profile-career-company">
+                            @job.CompanyName
+                            (@job.StartYear.@job.StartMonth -
+                            @(job.StillInRole ? "至今" : $"{job.EndYear}.{job.EndMonth}"))
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p>暂无职业经历</p>
+        }
+    </div>
+
+    <div class="profile-card">
+        <h2 class="profile-title">简历列表</h2>
+        @if (Model.Resumes?.Any() == true)
+        {
+            <ul>
+                @foreach (var r in Model.Resumes)
+                {
+                    <li>
+                        <a href="@r.ImageUrl" target="_blank">查看简历 (@r.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd"))</a>
+                    </li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>尚未上传简历</p>
+        }
     </div>
 </div>
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/Profile.css" />
-}
-
-@section Scripts {
-    <script src="~/js/profile.js"></script>
+    <link rel="stylesheet" href="~/css/profile.css" />
 }

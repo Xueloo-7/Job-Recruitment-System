@@ -1,186 +1,304 @@
 ﻿using Demo.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Security.Claims;
 
-namespace Demo.Controllers
+namespace Demo.Controllers;
+
+[Authorize(AuthenticationSchemes = "DefaultCookie")]
+public class ProfileController : Controller
 {
-    [Authorize(AuthenticationSchemes = "DefaultCookie")]
-    public class ProfileController : Controller
-    {
-        private readonly DB db;
+    private readonly DB _context;
+    private readonly IWebHostEnvironment _env;
 
-        public ProfileController(DB context)
+    public ProfileController(DB context, IWebHostEnvironment env)
+    {
+        _context = context;
+        _env = env;
+    }
+
+    // 统一取当前用户
+    private async Task<User?> GetCurrentUserAsync()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (string.IsNullOrEmpty(userId)) return null;
+
+        return await _context.Users
+            .Include(u => u.Educations)
+            .Include(u => u.JobExperiences)
+            .Include(u => u.Resumes)
+            .FirstOrDefaultAsync(u => u.Id == userId);
+    }
+
+    // ========== Index ==========
+    public async Task<IActionResult> Index()
+    {
+        var user = await GetCurrentUserAsync();
+        if (user == null) return NotFound();
+        ViewData["Active"] = "Index";
+        return View(user);
+    }
+
+    // ========== Resume 列表 ==========
+    public async Task<IActionResult> Resume()
+    {
+        var user = await GetCurrentUserAsync();
+        if (user == null) return NotFound();
+        ViewData["Active"] = "Resume";
+        return View(user.Resumes?.OrderByDescending(r => r.CreatedAt));
+    }
+
+    // 上传简历（支持多文件）
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UploadResume(IFormFile file)
+    {
+        var user = await GetCurrentUserAsync();
+        if (user == null || file == null || file.Length == 0)
+            return RedirectToAction(nameof(Resume));
+
+        var ext = Path.GetExtension(file.FileName);
+        var fileName = $"resume_{Guid.NewGuid()}{ext}";
+        var savePath = Path.Combine(_env.WebRootPath, "uploads", "resumes");
+        Directory.CreateDirectory(savePath);
+
+        var fullPath = Path.Combine(savePath, fileName);
+        using (var stream = new FileStream(fullPath, FileMode.Create))
         {
-            db = context;
+            await file.CopyToAsync(stream);
         }
 
-        // 测试数据
-        private static User demoUser = new User
+        var resume = new Resume
         {
-            FirstName = "no data found",
-            LastName = "",
-            Email = "no data found",
-            Location = "no data found",
-            PhoneNumber = "no data found"
+            Id = await GenerateResumeId(),
+            UserId = user.Id,
+            ImageUrl = $"/uploads/resumes/{fileName}"
+        };
+        _context.Resumes.Add(resume);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Resume));
+    }
+
+    // 删除简历
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteResume(string id)
+    {
+        var resume = await _context.Resumes.FindAsync(id);
+        if (resume != null)
+        {
+            _context.Resumes.Remove(resume);
+            await _context.SaveChangesAsync();
+            // 可选：删除物理文件
+            var physicalPath = Path.Combine(_env.WebRootPath, resume.ImageUrl.TrimStart('/'));
+            if (System.IO.File.Exists(physicalPath))
+                System.IO.File.Delete(physicalPath);
+        }
+        return RedirectToAction(nameof(Resume));
+    }
+
+    // 生成ID: R001...
+    private async Task<string> GenerateResumeId()
+    {
+        int counter = 1;
+        string newId;
+        do
+        {
+            newId = $"R{counter:000}";
+            counter++;
+        } while (await _context.Resumes.AnyAsync(r => r.Id == newId));
+        return newId;
+    }
+
+    // ── Info ────────────────────────────────────────
+    [HttpGet]
+    public async Task<IActionResult> Info()
+    {
+        var u = await GetCurrentUserAsync();
+        if (u == null) return NotFound();
+        return View(new InfoViewModel
+        {
+            Email = u.Email,
+            PhoneNumber = u.PhoneNumber,
+            Location = u.Location,
+            FirstName = u.FirstName,
+            LastName = u.LastName
+        });
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Info(InfoViewModel vm)
+    {
+        if (!ModelState.IsValid) return View(vm);
+        var u = await GetCurrentUserAsync();
+        if (u == null) return NotFound();
+
+        u.Email = vm.Email;
+        u.PhoneNumber = vm.PhoneNumber;
+        u.Location = vm.Location;
+        u.FirstName = vm.FirstName;
+        u.LastName = vm.LastName;
+        u.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = "资料已更新";
+        return RedirectToAction(nameof(Index));
+    }
+
+    // ── Summary ─────────────────────────────────────
+    [HttpGet]
+    public async Task<IActionResult> Summary()
+    {
+        var u = await GetCurrentUserAsync();
+        return View(new SummaryViewModel { Summary = u?.Summary });
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Summary(SummaryViewModel vm)
+    {
+        if (!ModelState.IsValid) return View(vm);
+        var u = await GetCurrentUserAsync();
+        if (u == null) return NotFound();
+
+        u.Summary = vm.Summary;
+        u.UpdatedAt = DateTime.UtcNow;
+        await _context.SaveChangesAsync();
+        return RedirectToAction(nameof(Index));
+    }
+
+    // ── Career History ──────────────────────────────
+    [HttpGet]
+    public async Task<IActionResult> CareerHistory()
+    {
+        var u = await GetCurrentUserAsync();
+        if (u == null) return NotFound();
+
+        var vm = new CareerPageViewModel
+        {
+            ExistingJobExperiences = u.JobExperiences ?? new List<JobExperience>()
+        };
+        return View(vm);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddJob(CareerPageViewModel vm)
+    {
+        if (!ModelState.IsValid)
+        {
+            // 重新带回已有列表，让页面验证失败时仍能显示数据
+            var u = await GetCurrentUserAsync();
+            vm.ExistingJobExperiences = u?.JobExperiences ?? new List<JobExperience>();
+            ModelState.DebugErrors();
+            return View("CareerHistory", vm);
+        }
+
+        var uCurrent = await GetCurrentUserAsync();
+        if (uCurrent == null) return NotFound();
+
+        var nextNum = (_context.JobExperiences.Count() + 1).ToString("D3");
+        var je = new JobExperience
+        {
+            Id = $"JE{nextNum}",
+            UserId = uCurrent.Id,
+            JobTitle = vm.JobTitle,
+            CompanyName = vm.CompanyName,
+            StartMonth = vm.StartMonth,
+            StartYear = vm.StartYear,
+            EndMonth = vm.EndMonth,
+            EndYear = vm.EndYear,
+            StillInRole = vm.StillInRole
         };
 
-        private User GetCurrentUser(string? userId)
-        {
-            if (string.IsNullOrEmpty(userId))
-                return demoUser;
+        _context.JobExperiences.Add(je);
+        await _context.SaveChangesAsync();
 
-            var user = db.Users.Find(userId);
-            return user ?? demoUser;
+        return RedirectToAction(nameof(CareerHistory));
+    }
+
+    // ── Education ───────────────────────────────────
+    [HttpGet]
+    public async Task<IActionResult> Education()
+    {
+        var u = await GetCurrentUserAsync();
+        if (u == null) return NotFound();
+
+        var vm = new EducationPageViewModel
+        {
+            ExistingEducations = u.Educations ?? new List<Education>()
+        };
+        return View(vm);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> AddEducation(EducationPageViewModel vm)
+    {
+        if (!ModelState.IsValid)
+        {
+            // 重新带回已有列表，让页面验证失败时仍能显示数据
+            var u = await GetCurrentUserAsync();
+            vm.ExistingEducations = u?.Educations ?? new List<Education>();
+            ModelState.DebugErrors();
+            return View("Education", vm);
         }
 
-        // 首页
-        public IActionResult Index(string? userId = "")
+        var uCurrent = await GetCurrentUserAsync();
+        if (uCurrent == null) return NotFound();
+
+        var nextNum = (_context.Educations.Count() + 1).ToString("D3");
+        var e = new Education
         {
-            User user = GetCurrentUser(userId);
-            return View(user);
-        }
+            Id = $"E{nextNum}",
+            UserId = uCurrent.Id,
+            Institution = vm.Institution,
+            Qualification = vm.Institution
+        };
 
-        // ------------------- Profile -------------------
-        public IActionResult Profile(string? userId)
+        _context.Educations.Add(e);
+        await _context.SaveChangesAsync();
+
+        return RedirectToAction(nameof(Education));
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteEducation(string id)
+    {
+        var edu = await _context.Educations.FindAsync(id);
+        if (edu != null)
         {
-            return PartialView("_Profile", GetCurrentUser(userId));
+            _context.Educations.Remove(edu);
+            await _context.SaveChangesAsync();
         }
-
-        public IActionResult EditProfilePartial(string? userId)
-        {
-            return PartialView("_EditProfile", GetCurrentUser(userId));
-        }
-
-        [HttpPost]
-        public IActionResult EditProfile(User updatedUser)
-        {
-            var existingUser = db.Users.FirstOrDefault(u => u.Id == updatedUser.Id);
-            if (existingUser == null)
-            {
-                return NotFound();
-            }
-
-            // 手动更新允许修改的字段
-            existingUser.FirstName = updatedUser.FirstName;
-            existingUser.LastName = updatedUser.LastName;
-            existingUser.Email = updatedUser.Email;
-            existingUser.PhoneNumber = updatedUser.PhoneNumber;
-            existingUser.Location = updatedUser.Location;
-
-            db.SaveChanges();
-            return PartialView("_Profile", existingUser);
-        }
+        return RedirectToAction(nameof(Education));
+    }
 
 
-        // ------------------- Summary -------------------
-        public IActionResult Summary(string? userId)
-        {
-            return PartialView("_Summary", GetCurrentUser(userId));
-        }
+    // 返回匹配的Qualification
+    [HttpGet]
+    public IActionResult SearchQualification(string term)
+    {
+        if (string.IsNullOrWhiteSpace(term)) return Json(Enumerable.Empty<object>());
+        var list = _context.Qualifications
+            .Where(q => q.Name.Contains(term))
+            .Select(q => new { id = q.Id, name = q.Name })
+            .Take(10)
+            .ToList();
+        return Json(list);
+    }
 
-        [HttpGet]
-        public IActionResult EditSummaryPartial(string? userId)
-        {
-            var user = db.Users.FirstOrDefault(u => u.Id == userId);
-            if (user == null)
-            {
-                return NotFound();
-            }
-            return PartialView("_EditSummary", user);
-        }
-
-        [HttpPost]
-        public IActionResult EditSummary(User updatedUser)
-        {
-            db.Users.Update(updatedUser);
-            db.SaveChanges();
-            return PartialView("_Summary", updatedUser);
-        }
-
-        // ------------------- Career History -------------------
-        public IActionResult CareerHistory(string? userId)
-        {
-            var jobs = db.JobExperiences.Where(j => j.UserId == userId).ToList();
-
-            return PartialView("_CareerHistory", jobs);
-        }
-
-        [HttpGet]
-        public IActionResult EditCareerHistory(string? userId)
-        {
-            if (string.IsNullOrEmpty(userId))
-            {
-                return NotFound();
-            }
-
-            var job = db.JobExperiences.FirstOrDefault(j => j.UserId == userId);
-            if (job == null)
-            {
-                return NotFound();
-            }
-
-            return PartialView("_EditCareerHistory", job);
-        }
-
-        [HttpPost]
-        public IActionResult EditCareerHistory(JobExperience jobExperience)
-        {
-            if (!ModelState.IsValid)
-            {
-                return PartialView("_EditCareerHistory", jobExperience);
-            }
-
-            db.JobExperiences.Update(jobExperience);
-            db.SaveChanges();
-
-            // 编辑完成后返回 CareerHistory
-            var jobs = db.JobExperiences
-                         .Where(j => j.UserId == jobExperience.UserId)
-                         .ToList();
-
-            return PartialView("_CareerHistory", jobs);
-        }
-
-        // ------------------- Education -------------------
-
-        // 显示用户的所有 Education 记录
-        public IActionResult Education(string? userId)
-        {
-            if (string.IsNullOrEmpty(userId))
-                return PartialView("_Education", Enumerable.Empty<Education>());
-
-            var educations = db.Educations.Where(e => e.UserId == userId).ToList();
-
-            return PartialView("_Education", educations);
-        }
-
-        // 显示编辑某个 Education 的表单
-        public IActionResult EditEducationPartial(string? id)
-        {
-            var education = db.Educations.FirstOrDefault(e => e.Id == id);
-            if (education == null)
-            {
-                return NotFound();
-            }
-                
-
-            return PartialView("_EditEducation", education);
-        }
-
-        // 保存 Education 编辑后的数据
-        [HttpPost]
-        public IActionResult EditEducation(Education updatedEducation)
-        {
-            if (!ModelState.IsValid)
-                return PartialView("_EditEducation", updatedEducation);
-
-            db.Educations.Update(updatedEducation);
-            db.SaveChanges();
-
-            var educations = db.Educations.Where(e => e.UserId == updatedEducation.UserId).ToList();
-
-            return PartialView("_Education", educations);
-        }
+    // 返回匹配的Institution
+    [HttpGet]
+    public IActionResult SearchInstitution(string term)
+    {
+        if (string.IsNullOrWhiteSpace(term)) return Json(Enumerable.Empty<object>());
+        var list = _context.Institutions
+            .Where(i => i.Name.Contains(term))
+            .Select(i => new { id = i.Id, name = i.Name })
+            .Take(10)
+            .ToList();
+        return Json(list);
     }
 }

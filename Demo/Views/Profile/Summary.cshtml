@@ -1,0 +1,28 @@
+﻿@model SummaryViewModel
+
+<div class="profile-page">
+    <div class="profile-nav">
+        <a asp-action="Index" class="">Dashboard</a>
+        <a asp-action="Info" class="">Information</a>
+        <a asp-action="Summary" class="active" )">Summary</a>
+        <a asp-action="CareerHistory" class="">Career History</a>
+        <a asp-action="Education" class="">Education</a>
+        <a asp-action="Resume" class="">Resume</a>
+    </div>
+
+    <div class="profile-card">
+        <h1 class="profile-title">Summary</h1>
+        <!-- 这里写对应页面内容 -->
+        <form asp-action="Summary" method="post">
+            <div class="form-group">
+                <textarea asp-for="Summary" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Summary" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">保存</button>
+        </form>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/profile.css" />
+}

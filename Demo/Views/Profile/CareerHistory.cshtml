@@ -1,0 +1,207 @@
+﻿@model CareerPageViewModel
+
+<div class="profile-page">
+    <div class="profile-nav">
+        <a asp-action="Index" class="">Dashboard</a>
+        <a asp-action="Info" class="">Information</a>
+        <a asp-action="Summary" class="">Summary</a>
+        <a asp-action="CareerHistory" class="active">Career History</a>
+        <a asp-action="Education" class="">Education</a>
+        <a asp-action="Resume" class="">Resume</a>
+    </div>
+
+    <div class="profile-card">
+        <h1 class="profile-title">Career History</h1>
+
+        @if (Model.ExistingJobExperiences == null || !Model.ExistingJobExperiences.Any())
+        {
+            <p>No career records found.</p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Job Title</th>
+                        <th>Company</th>
+                        <th>Start</th>
+                        <th>End</th>
+                        <th>Active</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var je in Model.ExistingJobExperiences)
+                    {
+                        <tr>
+                            <td>@je.JobTitle</td>
+                            <td>@je.CompanyName</td>
+                            <td>@je.StartYear-@je.StartMonth</td>
+                            <td>@(je.StillInRole ? "Present" : $"{je.EndYear}-{je.EndMonth}")</td>
+                            <td>@(je.StillInRole ? "✔" : "✖")</td>
+                            <td>
+                                <!-- 隐藏删除表单 -->
+                                <form id="deleteEduForm-@je.Id" asp-action="DeleteEducation" method="post" style="display:none;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@je.Id" />
+                                </form>
+
+                                <!-- 删除按钮 -->
+                                <button type="button" class="profile-btn" style="background:#dc2626;"
+                                        onclick="showConfirmModal({
+                                                title: '删除教育经历',
+                                                message: '确定要删除这条教育记录吗？',
+                                                onConfirm: function(){
+                                                    document.getElementById('deleteEduForm-@je.Id').submit();
+                                                }
+                                            })">
+                                    删除
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+
+        <!-- Add form -->
+        <h1 class="profile-title">Add Job</h1>
+
+        <form asp-action="AddJob" method="post" class="job-form">
+            <div class="form-group">
+                <label asp-for="JobTitle">Job Title</label>
+                <input asp-for="JobTitle" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label asp-for="CompanyName">Company</label>
+                <input asp-for="CompanyName" class="form-control" />
+            </div>
+
+            <!-- Start date -->
+            <div class="form-group">
+                <label class="date-label">Started</label>
+                <div class="date-row">
+                    <select asp-for="StartMonth">
+                        @for (int m = 1; m <= 12; m++)
+                        {
+                            <option value="@m">@m</option>
+                        }
+                    </select>
+                    <select asp-for="StartYear">
+                        @for (int y = DateTime.Now.Year; y >= DateTime.Now.Year - 100; y--)
+                        {
+                            <option value="@y">@y</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <!-- End date -->
+            <div class="form-group" id="end-date-group">
+                <label class="date-label">Ended</label>
+                <div class="date-row" id="end-date-inputs">
+                    <select asp-for="EndMonth" class="form-control-inline">
+                        @for (int m = 1; m <= 12; m++)
+                        {
+                            <option value="@m">@m</option>
+                        }
+                    </select>
+                    <select asp-for="EndYear" class="form-control-inline">
+                        @for (int y = DateTime.Now.Year; y >= DateTime.Now.Year - 100; y--)
+                        {
+                            <option value="@y">@y</option>
+                        }
+                    </select>
+                </div>
+                <label class="checkbox-inline still-role">
+                    <input asp-for="StillInRole" type="checkbox" id="still-in-role" /> Still in role
+                </label>
+            </div>
+
+
+
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="CareerHistory" class="btn btn-secondary">Cancel</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        const stillInRoleCheckbox = document.getElementById("still-in-role");
+        const endDateInputs = document.getElementById("end-date-inputs");
+        const endDateLabel = document.querySelector("#end-date-group .date-label");
+
+        function toggleEndDate() {
+            if (stillInRoleCheckbox.checked) {
+                endDateInputs.style.display = "none";
+                endDateLabel.style.display = "none";
+            } else {
+                endDateInputs.style.display = "flex"; // 横向
+                endDateLabel.style.display = "inline-block";
+            }
+        }
+
+        stillInRoleCheckbox.addEventListener("change", toggleEndDate);
+        toggleEndDate(); // 页面加载时运行一次
+    </script>
+
+}
+
+@section Styles {
+    <style>
+        /* 日期选择行 */
+        .date-row {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+
+        /* 下拉框样式 */
+        .date-row select {
+            padding: 0.4rem 0.8rem;
+            border: 1px solid #d1d5db; /* Tailwind gray-300 */
+            border-radius: 6px;
+            background-color: #f9fafb; /* Tailwind gray-50 */
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+            .date-row select:focus {
+                outline: none;
+                border-color: #2563eb; /* Tailwind blue-600 */
+                box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+                background-color: #fff;
+            }
+
+            .date-row select:hover {
+                border-color: #9ca3af; /* Tailwind gray-400 */
+            }
+
+        /* “Still in role” checkbox */
+        .still-role {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 20px;
+            margin-top: 0.5rem;
+            color: ##F5F3EF;
+        }
+
+            .still-role input[type="checkbox"] {
+                width: 1rem;
+                height: 1rem;
+                accent-color: #2563eb; /* Modern checkbox */
+            }
+
+        /* End Date 区域的过渡 */
+        #end-date-inputs,
+        #end-date-group .date-label {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+    </style>
+    <link rel="stylesheet" href="~/css/profile.css" />
+}
