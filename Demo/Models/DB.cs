@@ -229,10 +229,10 @@ public class Job
     [Key, MaxLength(6)]
     [RegularExpression(@"^J\d{3}$", ErrorMessage = "ID 格式应为 J+三位数字")]
     [Remote(action: "CheckJobId", controller: "Test", ErrorMessage = "ID 已存在")]
-    public string Id { get; set; } 
+    public string Id { get; set; }
 
     [Required, MaxLength(6)]  // 【FK】
-    public string UserId { get; set; } 
+    public string UserId { get; set; }
 
     [Required]  // 【FK】
     public string CategoryId { get; set; }
@@ -325,6 +325,11 @@ public class Application
     [Required]
     public ApplicationStatus Status { get; set; } = ApplicationStatus.Pending;
 
+    [Required]
+    public SalaryExpected SalaryExpected { get; set; }
+    [Required]
+    public NoticeTime NoticeTime { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
@@ -350,6 +355,68 @@ public enum ApplicationSource
     JobFair, // 招聘会
     Referral, // 内推
     Unknown // 未知来源
+}
+
+public enum SalaryExpected
+{
+    [Display(Name = "Not need to pay for me.")]
+    RM0_1,
+    [Display(Name = "RM 1K")]
+    RM1K,
+    [Display(Name = "RM 1.5K")]
+    RM1_5K,
+    [Display(Name = "RM 2K")]
+    RM2K,
+    [Display(Name = "RM 2.5K")]
+    RM2_5K,
+    [Display(Name = "RM 3K")]
+    RM3K,
+    [Display(Name = "RM 3.5K")]
+    RM3_5K,
+    [Display(Name = "RM 4K")]
+    RM4K,
+    [Display(Name = "RM 4.5K")]
+    RM4_5K,
+    [Display(Name = "RM 5K")]
+    RM5K,
+    [Display(Name = "RM 5.5K")]
+    RM5_5K,
+    [Display(Name = "RM 6K")]
+    RM6K,
+    [Display(Name = "RM 7K")]
+    RM7K,
+    [Display(Name = "RM 8K")]
+    RM8K,
+    [Display(Name = "RM 10K")]
+    RM10K,
+    [Display(Name = "RM 12K")]
+    RM12K,
+    [Display(Name = "RM 15K")]
+    RM15K,
+    [Display(Name = "RM 20K")]
+    RM20K,
+    [Display(Name = "RM 30K")]
+    RM30K,
+    [Display(Name = "RM 40K")]
+    RM40K,
+    [Display(Name = "RM50K or more")]
+    RM50KOrMore
+}
+
+public enum NoticeTime
+{
+    [Display(Name = "None, I'm ready to go now")]
+    NoneImReadyToGoNow,
+    [Display(Name = "Less than 2 weeks")]
+    LessThanTwoWeek,
+    [Display(Name = "1 month")]
+    OneMonths,
+    [Display(Name = "2 months")]
+    TwoMonths,
+    [Display(Name = "3 months")]
+    ThreeMonths,
+    [Display(Name = "More than 3 months")]
+    MoreThanThreeMonths
 }
 
 public class Notification : IHasId

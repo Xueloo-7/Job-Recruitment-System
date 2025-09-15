@@ -15,7 +15,11 @@
     <p>Posted @((DateTime.Now - Model.CreatedAt).Days)d ago</p>
     <br />
     <div>
-        <button>Quick apply</button>
+        <button type="button"
+                class="btn btn-primary"
+                onclick="location.href='@Url.Action("Apply", "JobApply", new { jobId = Model.Id })'">
+            Quick Apply
+        </button>
         <button>Save</button>
     </div>
     <br />

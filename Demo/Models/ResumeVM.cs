@@ -6,10 +6,8 @@ using System.ComponentModel.DataAnnotations;
 public class ResumeVM
 {
     public string? Id { get; set; } // 系统生成，不参与验证
-
-    [Required]
-    public string UserId { get; set; }
-
+    public string? UserId { get; set; }
+    [MaxLength(255)]
     public string? ImageUrl { get; set; }
 
     public IFormFile? ImageFile { get; set; }

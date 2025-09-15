@@ -121,7 +121,7 @@ public class JobVM1 : IValidatableObject
 
     //public bool IsOpen { get; set; } = true;
 
-     //✅ 下拉选项
+    //✅ 下拉选项
     public List<SelectListItem>? UserOptions { get; set; }
     public List<SelectListItem>? CategoryOptions { get; set; }
     public List<SelectListItem>? PayTypeOptions { get; set; }
@@ -141,7 +141,7 @@ public class JobVM2
     public string PromotionId { get; set; }  // ✅ 新增 Promotion 选择字段
 
     public List<SelectListItem>? PromotionOptions { get; set; } // ✅ 新增
-    
+
 }
 
 public class JobVM3
