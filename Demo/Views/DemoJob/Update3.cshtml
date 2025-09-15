@@ -15,8 +15,8 @@
     <label class="upload">
         <input asp-for="LogoFile" accept="image/jpeg,image/png" hidden>
         <img src="@(string.IsNullOrEmpty(Model.ExistingLogoUrl)// 判断数据库里是否有已有的 Logo 路径
-                                           ? Url.Content("~/images/default_logo.png")// 如果没有，则使用默认图片
-                          : Url.Content("~/" + Model.ExistingLogoUrl))" @*如果有，则在路径前加 "~/" 转成正确的绝对路径 *@
+                                                        ? Url.Content("~/images/default_logo.png")// 如果没有，则使用默认图片
+                                       : Url.Content("~/" + Model.ExistingLogoUrl))" @*如果有，则在路径前加 "~/" 转成正确的绝对路径 *@
              alt="Company Logo"
              style="max-width:150px; max-height:150px;">
     </label>

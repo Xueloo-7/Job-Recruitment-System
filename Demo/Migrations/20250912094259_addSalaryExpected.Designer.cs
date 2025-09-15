@@ -4,6 +4,7 @@ using Demo.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Migrations
 {
     [DbContext(typeof(DB))]
-    partial class DBModelSnapshot : ModelSnapshot
+    [Migration("20250912094259_addSalaryExpected")]
+    partial class addSalaryExpected
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,7 +68,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Applications", (string)null);
+                    b.ToTable("Applications");
                 });
 
             modelBuilder.Entity("Demo.Models.AuditLog", b =>
@@ -106,7 +109,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AuditLogs", (string)null);
+                    b.ToTable("AuditLogs");
                 });
 
             modelBuilder.Entity("Demo.Models.Category", b =>
@@ -127,7 +130,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Demo.Models.Education", b =>
@@ -143,8 +146,8 @@ namespace Demo.Migrations
 
                     b.Property<string>("Qualification")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -155,7 +158,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Educations", (string)null);
+                    b.ToTable("Educations");
                 });
 
             modelBuilder.Entity("Demo.Models.Institution", b =>
@@ -171,7 +174,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Institutions", (string)null);
+                    b.ToTable("Institutions");
                 });
 
             modelBuilder.Entity("Demo.Models.Job", b =>
@@ -251,7 +254,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Jobs", (string)null);
+                    b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("Demo.Models.JobExperience", b =>
@@ -300,7 +303,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("JobExperiences", (string)null);
+                    b.ToTable("JobExperiences");
                 });
 
             modelBuilder.Entity("Demo.Models.Notification", b =>
@@ -340,7 +343,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Demo.Models.Promotion", b =>
@@ -366,7 +369,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Promotions", (string)null);
+                    b.ToTable("Promotions");
                 });
 
             modelBuilder.Entity("Demo.Models.Qualification", b =>
@@ -377,12 +380,12 @@ namespace Demo.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Qualifications", (string)null);
+                    b.ToTable("Qualifications");
                 });
 
             modelBuilder.Entity("Demo.Models.Resume", b =>
@@ -409,9 +412,10 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
-                    b.ToTable("Resumes", (string)null);
+                    b.ToTable("Resumes");
                 });
 
             modelBuilder.Entity("Demo.Models.User", b =>
@@ -469,7 +473,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Demo.Models.Application", b =>
@@ -582,8 +586,8 @@ namespace Demo.Migrations
             modelBuilder.Entity("Demo.Models.Resume", b =>
                 {
                     b.HasOne("Demo.Models.User", "User")
-                        .WithMany("Resumes")
-                        .HasForeignKey("UserId")
+                        .WithOne("Resume")
+                        .HasForeignKey("Demo.Models.Resume", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -617,7 +621,7 @@ namespace Demo.Migrations
 
                     b.Navigation("Notifications");
 
-                    b.Navigation("Resumes");
+                    b.Navigation("Resume");
                 });
 #pragma warning restore 612, 618
         }

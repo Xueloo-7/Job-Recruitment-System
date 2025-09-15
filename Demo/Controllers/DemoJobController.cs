@@ -103,7 +103,6 @@ public class DemoJobController : Controller
 
         if (ModelState.IsValid)
         {
-            DebugModelStateErrors();
             // 按数字部分排序生成ID
             var maxId = db.Jobs
                 .Where(j => j.Id.StartsWith("J")) // 只取以 "J" 开头的岗位记录
@@ -431,7 +430,6 @@ public class DemoJobController : Controller
         jobEntity.WorkType = JobData.Insert1.WorkType.Value;
         jobEntity.SalaryMax = JobData.Insert1.SalaryMax;
         jobEntity.SalaryMin = JobData.Insert1.SalaryMin;
-
         jobEntity.Description = JobData.Insert2.Description;
         jobEntity.Summary = JobData.Insert2.Summary;
         jobEntity.PromotionId = JobData.Insert2.PromotionId;

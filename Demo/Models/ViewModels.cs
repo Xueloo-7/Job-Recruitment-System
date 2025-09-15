@@ -49,3 +49,18 @@ public class EditEmployerVM
 
     public bool IsActive { get; set; }
 }
+
+public class ApplyPageVM  // 组合 ApplicationVM 和 ResumeVM
+{
+    public ApplicationVM Application { get; set; } = new ApplicationVM();
+    public ResumeVM Resume { get; set; } = new ResumeVM();
+}
+
+public class ApplicationListVM
+{
+    public string ApplicationId { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public ApplicationStatus Status { get; set; }
+    public DateTime? HiredDate { get; set; }
+    public string JobTitle { get; set; }
+    public string CompanyName { get; set; }
