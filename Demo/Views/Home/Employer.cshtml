@@ -2,9 +2,6 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
-
-
 <div class="employer-container">
     <div class="employer-card">
         <div class="punch-holes">
@@ -13,18 +10,18 @@
                 <span class="hole"></span>
             }
         </div>
-        <h2>Filling job vacancies</h2>
+        <h2>Hire the right people for your business</h2>
 
         <div class="highlight-message">
-            free services charge only!
+            <i class="fas fa-bullhorn"></i>FREE job ads for selected roles
         </div>
 
         @* submit then go to register page (send email to it for showing email) *@
-        <form action="/Employer/Register" method="get" id="employer-form">
+        <form asp-controller="Employer" asp-action="Login" method="get" id="employer-form">
             <label for="email">Enter Your Business Email</label>
-            <div class="email-input-group">
-                <input type="email" id="email" name="email" placeholder="example@domain.com" required />
-                <button type="submit">Register</button>
+            <div class="form-row">
+                <input type="email" name="Email" placeholder="Email Address" required />
+                <button type="submit">Sign In</button>
             </div>
         </form>
 
@@ -40,15 +37,18 @@
     <div class="features">
         <div class="feature-card">
             <img src="~/images/image.png" alt="1st choice icon" />
-            <p>1st choice for Malaysian<br />job seekers</p>
+            <p class="title">1st choice for Malaysian job seekers</p>
+            <p>Meet job seekers where they prefer to search for jobs</p>
         </div>
         <div class="feature-card">
             <img src="~/images/image2.png" alt="5 million profiles icon" />
-            <p>Over 5 million<br />candidate profiles</p>
+            <p class="title">Over 5 million candidate profiles</p>
+            <p>Reach our large and diverse pool of Malaysian talent for your business</p>
         </div>
         <div class="feature-card">
             <img src="~/images/image1.png" alt="job placements icon" />
-            <p>First 1 job placements</p>
+            <p class="title">#1 job placements</p>
+            <p>Highest success rate in matching employers to the right talent</p>
         </div>
     </div>    
     
@@ -60,5 +60,5 @@
 }
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/Employer.css" />
+    <link rel="stylesheet" href="~/css/employer.css" />
 }

@@ -1,100 +1,93 @@
-﻿@model Demo.Models.User
+﻿@model EmployerDashboardVM
 @{
     Layout = "_EmployerLayout";
 }
 
-<div class="employer-info">
-    <h2>Employer Information</h2>
+<div class="container">
+    <div class="header">
+        <div class="content">
+            <h1>Hi, @Model.EmployerName!</h1>
+            <p>You are in the right place to find your next hire. Get started by creating your first job ad.</p>
+            <a asp-controller="Job" asp-action="Create" class="post-btn">Post a Job</a>
+        </div>
 
-    @if (Model != null && Model.Role == Demo.Models.Role.Employer)
-    {
-        <table class="info-table">
-            <tr>
-                <th>First Name</th>
-                <td>@Model.FirstName</td>
-            </tr>
-            <tr>
-                <th>Last Name</th>
-                <td>@Model.LastName</td>
-            </tr>
-            <tr>
-                <th>Location</th>
-                <td>@Model.Location</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>@Model.Email</td>
-            </tr>
-            <tr>
-                <th>Phone Number</th>
-                <td>@Model.PhoneNumber</td>
-            </tr>
-            <tr>
-                <th>Account Active</th>
-                <td>@(Model.IsActive ? "Yes" : "No")</td>
-            </tr>
-            <tr>
-                <th>Updated At</th>
-                <td>@Model.UpdatedAt.ToString("yyyy-MM-dd HH:mm")</td>
-            </tr>
-        </table>
+        <div class="image">
+            <img src="/images/background.jpg" alt="Alternate Text" />
+        </div>
+    </div>
+</div>
 
-        <h3>Jobs Posted</h3>
-        @if (Model.Jobs != null && Model.Jobs.Any())
-        {
-            <table class="list-table">
-                <tr>
-                    <th>Title</th>
-                    <th>Location</th>
-                </tr>
-                @foreach (var job in Model.Jobs)
-                {
+<hr />
+
+<div class="container">
+    <div class="main">
+        <div class="top">
+            <h2>My recent job ads</h2>
+        </div>
+        <div class="card-container">
+            <div class="card post">
+                <h4>Total Post</h4>
+                <p>@Model.TotalJobs</p>
+            </div>
+            <div class="card candidate">
+                <h4>Total Candidate</h4>
+                <p>@Model.TotalApplications</p>
+            </div>
+            <div class="card hired">
+                <h4>Total Hired</h4>
+                <p>@Model.TotalHires</p>
+            </div>
+        </div>
+        <div class="job-list">
+            <h2>@Model.EmployerName - @Model.TotalJobs Positions in total</h2>
+
+            <table>
+                <thead>
                     <tr>
-                        <td>@job.Title</td>
-                        <td>@job.Location</td>
+                        <th>Status</th>
+                        <th>Job</th>
+                        <th>Candidates</th>
+                        <th>Hired</th>
+                        <th>Actions</th>
                     </tr>
-                }
+                </thead>
+                <tbody>
+                    @if (Model.Jobs != null && Model.Jobs.Any())
+                    {
+                        foreach (var job in Model.Jobs)
+                        {
+                            <tr>
+                                <td>@job.Status</td>
+                                <td>
+                                    <div>
+                                        <span>@job.Title</span><br />
+                                        <small>@job.Location</small>
+                                    </div>
+                                </td>
+                                <td>@job.Candidates</td>
+                                <td>@(job.Hired > 0 ? job.Hired.ToString() : "-")</td>
+                                <td>
+                                    <a asp-controller="Job" asp-action="Edit" asp-route-id="@job.JobId" class="edit-btn">Edit</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5" class="no-data">暂无职位</td>
+                        </tr>
+                    }
+                </tbody>
             </table>
-        }
-        else
-        {
-            <p>No jobs posted yet.</p>
-        }
+        </div>
 
-        <h3>Applications Received</h3>
-        @if (Model.Applications != null && Model.Applications.Any())
-        {
-            <table class="list-table">
-                <tr>
-                    <th>UserId</th>
-                    <th>Status</th>
-                </tr>
-                @foreach (var app in Model.Applications)
-                {
-                    <tr>
-                        <td>@app.UserId</td>
-                        <td>@app.Status</td>
-                    </tr>
-                }
-            </table>
-        }
-        else
-        {
-            <p>No applications yet.</p>
-        }
-    }
-    else
-    {
-        <p class="errormessage">This user is not an Employer, or data not available.</p>
-    }
 
-    <button type="button" class="edit-btn">Edit</button>
-
-    <div id="employer-edit-container"></div>
+    </div>
 </div>
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/Employer.css" />
+    <link rel="stylesheet" href="~/css/employer.css" />
 }
 
 @section Scripts {

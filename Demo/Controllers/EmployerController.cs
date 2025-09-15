@@ -15,20 +15,15 @@ public class EmployerController : Controller
     }
 
     #region Authentication
-    // GET: Account/CheckEmail
+    // GET: Employer/CheckEmail
     public bool CheckEmail(string email)
     {
         return !db.Users.Any(u => u.Email == email);
     }
 
-    public IActionResult Register(string? email)
+    public IActionResult Register()
     {
-        var vm = new RegisterVM
-        {
-            // can be null
-            Email = email!
-        };
-        return View(vm);
+        return View();
     }
 
     [HttpPost]
@@ -73,14 +68,19 @@ public class EmployerController : Controller
         return View(vm);
     }
 
-    public IActionResult Login(string? returnURL)
+    public IActionResult Login(string? returnURL, string? email)
     {
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
             return RedirectToAction("Index", "Employer");
         }
+        var vm = new LoginVM
+        {
+            // can be null
+            Email = email!
+        };
         ViewBag.ReturnURL = returnURL;
-        return View();
+        return View(vm);
     }
 
     [HttpPost]
@@ -90,7 +90,7 @@ public class EmployerController : Controller
 
         if (user == null || !hp.VerifyPassword(user.PasswordHash, vm.Password))
         {
-            ModelState.AddModelError("", "Invalid credentials");
+            ModelState.AddModelError("Password", "Invalid credentials");
         }
         else if (ModelState.IsValid)
         {
@@ -164,7 +164,40 @@ public class EmployerController : Controller
         if (user.Role != Role.Employer)
             return BadRequest("User is not an employer.");
 
-        return View(user); // 传给 EmployerInfo.cshtml
+        var jobs = db.Jobs
+                     .Where(j => j.UserId == userId)
+                     .ToList();
+
+        int totalApplications = db.Applications
+                                  .Where(a => a.Job.UserId == userId)
+                                  .Count();
+
+        int totalHires = db.Applications
+                           .Where(a => a.Job.UserId == userId && a.Status == ApplicationStatus.Hired)
+                           .Count();
+
+
+
+        var vm = new EmployerDashboardVM
+        {
+            EmployerName = string.IsNullOrWhiteSpace(user.FirstName) && string.IsNullOrWhiteSpace(user.LastName)
+                            ? user.Name
+                            : $"{user.FirstName} {user.LastName}".Trim(),
+            TotalJobs = jobs.Count,
+            TotalApplications = totalApplications,
+            TotalHires = totalHires,
+            Jobs = jobs.Select(j => new JobDashboardVM
+            {
+                JobId = j.Id,
+                Title = j.Title,
+                Location = j.Location,
+                Status = j.Status.ToString(),
+                Candidates = db.Applications.Where(a => a.JobId == j.Id).Count(),
+                Hired = db.Applications.Where(a => a.JobId == j.Id && a.Status == ApplicationStatus.Hired).Count()
+            }).ToList()
+        };
+
+        return View(vm);
     }
 
 }

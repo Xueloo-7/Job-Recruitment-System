@@ -9,7 +9,7 @@
 
     <h1>Employer Login</h1>
 
-    <form asp-controller="Account" asp-action="Login" method="post" asp-antiforgery="true" class="email-login">
+    <form asp-controller="Employer" asp-action="Login" method="post" asp-antiforgery="true" class="email-login">
         <div class="form-group">
             <input asp-for="Email" placeholder="Email Address" required />
             <span asp-validation-for="Email" class="error"></span>
