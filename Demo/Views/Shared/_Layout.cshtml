@@ -38,11 +38,15 @@
                     <a asp-controller="Home" asp-action="Index" class="@Html.IsActive("Home", "Index")">Job Search</a>
                     <a asp-controller="Profile" asp-action="Index" class="@Html.IsActive("Profile")">Profile</a>
                     <a asp-controller="Home" asp-action="Employer" class="@Html.IsActive("Home", "Employer")">Employer</a>
-                    <a asp-controller="Account" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
-                    <a asp-controller="Account" asp-action="Logout" class="@Html.IsActive("Account", "Logout")">Sign Out</a>
-                    <a asp-controller="Test" asp-action="Index" class="@Html.IsActive("Test", "Index")">Test</a>
-                    <a asp-controller="Report" asp-action="Index" class="@Html.IsActive("Report", "Index")">Report</a>
-                    <a asp-controller="DemoJob" asp-action="Index" class="@Html.IsActive("DemoJob", "Index")">DemoJob</a> @*for testing only *@
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
+                        <a asp-controller="Account" asp-action="Logout" class="@Html.IsActive("Account", "Logout")">Sign Out</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
+                    }
+                    @* <a asp-controller="DemoJob" asp-action="Index" class="@Html.IsActive("DemoJob", "Index")">DemoJob</a>  *@
                 </nav>
             </div>
 

@@ -113,7 +113,7 @@
                         }
                     </select>
                 </div>
-                <label class="checkbox-inline still-role">
+                <label class="still-role">
                     <input asp-for="StillInRole" type="checkbox" id="still-in-role" /> Still in role
                 </label>
             </div>
@@ -150,6 +150,13 @@
 
 @section Styles {
     <style>
+        form{
+            margin: 0 auto;
+        }
+
+
+
+
         /* 日期选择行 */
         .date-row {
             display: flex;
@@ -187,7 +194,7 @@
             gap: 0.5rem;
             font-size: 20px;
             margin-top: 0.5rem;
-            color: ##F5F3EF;
+            color: #F5F3EF;
         }
 
             .still-role input[type="checkbox"] {

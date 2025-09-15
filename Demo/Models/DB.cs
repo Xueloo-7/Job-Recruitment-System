@@ -119,7 +119,7 @@ public class Education : IHasId
     [Required, MaxLength(6)]  // 【FK】
     public string UserId { get; set; }
 
-    [Required, MaxLength(50)]
+    [Required, MaxLength(100)]
     public string Qualification { get; set; }
 
     [Required, MaxLength(100)]
@@ -191,7 +191,7 @@ public class Qualification : IHasId
     [Remote(action: "CheckQualificationId", controller: "Test", ErrorMessage = "ID 已存在")]
     public string Id { get; set; }
 
-    [Required, MaxLength(50)]
+    [Required, MaxLength(100)]
     public string Name { get; set; }
 }
 

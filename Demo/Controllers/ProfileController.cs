@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace Demo.Controllers;
 
-[Authorize(AuthenticationSchemes = "DefaultCookie")]
+[Authorize(AuthenticationSchemes = "DefaultCookie", Roles = "JobSeeker")]
 public class ProfileController : Controller
 {
     private readonly DB _context;

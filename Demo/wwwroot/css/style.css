@@ -74,8 +74,42 @@ html, body {
         width: 100%;
     }
 
+/* ===================================
+   表单与按钮（通用于所有子页）
+   =================================== */
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    margin-top: 0.4rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border .25s;
+}
 
+    input:focus,
+    select:focus,
+    textarea:focus {
+        border-color: #6366f1;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
+    }
 
+/* checkbox */
+.check-box {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+    .check-box input[type="checkbox"] {
+        width: 1rem;
+        height: 1rem;
+        accent-color: #2563eb; /* Modern checkbox */
+    }
 
 
 /* Form CSS -------------------------------------------------------------- */
@@ -93,11 +127,13 @@ html, body {
 
 /* 输入框 */
 .form-control {
+    width: 100%; /* 让其充满父容器 */
+    height: 40px; /* 统一高度，可改 */
     padding: 0.5rem 0.75rem;
     border: 1px solid #ccc;
     border-radius: 6px;
     font-size: 1rem;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    box-sizing: border-box;
 }
 
     .form-control:focus {

@@ -17,7 +17,10 @@ builder.Services.AddAuthentication(options =>
     options.DefaultSignInScheme = "DefaultCookie";
     options.DefaultChallengeScheme = "DefaultCookie";
 })
-.AddCookie("DefaultCookie", options => { options.LoginPath = "/Account/Login"; })
+.AddCookie("DefaultCookie", options => { 
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+})
 .AddCookie("AdminCookie", options => { options.LoginPath = "/Admin/Login"; });
 
 builder.Services.AddHttpContextAccessor();

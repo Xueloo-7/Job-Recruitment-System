@@ -62,14 +62,14 @@
         <form asp-action="AddEducation" method="post">
             <div class="form-group">
                 <label asp-for="Qualification"></label>
-                <input asp-for="Qualification" class="form-control search-input" id="qualificationInput" autocomplete="off" />
+                <input asp-for="Qualification" maxlength="100" class="form-control search-input" id="qualificationInput" autocomplete="off" />
                 <div class="dropdown-list" id="qualificationList"></div>
                 <span asp-validation-for="Qualification" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Institution"></label>
-                <input asp-for="Institution" class="form-control search-input" id="institutionInput" autocomplete="off" />
+                <input asp-for="Institution" maxlength="100" class="form-control search-input" id="institutionInput" autocomplete="off" />
                 <div class="dropdown-list" id="institutionList"></div>
                 <span asp-validation-for="Institution" class="text-danger"></span>
             </div>

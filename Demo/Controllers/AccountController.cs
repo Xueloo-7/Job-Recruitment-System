@@ -81,9 +81,15 @@ public class AccountController : Controller
     {
         var user = db.Users.Where(u => u.Email == vm.Email).FirstOrDefault();
 
-        if (user == null || !hp.VerifyPassword(user.PasswordHash, vm.Password))
+        if (user == null)
         {
-            ModelState.AddModelError("", "Invalid credentials");
+            ModelState.AddModelError("Email", "This email is not registered.");
+            return View(vm);
+        }
+        if (!hp.VerifyPassword(user.PasswordHash, vm.Password))
+        {
+            ModelState.AddModelError("Password", "Invalid password.");
+            return View(vm);
         }
         else if (ModelState.IsValid)
         {
@@ -92,12 +98,14 @@ public class AccountController : Controller
             //hp.SignIn(user!.Email, user.Role.ToString(), vm.RememberMe);
             hp.SignIn(user, vm.RememberMe);
 
-            if (string.IsNullOrEmpty(returnURL))
-                return RedirectToAction("Index", "Home");
-            else
+            if (!string.IsNullOrEmpty(returnURL))
                 return Redirect(returnURL);
-        }
 
+            return user.Role == Role.Employer
+                ? RedirectToAction("Index", "Employer")
+                : RedirectToAction("Index", "Profile");
+
+        }
         return View(vm);
     }
 
@@ -108,6 +116,12 @@ public class AccountController : Controller
         hp.SignOut();
 
         return RedirectToAction("Index", "Home");
+    }
+
+    public IActionResult AccessDenied()
+    {
+        ViewBag.Message = "You don’t have permission to view this page. Please switch to a Jobseeker account.";
+        return View();
     }
 
     private void DebugModelStateErrors()

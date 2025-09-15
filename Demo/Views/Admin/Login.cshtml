@@ -4,8 +4,8 @@
     Layout = "_EmptyLayout";
 }
 
-<div class="signIn-container">
-    <h1>Sign In</h1>
+<div class="signIn-container admin-theme">
+    <h1>Admin Login</h1>
 
     <form asp-controller="Admin" asp-action="Login" method="post" asp-antiforgery="true">
 
@@ -32,5 +32,6 @@
 </div>
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/admin.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin.css"  />
+    <link rel="stylesheet" href="~/css/sign-in.css" />
 }
