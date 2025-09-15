@@ -14,6 +14,7 @@ public class EmployerController : Controller
         this.hp = hp;
     }
 
+    #region Authentication
     // GET: Account/CheckEmail
     public bool CheckEmail(string email)
     {
@@ -25,7 +26,7 @@ public class EmployerController : Controller
         var vm = new RegisterVM
         {
             // can be null
-            Email = email! 
+            Email = email!
         };
         return View(vm);
     }
@@ -51,7 +52,7 @@ public class EmployerController : Controller
             // TODO
             db.Users.Add(new User
             {
-                Id = GenerateUserId(),
+                Id = Helper.GenerateId(db.Users, "U"),
                 Name = GenerateUsername(vm.Email),
                 PasswordHash = hp.HashPassword(vm.Password),
                 Email = vm.Email,
@@ -76,7 +77,7 @@ public class EmployerController : Controller
     {
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
-            return RedirectToAction("EmployerInfo", "Home");
+            return RedirectToAction("Index", "Employer");
         }
         ViewBag.ReturnURL = returnURL;
         return View();
@@ -99,7 +100,7 @@ public class EmployerController : Controller
 
             if (string.IsNullOrEmpty(returnURL))
             {
-                return RedirectToAction("EmployerInfo", "Home");
+                return RedirectToAction("Index", "Employer");
             }
         }
 
@@ -128,162 +129,6 @@ public class EmployerController : Controller
         }
     }
 
-    //// GET: Account/UpdatePassword
-    //// TODO
-    //public IActionResult UpdatePassword()
-    //{
-    //    return View();
-    //}
-
-    //// POST: Account/UpdatePassword
-    //// TODO
-    //[HttpPost]
-    //public IActionResult UpdatePassword(UpdatePasswordVM vm)
-    //{
-    //    // Get user (admin or member) record based on email (PK)
-    //    // TODO
-    //    var u = db.Users.Find("TODO");
-    //    if (u == null) return RedirectToAction("Index", "Home");
-
-    //    // If current password not matched
-    //    // TODO
-    //    if (true)
-    //    {
-    //        ModelState.AddModelError("Current", "Current Password not matched.");
-    //    }
-
-    //    if (ModelState.IsValid)
-    //    {
-    //        // Update user password (hash)
-    //        // TODO
-
-    //        TempData["Info"] = "Password updated.";
-    //        return RedirectToAction();
-    //    }
-
-    //    return View();
-    //}
-
-    //// GET: Account/UpdateProfile
-    //// TODO
-    //public IActionResult UpdateProfile()
-    //{
-    //    // Get member record based on email (PK)
-    //    // TODO
-    //    var m = db.Members.Find("TODO");
-    //    if (m == null) return RedirectToAction("Index", "Home");
-
-    //    var vm = new UpdateProfileVM
-    //    {
-    //        // TODO
-    //        Email = "TODO",
-    //        Name = "TODO",
-    //        PhotoURL = m.PhotoURL,
-    //    };
-
-    //    return View(vm);
-    //}
-
-    //// POST: Account/UpdateProfile
-    //// TODO
-    //[HttpPost]
-    //public IActionResult UpdateProfile(UpdateProfileVM vm)
-    //{
-    //    // Get member record based on email (PK)
-    //    // TODO
-    //    var m = db.Members.Find("TODO");
-    //    if (m == null) return RedirectToAction("Index", "Home");
-
-    //    if (vm.Photo != null)
-    //    {
-    //        var err = hp.ValidatePhoto(vm.Photo);
-    //        if (err != "") ModelState.AddModelError("Photo", err);
-    //    }
-
-    //    if (ModelState.IsValid)
-    //    {
-    //        // TODO
-    //        var TODO = vm.Name;
-
-    //        if (vm.Photo != null)
-    //        {
-    //            hp.DeletePhoto(m.PhotoURL, "photos");
-    //            m.PhotoURL = hp.SavePhoto(vm.Photo, "photos");
-    //        }
-
-    //        db.SaveChanges();
-
-    //        TempData["Info"] = "Profile updated.";
-    //        return RedirectToAction();
-    //    }
-
-    //    // TODO
-    //    vm.Email = "TODO";
-    //    vm.PhotoURL = m.PhotoURL;
-    //    return View(vm);
-    //}
-
-    //// GET: Account/ResetPassword
-    //public IActionResult ResetPassword()
-    //{
-    //    return View();
-    //}
-
-    //// POST: Account/ResetPassword
-    //[HttpPost]
-    //public IActionResult ResetPassword(ResetPasswordVM vm)
-    //{
-    //    var u = db.Users.Find(vm.Email);
-
-    //    if (u == null)
-    //    {
-    //        ModelState.AddModelError("Email", "Email not found.");
-    //    }
-
-    //    if (ModelState.IsValid)
-    //    {
-    //        // Generate random password
-    //        // TODO
-    //        string password = "TODO";
-
-    //        // Update user (admin or member) record
-    //        // TODO
-
-    //        // TODO: Send reset password email
-
-    //        TempData["Info"] = $"Password reset to <b>{password}</b>.";
-    //        return RedirectToAction();
-    //    }
-
-    //    return View();
-    //}
-
-
-
-
-
-
-
-    private string GenerateUserId()
-    {
-        // 查询当前已有的最大编号
-        var lastUser = db.Users
-            .Where(u => u.Id.StartsWith("U"))
-            .OrderByDescending(u => u.Id)
-            .FirstOrDefault();
-
-        int nextNumber = 1;
-        if (lastUser != null)
-        {
-            string lastNumberStr = lastUser.Id.Substring(1);
-            if (int.TryParse(lastNumberStr, out int lastNumber))
-            {
-                nextNumber = lastNumber + 1;
-            }
-        }
-
-        return $"U{nextNumber.ToString("D3")}";  // 例如 JOB001、JOB002
-    }
 
     private string GenerateUsername(string userEmail)
     {
@@ -304,4 +149,22 @@ public class EmployerController : Controller
             return Json($"ID {id} 已存在");
         return Json(true);
     }
+    #endregion
+
+    public IActionResult Index()
+    {
+        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        var user = db.Users
+                     .Where(u => u.Id == userId && u.Role == Role.Employer)
+                     .FirstOrDefault();
+
+        if (user == null)
+            return NotFound("Employer not found.");
+        if (user.Role != Role.Employer)
+            return BadRequest("User is not an employer.");
+
+        return View(user); // 传给 EmployerInfo.cshtml
+    }
+
 }

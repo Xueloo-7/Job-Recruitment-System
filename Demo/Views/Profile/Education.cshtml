@@ -1,0 +1,92 @@
+﻿@model EducationPageViewModel
+
+<div class="profile-page">
+    <div class="profile-nav">
+        <a asp-action="Index" class="">Dashboard</a>
+        <a asp-action="Info" class="">Information</a>
+        <a asp-action="Summary" class="" )">Summary</a>
+        <a asp-action="CareerHistory" class="">Career History</a>
+        <a asp-action="Education" class="active">Education</a>
+        <a asp-action="Resume" class="">Resume</a>
+    </div>
+
+    <div class="profile-card">
+        <h1 class="profile-title">Education</h1>
+        <!-- 这里写对应页面内容 -->
+        @if(Model.ExistingEducations == null || !Model.ExistingEducations.Any())
+        {
+            <p>No education records found.</p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Qualification</th>
+                        <th>Institution</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var e in Model.ExistingEducations)
+                    {
+                        <tr>
+                            <td>@e.Qualification</td>
+                            <td>@e.Institution</td>
+                            <td>
+                                <!-- 隐藏删除表单 -->
+                                <form id="deleteEduForm-@e.Id" asp-action="DeleteEducation" method="post" style="display:none;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@e.Id" />
+                                </form>
+
+                                <!-- 删除按钮 -->
+                                <button type="button" class="profile-btn" style="background:#dc2626;"
+                                        onclick="showConfirmModal({
+                                        title: '删除教育经历',
+                                        message: '确定要删除这条教育记录吗？',
+                                        onConfirm: function(){
+                                            document.getElementById('deleteEduForm-@e.Id').submit();
+                                        }
+                                    })">
+                                    删除
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        
+
+        <form asp-action="AddEducation" method="post">
+            <div class="form-group">
+                <label asp-for="Qualification"></label>
+                <input asp-for="Qualification" maxlength="100" class="form-control search-input" id="qualificationInput" autocomplete="off" />
+                <div class="dropdown-list" id="qualificationList"></div>
+                <span asp-validation-for="Qualification" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Institution"></label>
+                <input asp-for="Institution" maxlength="100" class="form-control search-input" id="institutionInput" autocomplete="off" />
+                <div class="dropdown-list" id="institutionList"></div>
+                <span asp-validation-for="Institution" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        table{
+            margin-bottom:20px;
+        }
+    </style>
+    <link rel="stylesheet" href="~/css/profile.css" />
+}
+@section Scripts{
+    <script src="~/js/education-search.js"></script>
+}

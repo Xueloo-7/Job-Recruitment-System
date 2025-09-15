@@ -1,35 +1,29 @@
 ﻿@model RegisterVM
 
 @{
-    ViewBag.Title = "Account | Register";
+    Layout = "_EmptyLayout";
 }
 
-<div class="signIn-container">
-    <div class="signIn-header">
-        <h1>Register</h1>
-        <p class="employer-prompt">
-            Already have an account? <a asp-controller="Account" asp-action="Login">Sign In</a>
-        </p>
-    </div>
+<div class="signIn-container account-theme">
+    <a asp-controller="Home" asp-action="Employer" class="back-btn">Are you an Employer?</a>
+
+    <h1>JobSeeker Register</h1>
 
     <form class="email-login" method="post" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
 
         <div class="form-group">
-            <label asp-for="Email"></label>
-            <input asp-for="Email" type="email" required>
+            <input asp-for="Email" type="email" placeholder="Email Address" required>
             <span asp-validation-for="Email" class="error"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Password"></label>
-            <input asp-for="Password" type="password" required>
+            <input asp-for="Password" type="password" placeholder="Password" required>
             <span asp-validation-for="Password" class="error"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Confirm"></label>
-            <input asp-for="Confirm" type="password" required>
+            <input asp-for="Confirm" type="password" placeholder="Confirm Password" required>
             <span asp-validation-for="Confirm" class="error"></span>
         </div>
 
@@ -45,12 +39,14 @@
 
         <div class="form-actions">
             <button type="submit" class="login-btn">Register</button>
-            <button type="reset" class="reset-btn">Reset</button>
         </div>
     </form>
+
+    Already have an account? <a asp-controller="Account" asp-action="Login">Sign In</a>
+
 </div>
 
 
 @section Styles {
-    <link rel="stylesheet" href="/css/signIn.css" />
+    <link rel="stylesheet" href="/css/sign-in.css" />
 }

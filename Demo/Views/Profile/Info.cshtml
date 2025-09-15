@@ -1,0 +1,88 @@
+﻿@model InfoViewModel
+@{
+    ViewData["Title"] = "Profile - Info";
+}
+
+<div class="profile-page">
+    <div class="profile-nav">
+        <a asp-action="Index" class="">Dashboard</a>
+        <a asp-action="Info" class="active">Information</a>
+        <a asp-action="Summary" class="" )">Summary</a>
+        <a asp-action="CareerHistory" class="">Career History</a>
+        <a asp-action="Education" class="">Education</a>
+        <a asp-action="Resume" class="">Resume</a>
+    </div>
+
+    <div class="profile-card">
+        <h1 class="profile-title">Information</h1>
+        <!-- 这里写对应页面内容 -->
+        <form asp-action="Info" method="post" class="info-form">
+            <div class="form-row">
+                <div class="form-group half">
+                    <label asp-for="FirstName"></label>
+                    <input asp-for="FirstName" class="form-control" />
+                </div>
+                <div class="form-group half">
+                    <label asp-for="LastName"></label>
+                    <input asp-for="LastName" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Location"></label>
+                <textarea asp-for="Location" class="form-control location-input" rows="3"></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        /* 整体表单 */
+        .info-form {
+            margin: 0 auto;
+        }
+
+        /* 并排行 */
+        .form-row {
+            display: flex;
+            gap: 1rem; /* First/Last Name 间距 */
+        }
+
+            /* 两边各占一半 */
+            .form-row .half {
+                flex: 1;
+            }
+
+        /* 普通输入框高度、宽度 */
+        .form-control {
+            width: 100%; /* 让其充满父容器 */
+            height: 40px; /* 统一高度，可改 */
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+
+        /* Location 单独加大高度 */
+        .location-input {
+            height: 120px; /* 三行左右，可按需要调 */
+        }
+    </style>
+    <link rel="stylesheet" href="~/css/profile.css" />
+}

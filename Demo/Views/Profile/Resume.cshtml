@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Resume>
+@{
+    ViewData["Title"] = "Resumes";
+}
+
+<div class="profile-page">
+    <div class="profile-nav">
+        <a asp-action="Index" class="">Dashboard</a>
+        <a asp-action="Info" class="">Information</a>
+        <a asp-action="Summary" class="active" )">Summary</a>
+        <a asp-action="CareerHistory" class="">Career History</a>
+        <a asp-action="Education" class="">Education</a>
+        <a asp-action="Education" class="">Resume</a>
+    </div>
+
+    <div class="profile-card">
+        <h2 class="profile-title">上传简历</h2>
+        <form asp-action="UploadResume" method="post" enctype="multipart/form-data" class="profile-form">
+            <input type="file" name="file" accept=".pdf,.doc,.docx,.jpg,.png" required />
+            <button type="submit" class="profile-btn">上传</button>
+        </form>
+    </div>
+
+    <div class="profile-card">
+        <h2 class="profile-title">已上传简历</h2>
+        @if (Model?.Any() == true)
+        {
+            <ul>
+                @foreach (var resume in Model)
+                {
+                    <li>
+                        <a href="@resume.ImageUrl" target="_blank">查看 (@resume.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd"))</a>
+
+                        <form id="deleteForm-@resume.Id" asp-action="DeleteResume" method="post" style="display:none;">
+                            <input type="hidden" name="id" value="@resume.Id" />
+                        </form>
+
+                        <button type="button" class="profile-btn" style="background:#dc2626;"
+                                onclick="showConfirmModal({
+                        title: '删除简历',
+                        message: '确定要删除这份简历吗？',
+                        onConfirm: function(){
+                            document.getElementById('deleteForm-@resume.Id').submit();
+                        }
+                    })">
+                            删除
+                        </button>
+                    </li>
+                }
+
+            </ul>
+        }
+        else
+        {
+            <p>暂无简历</p>
+        }
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .profile-form input{
+            margin-bottom:30px;
+        }
+    </style>
+    <link rel="stylesheet" href="~/css/profile.css" />
+}

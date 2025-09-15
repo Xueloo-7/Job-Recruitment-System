@@ -97,7 +97,7 @@ public class HomeController : BaseController
         // if already logged in, redirect to EmployerInfo
         if (User.Identity != null && User.Identity.IsAuthenticated)
         {
-            return RedirectToAction("EmployerInfo", "Home");
+            return RedirectToAction("Index", "Employer");
         }
         return View();
     }

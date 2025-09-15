@@ -1,58 +1,52 @@
 ﻿@model RegisterVM
 
 @{
-    ViewBag.Title = "Employer | Register";
+    Layout = "_EmptyLayout";
 }
 
-<div class="signIn-container">
-    <div class="signIn-header">
-        <h1>Register</h1>
-        <p class="employer-prompt">
-            Already have an account? <a asp-controller="Employer" asp-action="Login">Sign In</a>
-        </p>
-    </div>
+<div class="signIn-container employer-theme">
+    <a asp-controller="Home" asp-action="Index" class="back-btn">Are you looking for a job?</a>
+
+    <h1>Employer Register</h1>
 
     <form class="email-login" method="post" enctype="multipart/form-data">
         <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
 
         <div class="form-group">
-            <label asp-for="Email"></label>
-            <input asp-for="Email" type="email" required>
+            <input asp-for="Email" type="email" placeholder="Email Address" required>
             <span asp-validation-for="Email" class="error"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Password"></label>
-            <input asp-for="Password" type="password" required>
+            <input asp-for="Password" type="password" placeholder="Password" required>
             <span asp-validation-for="Password" class="error"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Confirm"></label>
-            <input asp-for="Confirm" type="password" required>
+            <input asp-for="Confirm" type="password" placeholder="Confirm Password" required>
             <span asp-validation-for="Confirm" class="error"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="Photo"></label>
-            <div class="upload-box">
-                <input asp-for="Photo" type="file" accept="image/jpeg,image/png" hidden id="photoInput" />
-                <label for="photoInput" class="upload-label">
-                    <img id="photoPreview" src="/images/default_avatar.jpg" />
-                    <div class="upload-text">Upload Image</div>
-                </label>
-            </div>
+            <label class="upload">
+                <small>Select Photo...</small>
+                <input asp-for="Photo" accept="image/jpeg,image/png" hidden>
+                <img src="" alt="Preview" />
+            </label>
             <span asp-validation-for="Photo" class="error"></span>
         </div>
 
         <div class="form-actions">
             <button type="submit" class="login-btn">Register</button>
-            <button type="reset" class="reset-btn">Reset</button>
         </div>
     </form>
+
+    Already have an account? <a asp-controller="Employer" asp-action="Login">Sign In</a>
+
 </div>
 
 
 @section Styles {
-    <link rel="stylesheet" href="/css/signIn.css" />
+    <link rel="stylesheet" href="/css/sign-in.css" />
 }

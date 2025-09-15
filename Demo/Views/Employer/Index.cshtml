@@ -1,0 +1,102 @@
+﻿@model Demo.Models.User
+@{
+    Layout = "_EmployerLayout";
+}
+
+<div class="employer-info">
+    <h2>Employer Information</h2>
+
+    @if (Model != null && Model.Role == Demo.Models.Role.Employer)
+    {
+        <table class="info-table">
+            <tr>
+                <th>First Name</th>
+                <td>@Model.FirstName</td>
+            </tr>
+            <tr>
+                <th>Last Name</th>
+                <td>@Model.LastName</td>
+            </tr>
+            <tr>
+                <th>Location</th>
+                <td>@Model.Location</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>@Model.Email</td>
+            </tr>
+            <tr>
+                <th>Phone Number</th>
+                <td>@Model.PhoneNumber</td>
+            </tr>
+            <tr>
+                <th>Account Active</th>
+                <td>@(Model.IsActive ? "Yes" : "No")</td>
+            </tr>
+            <tr>
+                <th>Updated At</th>
+                <td>@Model.UpdatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+            </tr>
+        </table>
+
+        <h3>Jobs Posted</h3>
+        @if (Model.Jobs != null && Model.Jobs.Any())
+        {
+            <table class="list-table">
+                <tr>
+                    <th>Title</th>
+                    <th>Location</th>
+                </tr>
+                @foreach (var job in Model.Jobs)
+                {
+                    <tr>
+                        <td>@job.Title</td>
+                        <td>@job.Location</td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <p>No jobs posted yet.</p>
+        }
+
+        <h3>Applications Received</h3>
+        @if (Model.Applications != null && Model.Applications.Any())
+        {
+            <table class="list-table">
+                <tr>
+                    <th>UserId</th>
+                    <th>Status</th>
+                </tr>
+                @foreach (var app in Model.Applications)
+                {
+                    <tr>
+                        <td>@app.UserId</td>
+                        <td>@app.Status</td>
+                    </tr>
+                }
+            </table>
+        }
+        else
+        {
+            <p>No applications yet.</p>
+        }
+    }
+    else
+    {
+        <p class="errormessage">This user is not an Employer, or data not available.</p>
+    }
+
+    <button type="button" class="edit-btn">Edit</button>
+
+    <div id="employer-edit-container"></div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Employer.css" />
+}
+
+@section Scripts {
+    <script src="~/js/Employer.js"></script>
+}

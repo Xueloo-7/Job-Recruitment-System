@@ -11,174 +11,6 @@ html, body {
     display: none;
 }
 
-/* Button CSS -------------------------------------------------------------- */
-.btn{
-    margin-right: 10px;
-}
-
-.btn-primary {
-    background-color: #F5F3EF; /* 主色，可换 */
-    border: none;
-    color: #000000;
-    padding: 0.6rem 1.2rem; /* 高度 & 左右间距 */
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 8px; /* 圆角 */
-    cursor: pointer;
-    outline: none;
-    text-decoration:none;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-    /* 悬停与按下效果 */
-    .btn-primary:hover {
-        background-color: #9BAE9E; /* hover 时更深的蓝紫 */
-        outline: 2px solid #F5F3EF;
-        color: #F5F3EF;
-    }
-
-    .btn-primary:active {
-        transform: scale(0.97); /* 点击轻微缩放 */
-    }
-
-    /* 如果想单独控制宽度，可添加以下 */
-    .btn-primary.full-width {
-        width: 100%;
-    }
-
-.btn-secondary {
-    border: none;
-    color: #F5F3EF;
-    padding: 0.6rem 1.2rem; /* 高度 & 左右间距 */
-    font-size: 1rem;
-    font-weight: 600;
-    border-radius: 8px; /* 圆角 */
-    cursor: pointer;
-    text-decoration: none;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-    /* 悬停 */
-    .btn-secondary:hover {
-        background-color: #d9d7d2; /* hover 时更深的蓝紫 */
-        color: #000000;
-    }
-
-    /* 按下 */
-    .btn-secondary:active {
-        transform: scale(0.97); /* 点击轻微缩放 */
-    }
-
-    /* 可选：全宽 */
-    .btn-secondary.full-width {
-        width: 100%;
-    }
-
-/* ===================================
-   表单与按钮（通用于所有子页）
-   =================================== */
-input,
-select,
-textarea {
-    width: 100%;
-    padding: 0.6rem 0.8rem;
-    margin-top: 0.4rem;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: border .25s;
-}
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-        border-color: #6366f1;
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
-    }
-
-/* checkbox */
-.check-box {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-top: 0.5rem;
-}
-
-    .check-box input[type="checkbox"] {
-        width: 1rem;
-        height: 1rem;
-        accent-color: #2563eb; /* Modern checkbox */
-    }
-
-
-/* Form CSS -------------------------------------------------------------- */
-.form-group {
-    margin-bottom: 1.2rem;
-    display: flex;
-    flex-direction: column;
-}
-
-    /* 标签样式 */
-    .form-group label {
-        font-weight: 600;
-        margin-bottom: 0.4rem;
-    }
-
-/* 输入框 */
-.form-control {
-    width: 100%; /* 让其充满父容器 */
-    height: 40px; /* 统一高度，可改 */
-    padding: 0.5rem 0.75rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 1rem;
-    box-sizing: border-box;
-}
-
-    .form-control:focus {
-        border-color: #4f46e5; /* 主题紫色 */
-        box-shadow: 0 0 0 3px rgba(79,70,229,0.2);
-        outline: none;
-    }
-
-/* 验证错误文字 */
-.text-danger {
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
-    color: #e53e3e; /* 红色提示 */
-}
-
-/* DropDown List -------------------------------------------------------------- */
-
-.dropdown-list {
-    position: absolute;
-    background: #fff;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    width: 100%;
-    max-height: 200px;
-    overflow-y: auto;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    display: none;
-    z-index: 1000;
-}
-
-.dropdown-item {
-    padding: 8px 12px;
-    cursor: pointer;
-    transition: background 0.2s ease;
-}
-
-    .dropdown-item:hover {
-        background: #f0f0f0;
-    }
-
-.search-input {
-    position: relative;
-}
-
-
 /* Flash Message -------------------------------------------------------------- */
 
 .info {
@@ -271,7 +103,7 @@ textarea {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #9bae9e;
+    background-color: #2D89CC;
     padding: 10px 26px 0px 26px;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     z-index: 999;
@@ -305,8 +137,8 @@ textarea {
 }
 
 .logo {
-    width: 48px;
-    height: 48px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
 }
 
@@ -318,18 +150,13 @@ textarea {
 
 .nav-links a {
     margin-right: 16px;
-    margin-bottom: 10px;
     text-decoration: none;
+    color: #000;
     font-weight: 500;
     position: relative;
 }
 
-    .nav-links a.active {
-        background-color: #e0e0e0;
-        border-radius: 10px;
-    }
-
-/*    .nav-links a.active::after {
+    .nav-links a.active::after {
         content: '';
         display: block;
         height: 3px;
@@ -338,7 +165,7 @@ textarea {
         position: absolute;
         bottom: -4px;
         left: 0;
-    }*/
+    }
 
 .icon-button {
     background: white;
@@ -366,10 +193,10 @@ textarea {
     transition: border-color 0.3s ease;
 }
 
-/*    .nav-links a.active {
+    .nav-links a.active {
         border-bottom: 2px solid black;
         font-weight: bold;
-    }*/
+    }
 
 @media (max-width: 1010px) {
 
@@ -381,8 +208,6 @@ textarea {
     .navbar-down .nav-links {
         display: block;
     }
-
-    .navbar
 }
 
 @media (max-width: 700px) {
