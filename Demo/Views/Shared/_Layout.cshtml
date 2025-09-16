@@ -29,7 +29,7 @@
         </div>
     </div>
 
-    <header class="navbar">
+    <header class="navbar jobseeker-theme">
         <div class="navbar-top">
             <div class="navbar-left">
                 <img src="~/images/favicon.png" alt="Logo" class="logo" />
@@ -46,7 +46,6 @@
                     {
                         <a asp-controller="Account" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
                     }
-                    <a asp-controller="JobApply" asp-action="ApplyList" class="@Html.IsActive("JobApply", "ApplyList")">Job application Listing</a> @*for testing only *@
                 </nav>
             </div>
 
@@ -80,9 +79,14 @@
                 <a asp-controller="Home" asp-action="Index" class="@Html.IsActive("Home", "Index")">Job Search</a>
                 <a asp-controller="Profile" asp-action="Index" class="@Html.IsActive("Profile")">Profile</a>
                 <a asp-controller="Home" asp-action="Employer" class="@Html.IsActive("Home", "Employer")">Employer</a>
-                <a asp-controller="Account" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
-                <a asp-controller="Test" asp-action="Index" class="@Html.IsActive("Test", "Index")">Test</a>
-                <a asp-controller="Report" asp-action="Index" class="@Html.IsActive("Report", "Index")">Report</a>
+                @if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    <a asp-controller="Account" asp-action="Logout" class="@Html.IsActive("Account", "Logout")">Sign Out</a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
+                }
             </nav>
         </div>
 
@@ -93,7 +97,7 @@
         @RenderBody()
     </main>
 
-    <footer>
+    <footer class="jobseeker-theme">
         <!-- Social Media Icons -->
         <div class="social-icons">
             <a href="https://www.youtube.com" target="_blank" title="YouTube" class="tooltip" data-tooltip="YouTube">

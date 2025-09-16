@@ -65,7 +65,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Applications");
+                    b.ToTable("Applications", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.AuditLog", b =>
@@ -106,7 +106,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AuditLogs");
+                    b.ToTable("AuditLogs", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.Category", b =>
@@ -127,7 +127,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.Education", b =>
@@ -155,7 +155,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Educations");
+                    b.ToTable("Educations", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.Institution", b =>
@@ -171,7 +171,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Institutions");
+                    b.ToTable("Institutions", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.Job", b =>
@@ -251,7 +251,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Jobs");
+                    b.ToTable("Jobs", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.JobExperience", b =>
@@ -300,7 +300,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("JobExperiences");
+                    b.ToTable("JobExperiences", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.Notification", b =>
@@ -340,7 +340,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.Promotion", b =>
@@ -366,7 +366,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Promotions");
+                    b.ToTable("Promotions", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.Qualification", b =>
@@ -382,7 +382,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Qualifications");
+                    b.ToTable("Qualifications", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.Resume", b =>
@@ -411,7 +411,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Resumes");
+                    b.ToTable("Resumes", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.User", b =>
@@ -469,7 +469,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Demo.Models.Application", b =>

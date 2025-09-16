@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
-    <link rel="stylesheet" href="~/css/employer-style.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/sideMenu.css" asp-append-version="true" />
 
     @RenderSection("Styles", required: false)
@@ -17,16 +17,24 @@
 
     <div class="info">@Html.Raw(TempData["Info"])</div>
 
-    <header class="navbar">
+    <header class="navbar employer-theme">
         <div class="navbar-top">
             <div class="navbar-left">
                 <img src="~/images/favicon.png" alt="Logo" class="logo" />
-                <h1 class="brand">Job Seeker</h1>
+                <h1 class="brand">Employer</h1>
                 <nav class="nav-links">
-                    <a asp-controller="Profile" asp-action="Index" class="@Html.IsActive("Profile")">Profile</a>
-                    <a asp-controller="Account" asp-action="Logout" class="@Html.IsActive("Account", "Logout")">Sign Out</a>
+                    <a asp-controller="Employer" asp-action="Index" class="@Html.IsActive("Profile")">Home</a>
+                    <a asp-controller="Employer" asp-action="Account" class="@Html.IsActive("Profile")">Account</a>
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
+                        <a asp-controller="Employer" asp-action="Logout" class="@Html.IsActive("Account", "Logout")">Sign Out</a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Employer" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
+                    }
                     <a asp-controller="Report" asp-action="Index" class="@Html.IsActive("Report", "Index")">Report</a>
-                    <a asp-controller="DemoJob" asp-action="Index" class="@Html.IsActive("DemoJob", "Index")">Job Ads</a> @*for testing only *@
+                    <a asp-controller="JobApply" asp-action="ApplyList" class="@Html.IsActive("JobApply", "ApplyList")">List</a> @*for testing only *@
                 </nav>
             </div>
 
@@ -57,11 +65,16 @@
 
         <div class="navbar-down">
             <nav class="nav-links">
-                <a asp-controller="Home" asp-action="Index" class="@Html.IsActive("Home", "Index")">Job Search</a>
-                <a asp-controller="Profile" asp-action="Index" class="@Html.IsActive("Profile")">Profile</a>
-                <a asp-controller="Home" asp-action="Employer" class="@Html.IsActive("Home", "Employer")">Employer</a>
-                <a asp-controller="Account" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
-                <a asp-controller="Test" asp-action="Index" class="@Html.IsActive("Test", "Index")">Test</a>
+                <a asp-controller="Employer" asp-action="Index" class="@Html.IsActive("Profile")">Home</a>
+                <a asp-controller="Employer" asp-action="Account" class="@Html.IsActive("Profile")">Account</a>
+                @if (User.Identity?.IsAuthenticated ?? false)
+                {
+                    <a asp-controller="Employer" asp-action="Logout" class="@Html.IsActive("Account", "Logout")">Sign Out</a>
+                }
+                else
+                {
+                    <a asp-controller="Employer" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
+                }
                 <a asp-controller="Report" asp-action="Index" class="@Html.IsActive("Report", "Index")">Report</a>
             </nav>
         </div>
@@ -73,7 +86,7 @@
         @RenderBody()
     </main>
 
-    <footer>
+    <footer class="employer-theme">
         <!-- Social Media Icons -->
         <div class="social-icons">
             <a href="https://www.youtube.com" target="_blank" title="YouTube" class="tooltip" data-tooltip="YouTube">
