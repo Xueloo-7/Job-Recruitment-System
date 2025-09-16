@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Reflection;
+using System.Security.Claims;
 namespace Demo.Controllers
 {
     public class JobApplyController : Controller
@@ -36,54 +37,69 @@ namespace Demo.Controllers
         // 假设用户已经登录
         private User GetCurrentUser()
         {
-            // 开发阶段临时使用
-            return new User
-            {
-                Id = "U004",
-                Name = "Sara Wong",
-                Role = Role.JobSeeker
-            };
+            if (!User.Identity.IsAuthenticated)
+                return null;
+
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userId))
+                return null;
+
+            var user = db.Users.FirstOrDefault(u => u.Id == userId);
+            return user;
         }
 
-        private void LoadDropdowns(ApplyPageVM vm) // for reset top down menu 
+        private void LoadDropdowns(ApplyPageVM vm)
         {
+            // Source
+            vm.Application.Sources = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "", Text = "--- Please select a source ---" } // 默认项
+    }
+            .Concat(
+                Enum.GetValues(typeof(ApplicationSource))
+                    .Cast<ApplicationSource>()
+                    .Select(e => new SelectListItem
+                    {
+                        Value = e.ToString(),
+                        Text = e.ToString()
+                    })
+            ).ToList();
 
-            vm.Application.Sources = Enum.GetValues(typeof(ApplicationSource))
-                 .Cast<ApplicationSource>()
-                  .Select(e => new SelectListItem
-                  {
-                      Value = e.ToString(),
-                      Text = e.ToString()
-                  })
-                  .ToList();
+            // NoticeTime
+            vm.Application.NoticeTimes = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "", Text = "--- Please select your expected notice period ---" }
+    }
+            .Concat(
+                Enum.GetValues(typeof(NoticeTime))
+                    .Cast<NoticeTime>()
+                    .Select(e => new SelectListItem
+                    {
+                        Value = e.ToString(),
+                        Text = e.GetType()
+                             .GetMember(e.ToString())
+                             .First()
+                             .GetCustomAttribute<DisplayAttribute>()?.Name ?? e.ToString()
+                    })
+            ).ToList();
 
-
-            vm.Application.NoticeTimes = Enum.GetValues(typeof(NoticeTime))
-                .Cast<NoticeTime>()
-                 .Select(e => new SelectListItem
-                 {
-                     Value = e.ToString(),
-                     Text = e.GetType() // 存储枚举值
-                          .GetMember(e.ToString())
-                          .First()
-                          .GetCustomAttribute<DisplayAttribute>()?
-                          .Name ?? e.ToString() // 用 Display 名称
-                 })
-                 .ToList();
-
-
-            vm.Application.SalaryExpecteds = Enum.GetValues(typeof(SalaryExpected))
-                .Cast<SalaryExpected>()
-                 .Select(e => new SelectListItem
-                 {
-                     Value = e.ToString(), // 存储枚举值
-                     Text = e.GetType()
-                          .GetMember(e.ToString())
-                          .First()
-                          .GetCustomAttribute<DisplayAttribute>()?
-                          .Name ?? e.ToString() // 用 Display 名称
-                 })
-                 .ToList();
+            // SalaryExpected
+            vm.Application.SalaryExpecteds = new List<SelectListItem>
+    {
+        new SelectListItem { Value = "", Text = "--- Please select your expected salary in month ---" }
+    }
+            .Concat(
+                Enum.GetValues(typeof(SalaryExpected))
+                    .Cast<SalaryExpected>()
+                    .Select(e => new SelectListItem
+                    {
+                        Value = e.ToString(),
+                        Text = e.GetType()
+                             .GetMember(e.ToString())
+                             .First()
+                             .GetCustomAttribute<DisplayAttribute>()?.Name ?? e.ToString()
+                    })
+            ).ToList();
         }
 
 
@@ -100,15 +116,22 @@ namespace Demo.Controllers
             if (job == null)
                 return NotFound();
 
+            var profileResume = db.Resumes.FirstOrDefault(u => u.UserId == currentUser.Id);
             var vm = new ApplyPageVM
             {
                 Application = new ApplicationVM
                 {
                     JobId = job.Id,
-                    UserId = currentUser.Id
+                    UserId = currentUser.Id,
+                    Source = null,          // 或者 ""
+                    SalaryExpected = null,  // 或者 ""
+                    NoticeTime = null       // 或者 ""
                 },
-                Resume = new ResumeVM()
+                HasResume = profileResume != null // 前端用这个判断是否已有 Resume
             };// create VM
+
+
+
             LoadDropdowns(vm); // load the list down menu 
 
             ViewBag.Job = job; // get the job data from job table 
@@ -117,7 +140,7 @@ namespace Demo.Controllers
 
 
         [HttpPost]
-        public IActionResult Apply(ApplyPageVM vm)
+        public IActionResult Apply(ApplyPageVM vm, string includeResume)
         {
             var currentUser = GetCurrentUser();
             if (currentUser == null)
@@ -125,21 +148,46 @@ namespace Demo.Controllers
 
             // 手动补充 UserId
             vm.Application.UserId = currentUser.Id;
-            vm.Resume.UserId = currentUser.Id;
-
             var job = db.Jobs.Find(vm.Application.JobId);
             if (job == null)
                 return NotFound();
+
 
             // 表单验证
             if (!ModelState.IsValid)
             {
                 DebugModelStateErrors();
                 LoadDropdowns(vm);
-                ViewBag.Job = job;               // ✅ 再次传给前端
+                ViewBag.Job = job;
                 return View(vm);
             }
 
+            // 检查 Profile 和 Resume
+            var education = db.Educations.FirstOrDefault(u => u.UserId == currentUser.Id);
+
+
+
+            if (education == null
+                || string.IsNullOrEmpty(currentUser.FirstName)
+                || string.IsNullOrEmpty(currentUser.LastName)
+                || string.IsNullOrEmpty(currentUser.PhoneNumber)
+                || string.IsNullOrEmpty(currentUser.Location))
+            {
+                TempData["info"] = "Please complete your Information and Education before applying!";
+                return RedirectToAction("Index", "Profile");
+            }
+
+            // 如果用户点击上传 Resume，但 Profile 还没有 Resume
+            var profileResume = db.Resumes.FirstOrDefault(u => u.UserId == currentUser.Id);
+            if (!string.IsNullOrEmpty(includeResume) && includeResume == "true" && profileResume == null)
+            {
+                // 用户希望上传简历，但 Profile 里没有简历
+                if (profileResume == null)
+                {
+                    TempData["Info"] = "Please upload your resume in your profile first.";
+                    return RedirectToAction("Resume", "Profile"); // 跳到 Profile 上传页面
+                }
+            }
 
             bool Exist_Apply = db.Applications.Any(j => j.UserId == currentUser.Id && j.JobId == job.Id);
             if (Exist_Apply) // verify whether the job is exist for the specific account 
@@ -158,57 +206,8 @@ namespace Demo.Controllers
                 .Select(s => int.Parse(s))// 把字符串数字转换成整数
                 .DefaultIfEmpty(0) // 如果数据库中没有记录，默认最大值为 0
                 .Max(); // 取出最大值，用于生成下一个 ID
-
             int nextNumber = maxId + 1;
-            vm.Application.Id = "A" + nextNumber.ToString("D3");
-
-
-            // 正确访问 ResumeVM 里的 ImageFile
-            if (vm.Resume == null || vm.Resume.ImageFile == null)
-            {
-                ModelState.AddModelError("Resume.ImageFile", "Please upload your resume file.");
-                LoadDropdowns(vm);
-                ViewBag.Job = job;
-                return View(vm);
-            }
-
-            var error = hp.ValidatePhoto(vm.Resume.ImageFile);
-            if (!string.IsNullOrEmpty(error))
-            {
-                ModelState.AddModelError("Resume.ImageFile", error);
-                LoadDropdowns(vm);
-                ViewBag.Job = job;
-                return View(vm);
-            }
-
-            string relativePath = null;
-
-            try
-            {
-                // 保存文件到服务器，返回唯一文件名
-                string ImageFileName = hp.SavePhoto(vm.Resume.ImageFile, "images/uploads/resume");
-
-                // 拼接成相对路径保存到数据库
-                relativePath = "images/uploads/resume/" + ImageFileName;
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError("Resume.ImageFile", "Image save failed: " + ex.Message);
-                LoadDropdowns(vm);
-                ViewBag.Job = job;
-                return View(vm);
-            }
-
-            // 保存 Resume（假设 Resume 表独立）
-            var resume = new Resume
-            {
-                UserId = currentUser.Id,
-                ImageUrl = relativePath
-
-            };
-            db.Resumes.Add(resume);
-            db.SaveChanges(); // 保存后生成 resume.Id
-
+            vm.Application.Id = "A" + nextNumber.ToString("D3"); // 生成唯一 ID
 
             // 保存 Application
             var application = new Application
@@ -216,9 +215,9 @@ namespace Demo.Controllers
                 Id = vm.Application.Id,
                 JobId = job.Id,
                 UserId = currentUser.Id,
-                Source = vm.Application.Source,
-                NoticeTime = vm.Application.NoticeTime,
-                SalaryExpected = vm.Application.SalaryExpected,
+                Source = vm.Application.Source.Value,
+                NoticeTime = vm.Application.NoticeTime.Value,
+                SalaryExpected = vm.Application.SalaryExpected.Value,
                 Status = ApplicationStatus.Pending,
                 CreatedAt = DateTime.Now,
                 UpdatedAt = DateTime.Now
@@ -254,6 +253,50 @@ namespace Demo.Controllers
             return View(applications);
         }
 
+
+        public IActionResult Detail(string applicationId)
+        {
+            var currentUser = GetCurrentUser();
+            if (currentUser == null)
+                return RedirectToAction("Login", "Account");
+
+            var app = db.Applications
+                        .Include(a => a.Job)  // ✅ 确保能拿到 Job 信息
+                        .FirstOrDefault(a => a.Id == applicationId && a.UserId == currentUser.Id);
+
+            if (app == null)
+                return NotFound();
+
+            var vm = new ApplicationDetailVM
+            {
+                ApplicationId = app.Id,
+                JobTitle = app.Job.Title,
+                CompanyName = app.Job.CompanyName,
+                JobLogo = app.Job.LogoImageUrl,
+                Source = app.Source.GetDisplayName(),    // using extension to display the msg           
+                SalaryExpected = app.SalaryExpected.GetDisplayName(),
+                NoticeTime = app.NoticeTime.GetDisplayName(),
+                Status = app.Status,
+                CreatedAt = app.CreatedAt,
+                HiredDate = app.HiredDate
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        public IActionResult DeleteApplication(string? id)
+        {
+            var app = db.Applications.Find(id);
+            if (app != null)
+            {
+                db.Applications.Remove(app);
+                db.SaveChanges();
+                TempData["Info"] = "Application canceled successfully.";
+            }
+
+            return RedirectToAction("ApplyList", "JobApply");  // 删除后回到之前页面
+        }
 
     }
 

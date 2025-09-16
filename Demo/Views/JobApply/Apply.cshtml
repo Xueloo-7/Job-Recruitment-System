@@ -3,30 +3,6 @@
     var job = ViewBag.Job as Demo.Models.Job;
 }
 
-@section Scripts {
-    <script src="~/js/app.js" asp-append-version="true"></script>
-    <link rel="stylesheet" href="~/css/jobApply.css" asp-append-version="true" />
-    <script>
-        // 切换箭头方向
-        document.addEventListener("DOMContentLoaded", function () {
-            const toggle = document.querySelector("#jobInfoToggle");
-            toggle.addEventListener("click", function () {
-                const icon = this.querySelector("i");
-                const target = document.querySelector(this.getAttribute("data-bs-target"));
-
-                setTimeout(() => {
-                    if (target.classList.contains("show")) {
-                        icon.classList.remove("fa-chevron-down");
-                        icon.classList.add("fa-chevron-up");
-                    } else {
-                        icon.classList.remove("fa-chevron-up");
-                        icon.classList.add("fa-chevron-down");
-                    }
-                }, 200);
-            });
-        });
-    </script>
-}
 
 <div class="apply-container shadow-sm p-4 rounded bg-light">
     <h2 class="mb-3 text-primary">Apply for <strong>@job?.Title</strong></h2>
@@ -62,23 +38,10 @@
         <input asp-for="Resume.UserId" type="hidden" value="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" />
         <input asp-for="Application.UserId" type="hidden" value="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" />
 
-        <!-- Resume Upload -->
-        <div class="mb-3">
-            <label asp-for="Resume.ImageFile" class="form-label fw-bold">Please Upload Your Resume</label>
-            <div class="upload-box">
-                <label class="btn btn-outline-primary">
-                    <i class="fas fa-upload"></i> Upload Resume
-                    <input asp-for="Resume.ImageFile" accept=".pdf,.doc,.docx" hidden>
-                </label>
-            </div>
-            <span asp-validation-for="Resume.ImageFile" class="text-danger"></span>
-        </div>
-
         <!-- Application fields -->
         <div class="form-group mb-3">
             <label asp-for="Application.Source">Which source informed you about this job opportunity?</label>
             <select asp-for="Application.Source" class="form-control" asp-items="Model.Application.Sources">
-                <option value="">--- Please select a source ---</option>
             </select>
             <span asp-validation-for="Application.Source" class="text-danger"></span>
         </div>
@@ -86,7 +49,6 @@
         <div class="form-group mb-3">
             <label asp-for="Application.SalaryExpected">What's your expected monthly basic salary?</label>
             <select asp-for="Application.SalaryExpected" class="form-control" asp-items="Model.Application.SalaryExpecteds">
-                <option value="">--- Please select ---</option>
             </select>
             <span asp-validation-for="Application.SalaryExpected" class="text-danger"></span>
         </div>
@@ -94,10 +56,61 @@
         <div class="form-group mb-3">
             <label asp-for="Application.NoticeTime">How much notice are you required to give your current employer?</label>
             <select asp-for="Application.NoticeTime" class="form-control" asp-items="Model.Application.NoticeTimes">
-                <option value="">--- Please select ---</option>
             </select>
             <span asp-validation-for="Application.NoticeTime" class="text-danger"></span>
         </div>
-        <div asp-validation-summary="All" class="text-danger"></div>
+
+        @* resume upload *@
+        <div class="mb-3"> 
+            <label>Upload Resume:</label>
+            <div class="form-check">
+                <label class="form-check-label" for="uploadYes">
+                    I want to upload my resume
+                </label>
+                <input class="form-check-input" type="radio" name="includeResume" id="uploadYes" value="true">
+            </div>
+            <div class="form-check">
+                <label class="form-check-label" for="uploadNo">
+                    I do not want to upload a resume
+                </label>
+                <input class="form-check-input" type="radio" name="includeResume" id="uploadNo" value="false" checked>
+            </div>
+        </div>
+
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
         <button type="submit" class="btn btn-success w-100">Submit Application</button>
     </form>
+
+
+@* summary and description style *@
+@section Scripts {
+        <script src="~/js/app.js" asp-append-version="true"></script>
+        <link rel="stylesheet" href="~/css/jobApply.css" asp-append-version="true" />
+        <script>
+            // 切换箭头方向
+            document.addEventListener("DOMContentLoaded", function () {
+                const toggle = document.querySelector("#jobInfoToggle");
+                if (!toggle) return; // 如果元素不存在就退出
+
+                toggle.addEventListener("click", function () {
+                    const icon = this.querySelector("i");
+                    const targetSelector = this.getAttribute("data-bs-target");
+                    const target = document.querySelector(targetSelector);
+
+                    if (!icon || !target) return; // 检查元素是否存在
+
+                    setTimeout(() => {
+                        if (target.classList.contains("show")) {
+                            icon.classList.remove("fa-chevron-down");
+                            icon.classList.add("fa-chevron-up");
+                        } else {
+                            icon.classList.remove("fa-chevron-up");
+                            icon.classList.add("fa-chevron-down");
+                        }
+                    }, 200);
+                });
+            });
+        </script>
+}
+
+

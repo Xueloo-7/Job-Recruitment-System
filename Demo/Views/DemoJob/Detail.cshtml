@@ -30,13 +30,14 @@
             <p><strong>Latest Update:</strong> @Model.UpdatedAt.ToString("dd/MM/yyyy HH:mm")</p>
             <p><strong>Summary:</strong> @Model.Summary</p>
             <p><strong>Description:</strong> @Model.Description</p>
+            <p><strong>Status:</strong> @Model.Status</p>
 
 
             <form asp-action="Delete" asp-controller="DemoJob" method="post" style="margin-top:20px;">
                 <input type="hidden" name="Id" value="@Model.Id" />
                 <input type="hidden" name="file" value="@Model.LogoImageUrl" />
                 <button type="submit" class="btn btn-danger">Delete</button>
-                <a asp-action="Index" class="btn btn-secondary">Back</a>
+                <a asp-action="Index" >Back</a>
             </form>
         </div>
     </div>

@@ -27,6 +27,11 @@ else
                     <td>@app.CreatedAt.ToString("yyyy-MM-dd")</td>
                     <td>@app.Status</td>
                     <td>@(app.HiredDate.HasValue? app.HiredDate.Value.ToString("yyyy-MM-dd") : "-")</td>
+                    <td>
+                        <a asp-action="Detail" asp-controller="JobApply" asp-route-applicationId="@app.ApplicationId">
+                            View Detail
+                        </a>
+                    </td>
                 </tr>
             }
         </tbody>
