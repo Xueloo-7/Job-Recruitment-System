@@ -83,8 +83,6 @@ public class ProfileController : Controller
     }
 
     // 删除简历
-    [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteResume(string id)
     {
         var resume = await _context.Resumes.FindAsync(id);
@@ -218,6 +216,17 @@ public class ProfileController : Controller
         return RedirectToAction(nameof(CareerHistory));
     }
 
+    public async Task<IActionResult> DeleteJob(string id)
+    {
+        var job = await _context.JobExperiences.FindAsync(id);
+        if (job != null)
+        {
+            _context.JobExperiences.Remove(job);
+            await _context.SaveChangesAsync();
+        }
+        return RedirectToAction(nameof(CareerHistory));
+    }
+
     // ── Education ───────────────────────────────────
     [HttpGet]
     public async Task<IActionResult> Education()
@@ -262,8 +271,6 @@ public class ProfileController : Controller
         return RedirectToAction(nameof(Education));
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteEducation(string id)
     {
         var edu = await _context.Educations.FindAsync(id);

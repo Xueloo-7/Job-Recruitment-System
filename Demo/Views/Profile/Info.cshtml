@@ -7,7 +7,7 @@
     <div class="profile-nav">
         <a asp-action="Index" class="">Dashboard</a>
         <a asp-action="Info" class="active">Information</a>
-        <a asp-action="Summary" class="" )">Summary</a>
+        <a asp-action="Summary" class="">Summary</a>
         <a asp-action="CareerHistory" class="">Career History</a>
         <a asp-action="Education" class="">Education</a>
         <a asp-action="Resume" class="">Resume</a>
@@ -29,9 +29,8 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Email"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <input asp-for="Email" class="form-control" disabled />
+                <input type="hidden" asp-for="Email" />
             </div>
 
             <div class="form-group">

@@ -1,0 +1,84 @@
+﻿.apply-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fafafa;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+    .apply-container img {
+        max-width: 120px;
+        border-radius: 8px;
+        /* 内层：厚 border，可随状态改变颜色 */
+        border: 6px solid white; /* 这里换成你想要的颜色 */
+        /* 外层：灰色固定 */
+        outline: 2px solid #ccc;
+    }
+
+
+    .apply-container .small {
+        font-size: 16px;
+        color: #666;
+        margin: 10px 0px;
+    }
+
+    .apply-container h1 {
+        font-size: 28px;
+        margin: 10px 0px;
+    }
+
+    .apply-container .location {
+        font-size: 20px;
+        color: #666;
+        margin: 10px 0px;
+    }
+
+    .btn-toggle {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #333;
+        background: #f5f5f5;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .btn-toggle:hover {
+        background: #e0e0e0;
+    }
+
+.job-info {
+    max-height: 0;
+    overflow: hidden;
+    margin-top: 10px;
+    transition: all 0.2s cubic-bezier(0.02, 1.505, 0.745, 1.235);
+}
+
+    .job-info.show {
+        max-height: 500px; /* 足够大的值，保证能完全展开 */
+    }
+
+
+    .job-info .card {
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        padding: 12px;
+        background-color: gainsboro;
+    }
+
+.apply-container form {
+    margin-top: 50px;
+}
+
+.apply-container .form-check-input {
+    width: auto;
+}
+
+.apply-container .resume-upload-container {
+    margin-bottom: 20px;
+}

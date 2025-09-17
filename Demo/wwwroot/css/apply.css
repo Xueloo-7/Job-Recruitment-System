@@ -1,0 +1,127 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f3;
+    margin: 0;
+    padding: 0;
+}
+
+.logo {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+}
+
+.header-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+}
+
+a {
+    color: #000;
+    text-decoration: underline;
+}
+
+    a:hover {
+        text-decoration: none;
+    }
+
+.container {
+    max-width: 400px;
+    margin: 60px auto;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px #ccc;
+}
+
+h1 {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1a1a1a;
+    margin-bottom: 25px;
+    border: 2px solid #3c0073;
+    padding: 5px 10px;
+    display: inline-block;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 5px;
+    border: 2px solid #3c0073;
+    border-radius: 5px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+.input-validation-error {
+    border-color: red;
+}
+
+.validation-message {
+    color: red;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.terms {
+    font-size: 12px;
+    color: #333;
+    margin-top: 10px;
+    text-align: center;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background-color: #285c42;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+    button:hover {
+        background-color: #1f4b35;
+    }
+
+.bottom-text {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f5f5f3;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    border-top: 1px solid #ccc;
+}
+
+    .footer a {
+        margin: 0 15px;
+        color: #000;
+    }
+
+    .footer span {
+        display: block;
+        margin-top: 5px;
+        color: #333;
+    }

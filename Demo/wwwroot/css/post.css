@@ -256,3 +256,26 @@
         color: #666;
         font-size: 18px;
     }
+
+.logo-input {
+    display: block;
+    margin-top: 8px;
+    padding: 6px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.logo-preview {
+    margin-top: 10px;
+}
+
+    .logo-preview img {
+        max-width: 150px;
+        max-height: 150px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
+        padding: 4px;
+        background-color: #fafafa;
+    }

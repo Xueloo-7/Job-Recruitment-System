@@ -327,7 +327,7 @@ form label {
 .container .header .image {
     flex: 1;
     padding: 20px;
-    background-color: #f0f0f0;
+/*    background-color: #f0f0f0;*/
 }
 
     .container .header .image img {
@@ -335,6 +335,7 @@ form label {
         height: 100%;
         display: block;
         margin: 0 auto;
+        border-radius: 12px;
     }
 
 @media (width <= 768px) {

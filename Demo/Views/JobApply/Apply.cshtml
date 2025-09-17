@@ -3,30 +3,25 @@
     var job = ViewBag.Job as Demo.Models.Job;
 }
 
+<div class="apply-container">
+    <img src="@Url.Content("~" + job?.LogoImageUrl)" class="company-logo" alt="Company Logo">
+    <p class="small">Applying for</p>
+    <h1>@job?.Title</h1>
+    <p class="location">@job?.Location</p>
 
-<div class="apply-container shadow-sm p-4 rounded bg-light">
-    <h2 class="mb-3 text-primary">Apply for <strong>@job?.Title</strong></h2>
+    <!-- Job Info Toggle -->
+    <button class="btn-toggle" id="jobInfoToggle" type="button">
+        <i class="fas fa-chevron-down" style="margin-right:10px"></i> Job Description & Summary
+    </button>
 
-    <div class="d-flex align-items-center mb-3">
-        <img src="@Url.Content("~/" + job?.LogoImageUrl)" class="company-logo me-3" alt="Company Logo">
-        <div>
-            <h5 class="mb-1">@job?.User.CompanyName</h5>
-
-            <!-- Job Info (Description + Summary) -->
-            <button class="btn btn-sm btn-outline-secondary collapse-toggle mb-2"
-                    id="jobInfoToggle" type="button">
-                <i class="fas fa-chevron-down me-1"></i> Job Description & Summary
-            </button>
-
-            <div class="job-info" id="jobInfo">
-                <div class="card card-body">
-                    <h6 class="fw-bold">Description</h6>
-                    @Html.Raw(job?.Description ?? "No Description available")
-                    <hr />
-                    <h6 class="fw-bold">Summary</h6>
-                    @Html.Raw(job?.Summary ?? "No Summary available")
-                </div>
-            </div>
+    <div class="job-info" id="jobInfo">
+        <div class="card">
+            <p class="small">Posted @((DateTime.Now - job?.CreatedAt)?.Days)d ago</p>
+            <h2>Description</h2>
+            @Html.Raw(job?.Description ?? "No Description available")
+            <hr style="margin-top:20px" />
+            <h2>Summary</h2>
+            @Html.Raw(job?.Summary ?? "No Summary available")
         </div>
     </div>
 
@@ -39,21 +34,21 @@
         <input asp-for="Application.UserId" type="hidden" value="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value" />
 
         <!-- Application fields -->
-        <div class="form-group mb-3">
+        <div class="form-group">
             <label asp-for="Application.Source">Which source informed you about this job opportunity?</label>
             <select asp-for="Application.Source" class="form-control" asp-items="Model.Application.Sources">
             </select>
             <span asp-validation-for="Application.Source" class="text-danger"></span>
         </div>
 
-        <div class="form-group mb-3">
+        <div class="form-group">
             <label asp-for="Application.SalaryExpected">What's your expected monthly basic salary?</label>
             <select asp-for="Application.SalaryExpected" class="form-control" asp-items="Model.Application.SalaryExpecteds">
             </select>
             <span asp-validation-for="Application.SalaryExpected" class="text-danger"></span>
         </div>
 
-        <div class="form-group mb-3">
+        <div class="form-group">
             <label asp-for="Application.NoticeTime">How much notice are you required to give your current employer?</label>
             <select asp-for="Application.NoticeTime" class="form-control" asp-items="Model.Application.NoticeTimes">
             </select>
@@ -61,7 +56,7 @@
         </div>
 
         @* resume upload *@
-        <div class="mb-3"> 
+        <div class="resume-upload-container form-group">
             <label>Upload Resume:</label>
             <div class="form-check">
                 <label class="form-check-label" for="uploadYes">
@@ -80,37 +75,15 @@
         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
         <button type="submit" class="btn btn-success w-100">Submit Application</button>
     </form>
-
+</div>
 
 @* summary and description style *@
+@section Styles {
+    <link rel="stylesheet" href="~/css/job-apply.css" />
+}
+
 @section Scripts {
-        <script src="~/js/app.js" asp-append-version="true"></script>
-        <link rel="stylesheet" href="~/css/jobApply.css" asp-append-version="true" />
-        <script>
-            // 切换箭头方向
-            document.addEventListener("DOMContentLoaded", function () {
-                const toggle = document.querySelector("#jobInfoToggle");
-                if (!toggle) return; // 如果元素不存在就退出
-
-                toggle.addEventListener("click", function () {
-                    const icon = this.querySelector("i");
-                    const targetSelector = this.getAttribute("data-bs-target");
-                    const target = document.querySelector(targetSelector);
-
-                    if (!icon || !target) return; // 检查元素是否存在
-
-                    setTimeout(() => {
-                        if (target.classList.contains("show")) {
-                            icon.classList.remove("fa-chevron-down");
-                            icon.classList.add("fa-chevron-up");
-                        } else {
-                            icon.classList.remove("fa-chevron-up");
-                            icon.classList.add("fa-chevron-down");
-                        }
-                    }, 200);
-                });
-            });
-        </script>
+    <script src="~/js/job-apply.js"></script>
 }
 
 

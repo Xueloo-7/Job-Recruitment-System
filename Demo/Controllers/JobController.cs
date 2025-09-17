@@ -1,17 +1,21 @@
-﻿using Demo.Migrations;
+﻿using Demo;
+using Demo.Migrations;
 using Demo.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 [Authorize(Roles = "Employer")]
 public class JobController : BaseController
 {
     private readonly DB db;
+    private readonly Helper hp;
 
-    public JobController(DB db)
+    public JobController(DB db, Helper hp)
     {
         this.db = db;
+        this.hp = hp;
     }
 
     // Functions
@@ -280,6 +284,23 @@ public class JobController : BaseController
     {
         var draft = GetUserDraft(vm.DraftId ?? Guid.Empty);
         if (draft == null) return NotFound();
+
+        // ===== 处理 Logo 上传 =====
+        if (vm.Logo != null && vm.Logo.Length > 0)
+        {
+            var err = hp.ValidatePhoto(vm.Logo);
+            if (!string.IsNullOrEmpty(err))
+            {
+                ModelState.AddModelError("Logo", err);
+                return View(vm); // 验证失败，返回表单并显示错误
+            }
+
+            var fileName = hp.SavePhoto(vm.Logo, "uploads/logos");
+
+            // 保存相对路径到 Draft
+            draft.LogoImageUrl = $"/uploads/logos/{fileName}";
+            vm.LogoImageUrl = draft.LogoImageUrl;
+        }
 
         if (action == "back")
         {

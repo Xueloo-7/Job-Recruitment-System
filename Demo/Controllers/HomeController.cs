@@ -102,6 +102,20 @@ public class HomeController : BaseController
         });
     }
 
+
+    // Home Job Details
+    public IActionResult Details(string id)
+    {
+        var job = db.Jobs
+            .Include(j => j.Category)
+            .Include(j => j.User)
+            .FirstOrDefault(j => j.Id == id);
+
+        if (job == null) return NotFound();
+
+        return PartialView("_JobDetails", job);
+    }
+
     public IActionResult Employer()
     {
         // 1. 如果没登录，任何人都能访问

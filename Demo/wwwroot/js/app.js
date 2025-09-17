@@ -108,18 +108,4 @@ $(document).on('click', '[data-post]', e => {
     f.submit();
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const toggleButton = document.getElementById("jobInfoToggle");
-    const jobInfo = document.getElementById("jobInfo");
-
-    if (toggleButton === null || jobInfo === null) 
-        return;
-
-    toggleButton.addEventListener("click", function () {
-        jobInfo.classList.toggle("show");
-        toggleButton.classList.toggle("active");
-    });
-});
-
-
 

@@ -9,7 +9,7 @@
 
             // 3. 加载详情页面内容
             const jobId = card.getAttribute('data-id');
-            fetch(`/Job/Details/${jobId}`)
+            fetch(`/Home/Details/${jobId}`)
                 .then(res => res.text())
                 .then(html => {
                     const detailBox = document.getElementById('job-details');

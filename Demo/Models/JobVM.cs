@@ -46,7 +46,9 @@ public class JobWriteVM
     [Required, MaxLength(2000)]
     public string Description { get; set; }
     [Required, MaxLength(200)]
-    public string Summary { get; set; } 
+    public string Summary { get; set; }
+    public IFormFile? Logo { get; set; }          // 用来接收上传的文件
+    public string? LogoImageUrl { get; set; }     // 用来显示预览（保存后的路径）
 }
 
 public class JobPaymentVM
