@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 
 public class JobClassifyVM
 {
+    public string? JobId { get; set; } // Null for new jobs, set for editing existing jobs
     public Guid? DraftId { get; set; }
     [Required, MaxLength(100)]
     public string Title { get; set; }
@@ -30,8 +31,9 @@ public class JobClassifyVM
     public List<SelectListItem> PayTypeOptions { get; set; } = new();
 }
 
-public class JobSubscriptionVM 
+public class JobSubscriptionVM
 {
+    public string? JobId { get; set; } // Null for new jobs, set for editing existing jobs
     public Guid? DraftId { get; set; }
     public string PromotionId { get; set; }
     public List<Promotion> Promotions { get; set; } = new();
@@ -39,6 +41,7 @@ public class JobSubscriptionVM
 
 public class JobWriteVM
 {
+    public string? JobId { get; set; } // Null for new jobs, set for editing existing jobs
     public Guid? DraftId { get; set; }
     [Required, MaxLength(2000)]
     public string Description { get; set; }

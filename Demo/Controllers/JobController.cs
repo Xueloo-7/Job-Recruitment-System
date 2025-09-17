@@ -35,6 +35,64 @@ public class JobController : BaseController
         draft.UpdatedAt = DateTime.UtcNow;
     }
 
+    private Job PublishOrUpdateJob(JobDraft draft)
+    {
+        // 如果 draft.JobId != null → 更新 Job
+        if (draft.JobId != null)
+        {
+            var job = db.Jobs.Find(draft.JobId);
+            if (job == null || job.UserId != draft.UserId)
+            {
+                throw new InvalidOperationException("Original job not found or not authorized.");
+            }
+
+            job.Title = draft.Title ?? "";
+            job.Location = draft.Location ?? "";
+            job.CategoryId = draft.CategoryId ?? "";
+            job.PromotionId = draft.PromotionId ?? "";
+            job.PayType = draft.PayType ?? PayType.Monthly;
+            job.WorkType = draft.WorkType ?? WorkType.FullTime;
+            job.SalaryMin = draft.SalaryMin ?? 0;
+            job.SalaryMax = draft.SalaryMax ?? 0;
+            job.Description = draft.Description ?? "";
+            job.Summary = draft.Summary ?? "";
+            job.UpdatedAt = DateTime.UtcNow;
+            job.Status = JobStatus.Pending; // 回到待审核
+
+            db.Jobs.Update(job);
+            db.JobDrafts.Remove(draft);
+            db.SaveChanges();
+            return job;
+        }
+        else
+        {
+            // 新发布
+            var job = new Job
+            {
+                Id = Helper.GenerateId(db.Jobs, "J"),
+                UserId = draft.UserId,
+                Title = draft.Title ?? "",
+                Location = draft.Location ?? "",
+                CategoryId = draft.CategoryId ?? "",
+                PromotionId = draft.PromotionId ?? "",
+                PayType = draft.PayType ?? PayType.Monthly,
+                WorkType = draft.WorkType ?? WorkType.FullTime,
+                SalaryMin = draft.SalaryMin ?? 0,
+                SalaryMax = draft.SalaryMax ?? 0,
+                Description = draft.Description ?? "",
+                Summary = draft.Summary ?? "",
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                Status = JobStatus.Pending
+            };
+
+            db.Jobs.Add(job);
+            db.JobDrafts.Remove(draft);
+            db.SaveChanges();
+            return job;
+        }
+    }
+
     public IActionResult Draft(Guid? id)
     {
         var userId = User.GetUserId();
@@ -83,6 +141,7 @@ public class JobController : BaseController
 
         var vm = new JobClassifyVM
         {
+            JobId = draft.JobId, // null for new jobs, set for editing existing jobs
             DraftId = draft.Id,
             Title = draft.Title ?? "",
             Location = draft.Location ?? "",
@@ -144,6 +203,7 @@ public class JobController : BaseController
 
         var vm = new JobSubscriptionVM
         {
+            JobId = draft.JobId, // null for new jobs, set for editing existing jobs
             DraftId = draft.Id,
             PromotionId = draft.PromotionId ?? "",
             Promotions = db.Promotions.ToList()
@@ -206,6 +266,7 @@ public class JobController : BaseController
 
         var vm = new JobWriteVM
         {
+            JobId = draft.JobId, // null for new jobs, set for editing existing jobs
             DraftId = draft.Id,
             Description = draft.Description ?? "",
             Summary = draft.Summary ?? ""
@@ -220,7 +281,6 @@ public class JobController : BaseController
         var draft = GetUserDraft(vm.DraftId ?? Guid.Empty);
         if (draft == null) return NotFound();
 
-        // Back：回到 Subscription，不做校验
         if (action == "back")
         {
             draft.LastStep = 2;
@@ -229,18 +289,15 @@ public class JobController : BaseController
             return RedirectToAction("Subscription", new { id = draft.Id });
         }
 
-        // Save Draft：允许空字段
         if (action == "save")
         {
-            ModelState.Clear(); // 跳过验证
+            ModelState.Clear();
         }
-        else if (action == "continue" && !ModelState.IsValid)
+        else if ((action == "continue" || action == "done") && !ModelState.IsValid)
         {
-            // Continue 但验证失败 → 返回表单
             return View(vm);
         }
 
-        // 映射 VM → Draft
         draft.Description = vm.Description;
         draft.Summary = vm.Summary;
         draft.UpdatedAt = DateTime.UtcNow;
@@ -252,12 +309,28 @@ public class JobController : BaseController
             SetFlashMessage(FlashMessageType.Success, "Draft Saved");
             return RedirectToAction("Write", new { id = draft.Id });
         }
-        else // continue
+        else if (action == "continue")
         {
             draft.LastStep = 4;
             db.SaveChanges();
             return RedirectToAction("PayAndPost", new { id = draft.Id });
         }
+        else if (action == "done")
+        {
+            try
+            {
+                var job = PublishOrUpdateJob(draft);
+                SetFlashMessage(FlashMessageType.Success, draft.JobId != null ? "Job Updated Successfully!" : "Job Posted Successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                SetFlashMessage(FlashMessageType.Danger, ex.Message);
+            }
+
+            return RedirectToAction("Index", "Employer");
+        }
+
+        return View(vm);
     }
 
     public IActionResult PayAndPost(Guid id)
@@ -292,7 +365,6 @@ public class JobController : BaseController
         var draft = GetUserDraft(vm.DraftId ?? Guid.Empty);
         if (draft == null) return NotFound();
 
-        // ========== Back ==========
         if (action == "back")
         {
             draft.LastStep = 3;
@@ -301,70 +373,24 @@ public class JobController : BaseController
             return RedirectToAction("Write", new { id = draft.Id });
         }
 
-        // ========== Continue (确认支付) ==========
         if (action == "continue")
         {
-            // 如果是 Withdraw 过来的草稿，走Update路线
-            if (draft.JobId != null)
+            try
             {
-                var job = db.Jobs.Find(draft.JobId);
-                if (job == null || job.UserId != draft.UserId)
-                {
-                    SetFlashMessage(FlashMessageType.Danger, "Original job not found.");
-                    return RedirectToAction("Index", "Employer");
-                }
-                // 更新 Job
-                job.Title = draft.Title ?? "";
-                job.Location = draft.Location ?? "";
-                job.CategoryId = draft.CategoryId ?? "";
-                job.PromotionId = draft.PromotionId ?? "";
-                job.PayType = draft.PayType ?? PayType.Monthly;
-                job.WorkType = draft.WorkType ?? WorkType.FullTime;
-                job.SalaryMin = draft.SalaryMin ?? 0;
-                job.SalaryMax = draft.SalaryMax ?? 0;
-                job.Description = draft.Description ?? "";
-                job.Summary = draft.Summary ?? "";
-                job.UpdatedAt = DateTime.UtcNow;
-                job.Status = JobStatus.Pending; // 重新变成待审核
-                db.Jobs.Update(job);
-                db.JobDrafts.Remove(draft); // 删除草稿
-                db.SaveChanges();
-                SetFlashMessage(FlashMessageType.Success, "Job Updated Successfully!");
-                return RedirectToAction("Details", "Job", new { id = job.Id });
+                var job = PublishOrUpdateJob(draft);
+                SetFlashMessage(FlashMessageType.Success, draft.JobId != null ? "Job Updated Successfully!" : "Job Posted Successfully!");
             }
-            else
+            catch (InvalidOperationException ex)
             {
-                // 模拟支付成功
-                var job = new Job
-                {
-                    Id = draft.JobId ?? Helper.GenerateId(db.Jobs, "J"), // 如果是从 Withdraw 过来的草稿，保留原 JobId
-                    UserId = draft.UserId,
-                    Title = draft.Title ?? "",
-                    Location = draft.Location ?? "",
-                    CategoryId = draft.CategoryId ?? "",
-                    PromotionId = draft.PromotionId ?? "",
-                    PayType = draft.PayType ?? PayType.Monthly,
-                    WorkType = draft.WorkType ?? WorkType.FullTime,
-                    SalaryMin = draft.SalaryMin ?? 0,
-                    SalaryMax = draft.SalaryMax ?? 0,
-                    Description = draft.Description ?? "",
-                    Summary = draft.Summary ?? "",
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    Status = JobStatus.Pending
-                };
-
-                db.Jobs.Add(job);
-                db.JobDrafts.Remove(draft); // 删除草稿
-                db.SaveChanges();
-
-                SetFlashMessage(FlashMessageType.Success, "Job Posted Successfully!");
-                return RedirectToAction("Details", "Job", new { id = job.Id });
+                SetFlashMessage(FlashMessageType.Danger, ex.Message);
             }
+
+            return RedirectToAction("Index", "Employer");
         }
 
-        return View(vm); // fallback
+        return View(vm);
     }
+
 
     public IActionResult DeleteDraft(Guid id)
     {
