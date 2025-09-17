@@ -271,7 +271,7 @@ namespace Demo.Controllers
             {
                 ApplicationId = app.Id,
                 JobTitle = app.Job.Title,
-                CompanyName = app.Job.CompanyName,
+                //CompanyName = app.Job.CompanyName,
                 JobLogo = app.Job.LogoImageUrl,
                 Source = app.Source.GetDisplayName(),    // using extension to display the msg           
                 SalaryExpected = app.SalaryExpected.GetDisplayName(),

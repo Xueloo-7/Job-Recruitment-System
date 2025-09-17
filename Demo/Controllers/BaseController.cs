@@ -5,6 +5,8 @@ using System.Security.Claims;
 
 public class BaseController : Controller
 {
+    // How to use:
+    // SetFlashMessage(FlashMessageType.Success, "Your profile has been updated.");
     protected void SetFlashMessage(FlashMessageType type, string message)
     {
         TempData["Flash.Type"] = type.ToString(); // Info / Success / Warning / Danger
