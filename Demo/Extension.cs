@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -50,5 +52,13 @@ public static class Extension
     public static string GetUserId(this ClaimsPrincipal user)
     {
         return user.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "Unkown User";
+    }
+
+
+    public static string GetDisplayName(this Enum value)
+    {
+        var member = value.GetType().GetMember(value.ToString());
+        var attribute = member[0].GetCustomAttribute<DisplayAttribute>();
+        return attribute?.Name ?? value.ToString();
     }
 }
