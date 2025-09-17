@@ -314,14 +314,14 @@ form label {
 
     /* 悬停：微微抬起，阴影更柔 */
     .post-btn:hover {
-        transform: scale(1.1);
+        transform: scale(1.05);
         box-shadow: 0 10px 18px rgba(37,99,235,.28), 0 3px 6px rgba(37,99,235,.2);
     }
 
     /* 按下：下沉一点，阴影压扁，亮度略降 */
     .post-btn:active {
         background: linear-gradient(180deg,#4F8789 0%, #165E9C 100%);
-        transform: scale(0.9);
+        transform: scale(0.95);
     }
 
 .container .header .image {
@@ -406,10 +406,8 @@ form label {
         display: flex;
         flex-direction: column;
         gap: 16px;
-        padding: 20px;
-        background: #fff;
+        margin-top: 20px;
         border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
         .container .main .job-list h2 {
@@ -421,8 +419,12 @@ form label {
         /* 表格 */
         .container .main .job-list table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0; /* 去掉间距，避免有空隙 */
             font-size: 0.95rem;
+            border-radius: 15px;
+            border: 2px solid #e5e7eb;
+            overflow: hidden; /* 让圆角生效 */
         }
 
         .container .main .job-list thead {
@@ -437,10 +439,40 @@ form label {
             vertical-align: middle;
         }
 
-        .container .main .job-list th {
-            font-weight: 600;
-            color: #444;
+        .container .main .job-list tr {
+            line-height: 2.0; /* 控制文字行高，也能撑开高度 */
         }
+
+        .container .main .job-list .status-card {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: white;
+            vertical-align: middle; /* 保证和单元格居中 */
+        }
+            .container .main .job-list .status-card.approved {
+                background-color: #16a34a; /* 绿：成功 / 审核通过 */
+            }
+
+            .container .main .job-list .status-card.pending {
+                background-color: #f59e0b; /* 橙：待处理 / 待审核 */
+            }
+
+            .container .main .job-list .status-card.rejected {
+                background-color: #dc2626; /* 红：拒绝 / 错误 */
+            }
+
+            .container .main .job-list .status-card.withdrawn {
+                background-color: #6b7280; /* 灰：撤回 / 关闭 */
+            }
+
+
+    .container .main .job-list th {
+        font-weight: 600;
+        color: #444;
+    }
 
         /* Logo 样式 */
         .container .main .job-list td img {

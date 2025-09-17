@@ -20,6 +20,7 @@
             btn.classList.add('selected-btn');
 
             selectedId = card.dataset.id;
+            document.getElementById("PromotionId").value = selectedId;
 
             // avate next button
             nextBtn.disabled = false;
@@ -27,11 +28,11 @@
         });
     });
 
-    nextBtn.addEventListener('click', () => {
-        if (selectedId) {
-            window.location.href = `/Home/Index?promotionId=${selectedId}`;
-        }
-    });
+    //nextBtn.addEventListener('click', () => {
+    //    if (selectedId) {
+    //        window.location.href = `/Job/S?promotionId=${selectedId}`;
+    //    }
+    //});
 
     // disable next button initially
     nextBtn.classList.remove('enabled');

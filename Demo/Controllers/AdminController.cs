@@ -143,7 +143,7 @@ public class AdminController : Controller
 
         TempData["Info"] = "Logout Successfully.";
 
-        hp.AdminSignOut();
+        hp.SignOut("Admin");
 
         return RedirectToAction("Index", "Home");
     }
@@ -277,7 +277,10 @@ public class AdminController : Controller
         // match Title, CompanyName
         if (!string.IsNullOrWhiteSpace(query))
         {
-            jobs = jobs.Where(u => u.Title.Contains(query) || u.CompanyName.Contains(query));
+            jobs = jobs.Where(j =>
+                j.Title.Contains(query) ||
+                j.User.CompanyName.Contains(query)
+            );
         }
 
         return View(jobs.ToList());
@@ -408,7 +411,7 @@ public class AdminController : Controller
 
         // Top Industries 真实数据
         var topIndustries = _db.Jobs
-            .GroupBy(j => j.CompanyName)   // 按公司名分组
+            .GroupBy(j => j.User.CompanyName)   // 按公司名分组
             .Select(g => new
             {
                 Industry = g.Key,
@@ -458,7 +461,7 @@ public class AdminController : Controller
 
         if (!string.IsNullOrWhiteSpace(query))
         {
-            jobs = jobs.Where(u => u.Title.Contains(query) || u.CompanyName.Contains(query));
+            jobs = jobs.Where(j => j.Title.Contains(query) || j.User.CompanyName.Contains(query));
         }
 
         return View(jobs.ToList());

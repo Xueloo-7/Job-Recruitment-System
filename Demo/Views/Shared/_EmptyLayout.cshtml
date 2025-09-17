@@ -13,8 +13,11 @@
     @RenderSection("Styles", required: false)
 </head>
 <body>
+    <!-- Flash Message -->
+    <partial name="_FlashMessage" />
 
-    <div class="info">@Html.Raw(TempData["Info"])</div>
+    <!-- Confirm Modal -->
+    <partial name="_ConfirmModal" />
 
     <main class="main-content">
         @RenderBody()

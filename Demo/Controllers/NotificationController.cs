@@ -42,7 +42,7 @@ public class NotificationController : BaseController
     public IActionResult Index(string? userId = "")
     {
         if(userId == null || userId == "")
-            userId = GetCurrentUserId(); // 获取当前用户 ID
+            userId = User.GetUserId(); // 获取当前用户 ID
 
         var notifications = _db.Notifications
             .Where(n => n.UserId == userId)
@@ -58,7 +58,7 @@ public class NotificationController : BaseController
     public IActionResult MarkAsRead(string id)
     {
         var notification = _db.Notifications.Find(id);
-        if (notification != null && notification.UserId == GetCurrentUserId())
+        if (notification != null && notification.UserId == User.GetUserId())
         {
             notification.IsRead = true;
             _db.SaveChanges();

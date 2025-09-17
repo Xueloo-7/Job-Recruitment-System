@@ -1,4 +1,5 @@
 ﻿using Demo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,16 @@ public class HomeController : BaseController
     {
         db = context;
     }
+
+    //public IActionResult Index()
+    //{
+    //    if(User.Identity != null && User.Identity.IsAuthenticated)
+    //        if(User.IsInRole("Employer"))
+    //            return RedirectToAction("Index", "Employer");
+    //        else if(User.IsInRole("Admin"))
+    //            return RedirectToAction("Index", "Admin");
+    //    return RedirectToAction("Dashboard");
+    //}
 
     public IActionResult Index(string keyword = "", string location = "", string? categoryId = null, string? jobPostingUserId = null)
     {
@@ -38,13 +49,13 @@ public class HomeController : BaseController
             {
                 jobQuery = jobQuery.Where(j =>
                     j.Title.Contains(keyword) ||
-                    j.CompanyName.Contains(keyword));
+                    j.User.CompanyName.Contains(keyword));
             }
 
             if (!string.IsNullOrEmpty(location))
             {
                 jobQuery = jobQuery.Where(j =>
-                    j.Location.Contains(location));
+                    j.User.Location.Contains(location));
             }
 
             if (!string.IsNullOrWhiteSpace(categoryId))
@@ -91,16 +102,27 @@ public class HomeController : BaseController
         });
     }
 
-
     public IActionResult Employer()
     {
-        // if already logged in, redirect to EmployerInfo
-        if (User.Identity != null && User.Identity.IsAuthenticated)
+        // 1. 如果没登录，任何人都能访问
+        if (User.Identity == null || !User.Identity.IsAuthenticated)
         {
+            return View(); // 返回 Employer 登录页面
+        }
+
+        // 2. 已经登录，检查角色
+        if (User.IsInRole("Employer"))
+        {
+            // 已经是 Employer，跳到 Employer/Index
             return RedirectToAction("Index", "Employer");
         }
-        return View();
+        else
+        {
+            // 已经登录，但不是 Employer，走 AccessDenied
+            return RedirectToAction("AccessDenied", "Account", new { returnUrl = "/Employer" });
+        }
     }
+
 
     public IActionResult SignIn()
     {

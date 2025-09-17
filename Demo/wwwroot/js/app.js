@@ -24,7 +24,42 @@ ready(() => {
         $('.sideMenu').removeClass('open');
         $('.overlay').removeClass('active');
     });
+
+    
+
 });
+
+// ======================
+// Confirm Modal
+// ======================
+// How to use:
+// <button onclick="showConfirm('Are you sure to delete？', function() {
+//      // Callback function
+//      alert('Confirm Deleted！');
+// })">
+// Delete
+// </button >
+
+function showConfirm(message, onConfirm) {
+    const modal = document.getElementById("confirmModal");
+    const msg = document.getElementById("confirmMessage");
+    const btnOk = document.getElementById("confirmOk");
+    const btnCancel = document.getElementById("confirmCancel");
+
+    msg.textContent = message;
+    modal.style.display = "flex";
+
+    // 防止多次绑定事件
+    btnOk.onclick = () => {
+        modal.style.display = "none";
+        if (typeof onConfirm === "function") {
+            onConfirm();
+        }
+    };
+    btnCancel.onclick = () => {
+        modal.style.display = "none";
+    };
+}
 
 // Photo preview
 $('.upload input').on('change', e => {
@@ -76,6 +111,9 @@ $(document).on('click', '[data-post]', e => {
 document.addEventListener("DOMContentLoaded", function () {
     const toggleButton = document.getElementById("jobInfoToggle");
     const jobInfo = document.getElementById("jobInfo");
+
+    if (toggleButton === null || jobInfo === null) 
+        return;
 
     toggleButton.addEventListener("click", function () {
         jobInfo.classList.toggle("show");

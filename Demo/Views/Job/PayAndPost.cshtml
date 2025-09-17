@@ -1,0 +1,99 @@
+﻿@model JobPaymentVM
+@{
+    ViewBag.Title = "Draft Job";
+    Layout = "_EmployerLayout";
+}
+
+<div class="container">
+    <h2>Create a New Job</h2>
+
+    <div class="stepper">
+        <div class="step completed">
+            <a asp-controller="Job" asp-action="Classify" asp-route-id="@Model.DraftId" class="circle">1</a>
+            <span>Classify</span>
+        </div>
+        <div class="line"></div>
+        <div class="step completed">
+            <a asp-controller="Job" asp-action="Subscription" asp-route-id="@Model.DraftId" class="circle">2</a>
+            <span>Subscription</span>
+        </div>
+        <div class="line"></div>
+        <div class="step completed">
+            <div class="circle">3</div>
+            <span>Write</span>
+        </div>
+        <div class="line"></div>
+        <div class="step active">
+            <div class="circle">4</div>
+            <span>Pay</span>
+        </div>
+    </div>
+
+    <div class="post-container">
+        <form asp-action="PayAndPost" asp-controller="Job" method="post">
+            <input type="hidden" asp-for="DraftId" />
+
+            <h3>Order summary</h3>
+            <div class="order-summary">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Items</th>
+                            <th style="text-align:right">Cost</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>@Model.Promotion?.Name</td>
+                            <td style="text-align:right">RM @Model.Subtotal.ToString("F2")</td>
+                        </tr>
+                    </tbody>
+
+                    <!-- 新增一个小盒子 tbody -->
+                    <tbody class="summary-box">
+                        <tr class="subtotal">
+                            <td>Subtotal</td>
+                            <td style="text-align:right">RM @Model.Subtotal.ToString("F2")</td>
+                        </tr>
+                        <tr class="sst">
+                            <td>SST</td>
+                            <td style="text-align:right">RM @Model.Tax.ToString("F2")</td>
+                        </tr>
+                    </tbody>
+
+                    <tbody>
+                        <tr class="total">
+                            <td>Total <span class="incl">incl. SST</span></td>
+                            <td style="text-align:right">RM @Model.Total.ToString("F2")</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" name="action" value="back"
+                        class="btn btn-primary">
+                    <i class="fas fa-arrow-left" style="margin-right:10px"></i>Back
+                </button>
+
+                <button type="submit" name="action" value="continue"
+                        class="btn btn-primary">
+                    Comfirm & Pay <i class="fas fa-arrow-right" style="margin-left:10px"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        textarea {
+            resize: vertical; /* 只能竖直方向调整高度 */
+        }
+    </style>
+    <link rel="stylesheet" href="~/css/post.css" />
+}
+
+@section Scripts {
+}

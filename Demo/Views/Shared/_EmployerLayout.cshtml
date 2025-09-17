@@ -15,7 +15,11 @@
 </head>
 <body>
 
-    <div class="info">@Html.Raw(TempData["Info"])</div>
+    <!-- Flash Message -->
+    <partial name="_FlashMessage" />
+
+    <!-- Confirm Modal -->
+    <partial name="_ConfirmModal" />
 
     <header class="navbar employer-theme">
         <div class="navbar-top">
@@ -23,17 +27,18 @@
                 <img src="~/images/favicon.png" alt="Logo" class="logo" />
                 <h1 class="brand">Employer</h1>
                 <nav class="nav-links">
-                    <a asp-controller="Employer" asp-action="Index" class="@Html.IsActive("Profile")">Home</a>
-                    <a asp-controller="Employer" asp-action="Account" class="@Html.IsActive("Profile")">Account</a>
+                    <a asp-controller="Employer" asp-action="Index" class="@Html.IsActive("Employer", "Index")">Dashboard</a>
+                    <a asp-controller="Home" asp-action="Index" class="@Html.IsActive("Home", "Index")">Job Search</a>
+                    <a asp-controller="Employer" asp-action="Account" class="@Html.IsActive("Employer", "Account")"> Account</a>
                     @if (User.Identity?.IsAuthenticated ?? false)
                     {
-                        <a asp-controller="Employer" asp-action="Logout" class="@Html.IsActive("Account", "Logout")">Sign Out</a>
+                        <a asp-controller="Employer" asp-action="Logout" class="@Html.IsActive("Employer", "Logout")">Sign Out</a>
                     }
                     else
                     {
-                        <a asp-controller="Employer" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
+                        <a asp-controller="Employer" asp-action="Login" class="@Html.IsActive("Employer", "Login")">Sign In</a>
                     }
-                    <a asp-controller="Report" asp-action="Index" class="@Html.IsActive("Report", "Index")">Report</a>
+                    <a asp-controller="Employer" asp-action="Report" class="@Html.IsActive("Report", "Index")">Report</a>
                 </nav>
             </div>
 
@@ -64,17 +69,18 @@
 
         <div class="navbar-down">
             <nav class="nav-links">
-                <a asp-controller="Employer" asp-action="Index" class="@Html.IsActive("Profile")">Home</a>
-                <a asp-controller="Employer" asp-action="Account" class="@Html.IsActive("Profile")">Account</a>
+                <a asp-controller="Employer" asp-action="Index" class="@Html.IsActive("Employer", "Index")">Dashboard</a>
+                <a asp-controller="Home" asp-action="Index" class="@Html.IsActive("Home", "Index")">Job Search</a>
+                <a asp-controller="Employer" asp-action="Account" class="@Html.IsActive("Employer", "Account")"> Account</a>
                 @if (User.Identity?.IsAuthenticated ?? false)
                 {
-                    <a asp-controller="Employer" asp-action="Logout" class="@Html.IsActive("Account", "Logout")">Sign Out</a>
+                    <a asp-controller="Employer" asp-action="Logout" class="@Html.IsActive("Employer", "Logout")">Sign Out</a>
                 }
                 else
                 {
-                    <a asp-controller="Employer" asp-action="Login" class="@Html.IsActive("Account", "Login")">Sign In</a>
+                    <a asp-controller="Employer" asp-action="Login" class="@Html.IsActive("Employer", "Login")">Sign In</a>
                 }
-                <a asp-controller="Report" asp-action="Index" class="@Html.IsActive("Report", "Index")">Report</a>
+                <a asp-controller="Employer" asp-action="Report" class="@Html.IsActive("Report", "Index")">Report</a>
             </nav>
         </div>
 

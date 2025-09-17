@@ -14,7 +14,7 @@ public static class Extension
     }
 
     // Returns "active" if the current route matches the specified controller
-    public static string IsActive(this IHtmlHelper html, string controller, string action = null)
+    public static string IsActive(this IHtmlHelper html, string controller, string action = "")
     {
         var routeData = html.ViewContext.RouteData;
         var currentController = routeData.Values["controller"]?.ToString();

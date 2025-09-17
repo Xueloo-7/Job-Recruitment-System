@@ -1,4 +1,16 @@
-﻿.job-container {
+﻿
+
+/* ------------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------------ */
+
+/* ------------------------------------------------------------------------ */
+
+.job-container {
     display: flex;
     align-items: flex-start;
     /* 使用百分比和最大宽度控制响应式宽度 */
@@ -60,16 +72,16 @@
         box-shadow: 0 0 0 3px #9BAE9E, 0 2px 8px rgba(0, 0, 0, 0.1); /* 模拟 outline 效果 */
     }
 
-.job-left::-webkit-scrollbar {
+.job-detail-box .job-left::-webkit-scrollbar {
     display: none; /* Chrome / Safari / Edge */
 }
 
-.job-right::-webkit-scrollbar {
+.job-detail-box .job-right::-webkit-scrollbar {
     display: none; /* Chrome / Safari / Edge */
 }
 
-.back-btn{
-    display:none;
+.job-detail-box .back-btn {
+    display: none;
 }
 
 @media (max-width: 768px) {
@@ -136,43 +148,3 @@
         content: ' ▾';
     }
 
-/*For testing  */
-.info {
-    position: fixed;
-    background: #666;
-    color: #fff;
-    border: 1px solid #333;
-    border-radius: 5px;
-    padding: 10px 20px;
-    max-width: 500px;
-    left: 50%;
-    transform: translate(-50%, 0);
-    top: -100px;
-    opacity: 0;
-}
-
-    .info:not(:empty) {
-        animation: fade 5s;
-    }
-
-@keyframes fade {
-    0% {
-        top: -100px;
-        opacity: 0;
-    }
-
-    10% {
-        top: 100px;
-        opacity: 1;
-    }
-
-    90% {
-        top: 100px;
-        opacity: 1;
-    }
-
-    100% {
-        top: -100px;
-        opacity: 0;
-    }
-}

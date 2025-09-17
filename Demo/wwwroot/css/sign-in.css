@@ -63,8 +63,8 @@
 
 /* 错误信息 */
 .signIn-container .error {
-    color: #ff6b6b;
-    font-size: 12px;
+    color: red;
+    font-size: 16px;
     margin-top: 4px;
     display: block;
 }
@@ -200,7 +200,7 @@ form {
 
     .account-theme .form-group input {
         background-color: #F5F3EF;
-        color: #ffffff;
+        color: #000;
     }
 
         .account-theme .form-group input:focus {

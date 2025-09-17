@@ -86,6 +86,11 @@ public class AccountController : Controller
             ModelState.AddModelError("Email", "This email is not registered.");
             return View(vm);
         }
+        if (user.Role != Role.JobSeeker)
+        {
+            ModelState.AddModelError("Email", "This email is already registered as " + user.Role.ToString());
+            return View(vm);
+        }
         if (!hp.VerifyPassword(user.PasswordHash, vm.Password))
         {
             ModelState.AddModelError("Password", "Invalid password.");
@@ -118,9 +123,28 @@ public class AccountController : Controller
         return RedirectToAction("Index", "Home");
     }
 
-    public IActionResult AccessDenied()
+    public IActionResult AccessDenied(string returnUrl = "")
     {
-        ViewBag.Message = "You don’t have permission to view this page. Please switch to a Jobseeker account.";
+        if (!string.IsNullOrEmpty(returnUrl))
+        {
+            if (returnUrl.Contains("/Employer", StringComparison.OrdinalIgnoreCase))
+            {
+                ViewBag.Message = "此页面需要 Employer 权限，请切换到雇主账号。";
+            }
+            else if (returnUrl.Contains("/Admin", StringComparison.OrdinalIgnoreCase))
+            {
+                ViewBag.Message = "此页面需要 Admin 权限，请切换到管理员账号。";
+            }
+            else
+            {
+                ViewBag.Message = "你没有权限访问此页面。";
+            }
+        }
+        else
+        {
+            ViewBag.Message = "你没有权限访问此页面。";
+        }
+
         return View();
     }
 

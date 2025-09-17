@@ -33,7 +33,7 @@
                 <td>@job.Id</td>
                 <td>@job.Title</td>
                 <td>@job.User.Name</td>
-                <td>@job.CompanyName</td>
+                <td>@job.User.CompanyName</td>
                 <td>@job.UpdatedAt</td>
                 <td>
                     <a class="btn-edit" asp-controller="Admin" asp-action="JobApprovalDetail" asp-route-id="@job.Id">Review</a>

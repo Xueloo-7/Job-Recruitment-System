@@ -1,23 +1,110 @@
-﻿<!-- Views/Promotion/Select.cshtml -->
-@model List<Demo.Models.Promotion>
+﻿@model JobSubscriptionVM
 @{
-    ViewBag.Title = "Choose a Promotion Package";
+    ViewBag.Title = "Draft Job";
+    Layout = "_EmployerLayout";
 }
 
-<h2>Choose a Promotion Package</h2>
+<div class="container">
+    <h2>Create a New Job</h2>
 
-<div class="promotion-container">
-    <partial name="_PromotionCard" model="Model" />
-</div>
+    <div class="stepper">
+        <div class="step completed">
+            <a asp-controller="Job" asp-action="Classify" asp-route-id="@Model.DraftId" class="circle">1</a>
+            <span>Classify</span>
+        </div>
+        <div class="line"></div>
+        <div class="step active">
+            <div class="circle">2</div>
+            <span>Subscription</span>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+            <div class="circle">3</div>
+            <span>Write</span>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+            <div class="circle">4</div>
+            <span>Pay</span>
+        </div>
+    </div>
 
-<div class="footer-bar">
-    <button id="next-btn" disabled>Next</button>
+    <div class="post-container">
+        <form asp-action="Subscription" asp-controller="Job" method="post">
+            <input type="hidden" asp-for="DraftId" />
+
+            <h3>Select a Promotion Package</h3>
+
+            <div class="promotion-list">
+                @foreach (var promo in Model.Promotions)
+                {
+                    var isChecked = promo.Id == Model.PromotionId;
+                    <div class="promotion-card">
+                        <input type="radio"
+                               name="PromotionId"
+                               id="promo_@promo.Id"
+                               value="@promo.Id"
+                               @(isChecked ? "checked=\"checked\"" : "") />
+                        <label for="promo_@promo.Id">
+                            <h4>@promo.Name</h4>
+                            <p class="price">$@promo.Price</p>
+                            <p class="duration">@promo.DurationDay days</p>
+                            <ul class="desc">
+                                @foreach (var line in (promo.Description ?? "").Split("\\n"))
+                                {
+                                    if (!string.IsNullOrWhiteSpace(line))
+                                    {
+                                        <li>@line</li>
+                                    }
+                                }
+                            </ul>
+                        </label>
+                    </div>
+                }
+
+            </div>
+
+
+            <span asp-validation-for="PromotionId" class="text-danger"></span>
+
+            <div class="form-actions">
+                <button type="submit" name="action" value="back"
+                        class="btn btn-primary">
+                    <i class="fas fa-arrow-left" style="margin-right:10px"></i>Back
+                </button>
+
+                <button type="submit" name="action" value="save"
+                        class="btn btn-secondary" formnovalidate>
+                    Save Draft
+                </button>
+
+                <button type="submit" name="action" value="continue"
+                        class="btn btn-primary" disabled id="btnContinue">
+                    Continue <i class="fas fa-arrow-right" style="margin-left:10px"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
 </div>
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/promotion.css" />
+    <link rel="stylesheet" href="~/css/post.css" />
 }
 
 @section Scripts {
-    <script src="~/js/promotion.js"></script>
+    <script>
+        function toggleContinue() {
+            const hasSelection = document.querySelector('input[name="PromotionId"]:checked');
+            document.getElementById('btnContinue').disabled = !hasSelection;
+        }
+
+        document.querySelectorAll('input[name="PromotionId"]').forEach(radio => {
+            radio.addEventListener('change', toggleContinue);
+        });
+
+        // ✅ 页面加载时运行一次，处理已有选中的情况
+        toggleContinue();
+    </script>
+
 }

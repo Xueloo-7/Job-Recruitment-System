@@ -4,6 +4,7 @@ using Demo.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Migrations
 {
     [DbContext(typeof(DB))]
-    partial class DBModelSnapshot : ModelSnapshot
+    [Migration("20250916132159_draftAddJobId")]
+    partial class draftAddJobId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,7 +68,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Applications", (string)null);
+                    b.ToTable("Applications");
                 });
 
             modelBuilder.Entity("Demo.Models.AuditLog", b =>
@@ -106,7 +109,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AuditLogs", (string)null);
+                    b.ToTable("AuditLogs");
                 });
 
             modelBuilder.Entity("Demo.Models.Category", b =>
@@ -127,7 +130,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Demo.Models.Education", b =>
@@ -155,7 +158,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Educations", (string)null);
+                    b.ToTable("Educations");
                 });
 
             modelBuilder.Entity("Demo.Models.Institution", b =>
@@ -171,7 +174,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Institutions", (string)null);
+                    b.ToTable("Institutions");
                 });
 
             modelBuilder.Entity("Demo.Models.Job", b =>
@@ -184,6 +187,11 @@ namespace Demo.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(6)");
 
+                    b.Property<string>("CompanyName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -193,7 +201,8 @@ namespace Demo.Migrations
 
                     b.Property<string>("Location")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("LogoImageUrl")
                         .HasMaxLength(255)
@@ -245,7 +254,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Jobs", (string)null);
+                    b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("Demo.Models.JobDraft", b =>
@@ -267,6 +276,9 @@ namespace Demo.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
                         .HasColumnType("nvarchar(2000)");
+
+                    b.Property<bool>("IsCompleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("JobId")
                         .HasColumnType("nvarchar(max)");
@@ -317,7 +329,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("JobDrafts", (string)null);
+                    b.ToTable("JobDrafts");
                 });
 
             modelBuilder.Entity("Demo.Models.JobExperience", b =>
@@ -366,7 +378,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("JobExperiences", (string)null);
+                    b.ToTable("JobExperiences");
                 });
 
             modelBuilder.Entity("Demo.Models.Notification", b =>
@@ -406,7 +418,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("Demo.Models.Promotion", b =>
@@ -432,7 +444,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Promotions", (string)null);
+                    b.ToTable("Promotions");
                 });
 
             modelBuilder.Entity("Demo.Models.Qualification", b =>
@@ -448,7 +460,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Qualifications", (string)null);
+                    b.ToTable("Qualifications");
                 });
 
             modelBuilder.Entity("Demo.Models.Resume", b =>
@@ -477,7 +489,7 @@ namespace Demo.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Resumes", (string)null);
+                    b.ToTable("Resumes");
                 });
 
             modelBuilder.Entity("Demo.Models.User", b =>
@@ -487,7 +499,6 @@ namespace Demo.Migrations
                         .HasColumnType("nvarchar(6)");
 
                     b.Property<string>("CompanyName")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
@@ -510,7 +521,6 @@ namespace Demo.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
@@ -540,7 +550,7 @@ namespace Demo.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("Demo.Models.Application", b =>

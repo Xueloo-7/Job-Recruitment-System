@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
@@ -98,6 +99,32 @@ public class Helper
             == PasswordVerificationResult.Success;
     }
 
+    //public void SignIn(User user, bool rememberMe)
+    //{
+    //    string scheme = user.Role switch
+    //    {
+    //        Role.Admin => "AdminCookie",
+    //        Role.Employer => "EmployerCookie",
+    //        _ => "DefaultCookie" // Jobseeker 或其他默认情况
+    //    };
+
+    //    var claims = new List<Claim>
+    //    {
+    //        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+    //        new Claim(ClaimTypes.Name, user.Email),
+    //        new Claim(ClaimTypes.Role, user.Role.ToString())
+    //    };
+
+    //    var identity = new ClaimsIdentity(claims, scheme);
+    //    var principal = new ClaimsPrincipal(identity);
+
+    //    var properties = new AuthenticationProperties
+    //    {
+    //        IsPersistent = rememberMe
+    //    };
+
+    //    ct.HttpContext!.SignInAsync(scheme, principal, properties);
+    //}
     public void SignIn(User user, bool rememberMe)
     {
         var scheme = user.Role == Role.Admin ? "AdminCookie" : "DefaultCookie";
@@ -121,15 +148,25 @@ public class Helper
     }
 
 
+    //public void SignOut(string role = "")
+    //{
+    //    string scheme = role switch
+    //    {
+    //        "Admin" => "AdminCookie",
+    //        "Employer" => "EmployerCookie",
+    //        _ => "DefaultCookie"
+    //    };
 
-    public void SignOut()
+    //    ct.HttpContext!.SignOutAsync(scheme);
+    //}
+    public void SignOut(string role="")
     {
-        ct.HttpContext!.SignOutAsync("DefaultCookie");
-    }
-
-    public void AdminSignOut()
-    {
-        ct.HttpContext!.SignOutAsync("AdminCookie");
+        string scheme = role switch
+        {
+            "Admin" => "AdminCookie",
+            _ => "DefaultCookie"
+        };
+        ct.HttpContext!.SignOutAsync(scheme);
     }
 
     public string RandomPassword()
@@ -203,10 +240,39 @@ public static class ModelStateExtensions
         {
             foreach (var error in entry.Value.Errors)
             {
-                Debug.WriteLine($"❌ Error in {entry.Key}: {error.ErrorMessage}");
+                Debug.WriteLine($"❌ Error in {entry.Key}: {error.ErrorMessage ?? error.Exception?.Message}");
             }
         }
     }
 
 }
 
+public static class SelectListHelper
+{
+    public static List<SelectListItem> ToSelectList<TEnum>(TEnum? selected = null) where TEnum : struct, Enum
+    {
+        return Enum.GetValues(typeof(TEnum))
+            .Cast<TEnum>()
+            .Select(e => new SelectListItem
+            {
+                Value = Convert.ToInt32(e).ToString(),
+                Text = e.ToString(),
+                Selected = selected.HasValue && e.Equals(selected.Value)
+            })
+            .ToList();
+    }
+
+    // Get Category SelectList from DB
+    public static List<SelectListItem> GetCategorySelectList(DB db, string? selectedId = null)
+    {
+        return db.Categories
+            .Where(c => c.ParentId != null)
+            .OrderBy(c => c.Name)
+            .Select(c => new SelectListItem
+            {
+                Value = c.Id,
+                Text = c.Name,
+                Selected = c.Id == selectedId
+            }).ToList();
+    }
+}

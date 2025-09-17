@@ -1,0 +1,13 @@
+﻿@if (TempData["Flash.Message"] != null)
+{
+    var type = TempData["Flash.Type"]?.ToString() ?? "Info";
+    var icon = type == "Success" ? "fa-check-circle"
+             : type == "Failed" ? "fa-times-circle"
+             : type == "Warning" ? "fa-exclamation-triangle"
+             : "fa-info-circle";
+
+    <div class="flash-message @type.ToLower()">
+        <i class="fas @icon"></i>
+        <span>@Html.Raw(TempData["Flash.Message"])</span>
+    </div>
+}

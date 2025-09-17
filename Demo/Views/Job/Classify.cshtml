@@ -1,0 +1,144 @@
+﻿@model JobClassifyVM
+@{
+    ViewBag.Title = "Draft Job";
+    Layout = "_EmployerLayout";
+}
+
+<div class="container">
+    <h2>Create a New Job</h2>
+
+    <div class="stepper">
+        <div class="step active">
+            <div class="circle">1</div>
+            <span>Classify</span>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+            <div class="circle">2</div>
+            <span>Subscription</span>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+            <div class="circle">3</div>
+            <span>Write</span>
+        </div>
+        <div class="line"></div>
+        <div class="step">
+            <div class="circle">4</div>
+            <span>Pay</span>
+        </div>
+    </div>
+
+    <div class="post-container">
+        <form asp-action="Classify" asp-controller="Job" method="post" class="needs-validation" novalidate>
+            <input type="hidden" asp-for="DraftId" />
+
+            <div class="form-group">
+                <label asp-for="Title" class="form-label">Job Title</label>
+                <input asp-for="Title" class="form-control" placeholder="Enter a simple job title (e.g. Sales Assistant)" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Location" class="form-label"></label>
+                <input asp-for="Location" class="form-control" placeholder="Enter a surburb, city or region (e.g. Kuala Lumpur)" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CategoryId" class="form-label"></label>
+                <select asp-for="CategoryId" asp-items="Model.CategoryOptions" class="form-select"></select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Workplace option</label>
+                <ul class="radio-list">
+                    @for (int i = 0; i < Model.WorkTypeOptions.Count; i++)
+                    {
+                        var option = Model.WorkTypeOptions[i];
+                        bool isChecked = (Model.WorkType == null && i == 0)
+                        || (((int?)Model.WorkType)?.ToString() == option.Value);
+
+                        <li>
+                            <input type="radio"
+                                   name="WorkType"
+                                   value="@option.Value"
+                                   id="WorkType_@option.Value"
+                                   @(isChecked ? "checked=\"checked\"" : "") />
+                            <label for="WorkType_@option.Value">@option.Text</label>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Pay Type</label>
+                <ul class="radio-list">
+                    @for (int i = 0; i < Model.PayTypeOptions.Count; i++)
+                    {
+                        var option = Model.PayTypeOptions[i];
+                        bool isChecked = (Model.PayType == null && i == 0)
+                        || (((int?)Model.PayType)?.ToString() == option.Value);
+
+                        <li>
+                            <input type="radio"
+                                   name="PayType"
+                                   value="@option.Value"
+                                   id="PayType_@option.Value"
+                                   @(isChecked ? "checked=\"checked\"" : "") />
+                            <label for="PayType_@option.Value">@option.Text</label>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+
+
+            <div class="pay-range">
+                <label class="title">
+                    Pay range
+                    <i title="Enter a range to offer candidates. If pay is an exact amount, enter the same in both fields."></i>
+                </label>
+                <div class="description">
+                    Enter a range to offer candidates. If pay is an exact amount, enter the same in both fields.
+                </div>
+
+                <div class="pay-row">
+                    <!-- From -->
+                    <div class="field">
+                        <label>From</label>
+                        <input asp-for="SalaryMin" placeholder="Enter minimum pay"/>
+                        <span asp-validation-for="SalaryMin" class="error"></span>
+                    </div>
+
+                    <!-- To -->
+                    <div class="field">
+                        <label>To</label>
+                        <input asp-for="SalaryMax" placeholder="Enter maximum pay" />
+                        <span asp-validation-for="SalaryMax" class="error"></span>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" name="action" value="save"
+                    class="btn btn-secondary" formnovalidate>
+                Save Draft
+            </button>
+
+            <button type="submit" name="action" value="continue"
+                    class="btn btn-primary">
+                Continue <i class="fas fa-arrow-right" style="margin-left:10px"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/post.css" />
+}
+
+@section Scripts {
+}

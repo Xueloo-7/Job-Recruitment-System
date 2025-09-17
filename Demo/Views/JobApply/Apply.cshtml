@@ -34,7 +34,7 @@
     <div class="d-flex align-items-center mb-3">
         <img src="@Url.Content("~/" + job?.LogoImageUrl)" class="company-logo me-3" alt="Company Logo">
         <div>
-            <h5 class="mb-1">@job?.CompanyName</h5>
+            <h5 class="mb-1">@job?.User.CompanyName</h5>
 
             <!-- Job Info (Description + Summary) -->
             <button class="btn btn-sm btn-outline-secondary collapse-toggle mb-2"

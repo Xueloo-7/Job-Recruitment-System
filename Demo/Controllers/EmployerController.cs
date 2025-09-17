@@ -1,9 +1,11 @@
 ﻿using Demo.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Security.Claims;
 
-public class EmployerController : Controller
+
+public class EmployerController : BaseController
 {
     private readonly DB db;
     private readonly Helper hp;
@@ -21,6 +23,12 @@ public class EmployerController : Controller
         return !db.Users.Any(u => u.Email == email);
     }
 
+    public IActionResult AccessDenied()
+    {
+        ViewBag.Message = "You don’t have permission to view this page. Please switch to a Employer account.";
+        return View();
+    }
+
     public IActionResult Register()
     {
         return View();
@@ -35,7 +43,7 @@ public class EmployerController : Controller
             ModelState.AddModelError("Email", "Duplicated Email.");
         }
 
-        if (ModelState.IsValid("Photo"))
+        if (ModelState.IsValid("Photo") && vm.Photo != null)
         {
             var err = hp.ValidatePhoto(vm.Photo);
             if (err != "") ModelState.AddModelError("Photo", err);
@@ -57,7 +65,7 @@ public class EmployerController : Controller
 
             db.SaveChanges();
 
-            TempData["Info"] = "Register successfully. Please login.";
+            SetFlashMessage(FlashMessageType.Info, "Register successfully. Please login.");
             return RedirectToAction("Login");
         }
         else
@@ -88,13 +96,23 @@ public class EmployerController : Controller
     {
         var user = db.Users.Where(u => u.Email == vm.Email).FirstOrDefault();
 
+        if (user == null)
+        {
+            ModelState.AddModelError("Email", "This email is not registered.");
+            return View(vm);
+        }
+        if (user.Role != Role.Employer)
+        {
+            ModelState.AddModelError("Email", "This email is already registered as " + user.Role.ToString());
+            return View(vm);
+        }
         if (user == null || !hp.VerifyPassword(user.PasswordHash, vm.Password))
         {
             ModelState.AddModelError("Password", "Invalid credentials");
         }
         else if (ModelState.IsValid)
         {
-            TempData["Info"] = "Login Successfully.";
+            SetFlashMessage(FlashMessageType.Info, "Login Successfully.");
 
             hp.SignIn(user, vm.RememberMe);
 
@@ -111,7 +129,7 @@ public class EmployerController : Controller
 
     public IActionResult Logout(string? returnURL)
     {
-        TempData["Info"] = "Logout Successfully.";
+        SetFlashMessage(FlashMessageType.Info, "Logout Successfully");
 
         hp.SignOut();
 
@@ -151,50 +169,91 @@ public class EmployerController : Controller
     }
     #endregion
 
+    [Authorize(Roles = "Employer")]
     public IActionResult Index()
     {
-        string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        string userId = User.GetUserId();
 
+        // Get User Info
         var user = db.Users
-                     .Where(u => u.Id == userId && u.Role == Role.Employer)
-                     .FirstOrDefault();
+            .Where(u => u.Id == userId)
+            .Select(u => new
+            {
+                u.Name,
+                u.FirstName,
+                u.LastName,
+                u.Location
+            })
+            .FirstOrDefault();
 
-        if (user == null)
-            return NotFound("Employer not found.");
-        if (user.Role != Role.Employer)
-            return BadRequest("User is not an employer.");
+        // Combine FirstName & LastName
+        string userName = "Unknown";
+        if (user != null)
+        {
+            userName = string.IsNullOrWhiteSpace(user.FirstName) && string.IsNullOrWhiteSpace(user.LastName)
+                ? user.Name
+                : $"{user.FirstName} {user.LastName}".Trim();
+        }
 
+        // Get Jobs & Drafts
         var jobs = db.Jobs
-                     .Where(j => j.UserId == userId)
-                     .ToList();
+            .Where(j => j.UserId == userId)
+            .Select(j => new
+            {
+                j.Id,
+                j.Title,
+                j.Status,
+                j.User.Location
+            })
+            .ToList();
 
-        int totalApplications = db.Applications
-                                  .Where(a => a.Job.UserId == userId)
-                                  .Count();
+        var drafts = db.JobDrafts
+            .Where(d => d.UserId == userId)
+            .Select(d => new EmployerDraftVM
+            {
+                Id = d.Id.ToString(),
+                JobId = d.JobId,
+                Title = d.Title ?? "Unknown"
+            })
+            .ToList();
 
-        int totalHires = db.Applications
-                           .Where(a => a.Job.UserId == userId && a.Status == ApplicationStatus.Hired)
-                           .Count();
+        // Get Application Stats
+        var appStats = db.Applications
+            .Where(a => a.Job.UserId == userId)
+            .GroupBy(a => a.JobId)
+            .Select(g => new
+            {
+                JobId = g.Key,
+                Total = g.Count(),
+                Hired = g.Count(a => a.Status == ApplicationStatus.Hired)
+            })
+            .ToList();
 
+        int totalApplications = appStats.Sum(s => s.Total);
+        int totalHires = appStats.Sum(s => s.Hired);
 
+        // Build Job ViewModels (Avoid N+1 Query)
+        var jobVMs = jobs
+            .Select(j => new EmployerJobVM
+            {
+                Id = j.Id,
+                Title = j.Title,
+                Location = j.Location,
+                Status = j.Status,
+                CandidatesCount = appStats.FirstOrDefault(s => s.JobId == j.Id)?.Total ?? 0,
+                HiredCount = appStats.FirstOrDefault(s => s.JobId == j.Id)?.Hired ?? 0
+            })
+            .ToList();
 
+        // Build Final ViewModel
         var vm = new EmployerDashboardVM
         {
-            EmployerName = string.IsNullOrWhiteSpace(user.FirstName) && string.IsNullOrWhiteSpace(user.LastName)
-                            ? user.Name
-                            : $"{user.FirstName} {user.LastName}".Trim(),
+            EmployerName = userName,
             TotalJobs = jobs.Count,
             TotalApplications = totalApplications,
             TotalHires = totalHires,
-            Jobs = jobs.Select(j => new JobDashboardVM
-            {
-                JobId = j.Id,
-                Title = j.Title,
-                Location = j.Location,
-                Status = j.Status.ToString(),
-                Candidates = db.Applications.Where(a => a.JobId == j.Id).Count(),
-                Hired = db.Applications.Where(a => a.JobId == j.Id && a.Status == ApplicationStatus.Hired).Count()
-            }).ToList()
+            Jobs = jobVMs,
+            Drafts = drafts
         };
 
         return View(vm);

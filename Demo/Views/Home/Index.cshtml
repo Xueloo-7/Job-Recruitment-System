@@ -63,8 +63,8 @@
             <div class="job-card" data-id="@job.Id">
                 <img src="@job.LogoImageUrl" alt="company image" />
                 <h4>@job.Title</h4>
-                <p>CompanyName: @job.CompanyName</p>
-                <p>Location: @job.Location</p>
+                <p>CompanyName: @job.User.CompanyName</p>
+                <p>Location: @job.User.Location</p>
                 <p>Salary: RM @job.SalaryMin - RM @job.SalaryMax</p>
                 <p>Summary: @job.Summary</p>
                 <p>@((DateTime.Now - job.CreatedAt).Days) day</p>

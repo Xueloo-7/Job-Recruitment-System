@@ -1,26 +1,28 @@
-﻿//document.addEventListener('DOMContentLoaded', function () {
-//    const form = document.getElementById('employer-form');
+﻿document.addEventListener('DOMContentLoaded', function () {
 
-//    form.addEventListener('submit', function (e) {
-//        e.preventDefault();
+    // Withdraw buttons
+    document.querySelectorAll('.withdraw-btn').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault(); // 阻止默认跳转
+            showConfirm("Are you sure you want to withdraw this job posting?", function () {
+                const jobId = btn.dataset.id;
+                window.location.href = `/Job/Withdraw/${jobId}`;
+            });
+        });
+    });
 
-//        const email = document.getElementById('email').value;
+    // Delete Draft buttons
+    document.querySelectorAll('.delete-draft-btn').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            showConfirm("Are you sure you want to delete this draft? (This operation cannot be undone)", function () {
+                const draftId = btn.dataset.id;
+                window.location.href = `/Job/DeleteDraft/${draftId}`;
+            });
+        });
+    });
 
-//        if (!validateEmail(email)) {
-//            alert("Please enter a valid business email.");
-//            return;
-//        }
-
-//        alert("Registered successfully!");
-//        // TODO: Submit to backend or show success UI
-//    });
-
-//    function validateEmail(email) {
-//        // Basic email pattern
-//        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-//        return re.test(email.toLowerCase());
-//    }
-//});
+});
 
 //EditEmployer
 $(function () {

@@ -247,7 +247,7 @@ namespace Demo.Controllers
                           Status = a.Status,
                           HiredDate = a.HiredDate,
                           JobTitle = a.Job.Title,
-                          CompanyName = a.Job.CompanyName
+                          CompanyName = a.Job.User.CompanyName
                       })
                       .ToList();
 

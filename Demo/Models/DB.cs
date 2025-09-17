@@ -16,6 +16,7 @@ public class DB : DbContext
     public DbSet<JobExperience> JobExperiences { get; set; }
     public DbSet<Resume> Resumes { get; set; }
     public DbSet<Job> Jobs { get; set; }
+    public DbSet<JobDraft> JobDrafts { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Qualification> Qualifications { get; set; }
     public DbSet<Institution> Institutions { get; set; }
@@ -85,9 +86,10 @@ public class User : IHasId
     public string? LastName { get; set; }
 
     [MaxLength(100)]
-    public string? Location { get; set; }
+    public string Location { get; set; } = "";
 
     public bool HasExperience { get; set; } = false;
+    public string CompanyName { get; set; } = "None";
 
     public ICollection<Education>? Educations { get; set; }
 
@@ -243,10 +245,7 @@ public class Job : IHasId
     [Required, MaxLength(100)]
     public string Title { get; set; }
 
-    [Required, MaxLength(30)]
-    public string CompanyName { get; set; }
-
-    [MaxLength(100)]
+    [Required]
     public string Location { get; set; }
 
     [Required]
@@ -287,7 +286,8 @@ public enum JobStatus
 {
     Approved, // 已审核通过，会被显示
     Rejected, // 已审核拒绝，不会被显示
-    Pending // 待审核
+    Pending, // 待审核,
+    Withdrawn
 }
 
 public enum PayType
@@ -304,6 +304,52 @@ public enum WorkType
     Contract,
     Casual
 }
+
+public class JobDraft
+{
+    [Key]
+    public Guid Id { get; set; } = Guid.NewGuid();
+    public string? JobId { get; set; }  // 关联已提交的 Job（如果有）
+
+    [Required, MaxLength(6)]  // FK
+    public string UserId { get; set; }
+
+    // 和 Job 相似，但大部分字段允许为空（因为可能没填完）
+    [MaxLength(100)]
+    public string? Title { get; set; }
+
+    [MaxLength(30)]
+    public string? CompanyName { get; set; }
+
+    [MaxLength(100)]
+    public string? Location { get; set; }
+
+    public PayType? PayType { get; set; }
+    public WorkType? WorkType { get; set; }
+    public decimal? SalaryMin { get; set; }
+    public decimal? SalaryMax { get; set; }
+
+    [MaxLength(2000)]
+    public string? Description { get; set; }
+
+    [MaxLength(200)]
+    public string? Summary { get; set; }
+
+    [MaxLength(255)]
+    public string? LogoImageUrl { get; set; }
+
+    public string? CategoryId { get; set; }
+    public string? PromotionId { get; set; }
+
+    public int LastStep { get; set; } = 1;
+
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+    // 导航属性
+    public User User { get; set; }
+}
+
 
 public class Application : IHasId
 {
@@ -457,7 +503,7 @@ public class Promotion : IHasId
     public string Name { get; set; }
 
     [Required]
-    public decimal Price { get; set; }
+    public decimal? Price { get; set; }
 
     [Required]
     public int DurationDay { get; set; }

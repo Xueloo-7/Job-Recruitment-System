@@ -8,32 +8,270 @@ html, body {
     font-family: 'Roboto', sans-serif;
 }
 
+/* Flash Message CSS -------------------------------------------------------------- */
+
+.flash-message {
+    position: fixed;
+    bottom: -120px; /* 初始隐藏在屏幕下方 */
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 18px 28px; /* ↑ 内边距加大 */
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 1.2rem; /* ↑ 字体更大 */
+    display: flex;
+    align-items: center;
+    gap: 14px; /* ↑ 图标和文字间距 */
+    min-width: 400px; /* ↑ 宽度更大 */
+    max-width: 800px;
+    background: #222;
+    color: #0f0;
+    box-shadow: 0 0 18px rgba(0, 255, 0, 0.7); /* ↑ 更强的光晕效果 */
+    opacity: 0;
+    z-index: 1000;
+}
+
+
+    /* Animate only when not empty */
+    .flash-message:not(:empty) {
+        animation: slideUpDown 4s ease forwards;
+    }
+
+@keyframes slideUpDown {
+    0% {
+        bottom: -100px;
+        opacity: 0;
+    }
+
+    15% {
+        bottom: 50px;
+        opacity: 1;
+    }
+
+    85% {
+        bottom: 50px;
+        opacity: 1;
+    }
+
+    100% {
+        bottom: -100px;
+        opacity: 0;
+    }
+}
+
+/* Info style */
+.flash-message.info {
+    color: #4caf50;
+    box-shadow: 0 0 12px rgba(76, 175, 80, 0.6);
+}
+
+/* Success style */
+.flash-message.success {
+    color: #00e676;
+    box-shadow: 0 0 12px rgba(0, 230, 118, 0.6);
+}
+
+.flash-message.warning {
+    color: #ff9800;
+    box-shadow: 0 0 12px rgba(255, 152, 0, 0.6);
+}
+
+/* Failed style */
+.flash-message.failed {
+    color: #f44336;
+    box-shadow: 0 0 12px rgba(244, 67, 54, 0.6);
+}
+
+
+/* Helper CSS -------------------------------------------------------------- */
+
 .hidden {
     display: none;
 }
 
+.underline-strong {
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px; /* 粗细 */
+    text-underline-offset: 4px; /* 往下移 */
+}
+
 /* Button CSS -------------------------------------------------------------- */
-.btn{
+.action-btn {
+    display: inline-flex;
+    align-items: center; /* 垂直居中 */
+    justify-content: center; /* 水平居中 */
+    box-sizing: border-box; /* 统一尺寸计算 */
+    height: 40px;
+    border-radius: 8px;
+    padding: 10px 24px;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    white-space: nowrap; /* 防止换行 */
+    color: black;
+    transition: all 0.2s cubic-bezier(0.02, 1.505, 0.745, 1.235);
+    /* 关键：去掉浏览器默认差异 */
+    background: none;
+    line-height: normal;
+}
+
+
+
+.action-btn:hover {
+    transform: scale(1.05);
+    outline: 2px solid #000;
+}
+
+.action-btn:active {
+    transform: scale(0.95);
+}
+
+.action-btn.border {
+    outline: 2px solid #000;
+    background-color: white;
+}
+
+.action-btn.edit {
+    background-color: antiquewhite; /* Green */
+    color: black;
+}
+
+.action-btn.delete {
+    background-color: #f44336; /* Red */
+    color: white;
+}
+
+    .action-btn:disabled {
+        background: #b5c7d3; /* 灰蓝色背景 */
+        color: #eee; /* 浅灰文字 */
+        cursor: not-allowed; /* 禁用手势 */
+        opacity: 0.65; /* 半透明效果 */
+        box-shadow: none; /* 移除阴影/高亮 */
+        transform: none; /* 禁止缩放动画 */
+    }
+
+/* Confirm Modal CSS -------------------------------------------------------------- */
+/* Modal 遮罩层 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+    /* Modal 内容 */
+    .modal-overlay .modal-content {
+        background: #fff;
+        border-radius: 8px;
+        padding: 20px 30px;
+        width: 350px;
+        max-width: 90%;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        animation: modal-fadeIn 0.2s ease-out;
+    }
+
+        .modal-overlay .modal-content p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* 按钮区 */
+        .modal-overlay .modal-content .modal-actions {
+            display: flex;
+            justify-content: space-around;
+        }
+
+            .modal-overlay .modal-content .modal-actions .btn-confirm, .btn-cancel {
+                padding: 8px 18px;
+                font-size: 14px;
+                border-radius: 6px;
+                cursor: pointer;
+                border: none;
+                transition: 0.2s;
+            }
+
+            .modal-overlay .modal-content .modal-actions .btn-confirm {
+                background: #28a745;
+                color: white;
+            }
+
+                .modal-overlay .modal-content .modal-actions .btn-confirm:hover {
+                    background: #218838;
+                }
+
+            .modal-overlay .modal-content .modal-actions .btn-cancel {
+                background: #dc3545;
+                color: white;
+            }
+
+                .modal-overlay .modal-content .modal-actions .btn-cancel:hover {
+                    background: #c82333;
+                }
+
+/* 动画 */
+@keyframes modal-fadeIn {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+
+/* Button CSS -------------------------------------------------------------- */
+.btn {
     margin-right: 10px;
 }
 
 .btn-primary {
-    background-color: #F5F3EF; /* 主色，可换 */
+    background: #1A70BB;
     border: none;
-    color: #000000;
+    color: #F5F3EF;
     padding: 0.6rem 1.2rem; /* 高度 & 左右间距 */
     font-size: 1rem;
     font-weight: 600;
     border-radius: 8px; /* 圆角 */
     cursor: pointer;
     outline: none;
-    text-decoration:none;
+    text-decoration: none;
     transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
+    /* 原生 disabled */
+    .btn-primary:disabled,
+    .btn-primary.disabled {
+        background: #b5c7d3; /* 灰蓝色背景 */
+        color: #eee; /* 浅灰文字 */
+        cursor: not-allowed; /* 禁用手势 */
+        opacity: 0.65; /* 半透明效果 */
+        box-shadow: none; /* 移除阴影/高亮 */
+        transform: none; /* 禁止缩放动画 */
+    }
+
+        /* 禁用状态下不要有 hover 效果 */
+        .btn-primary:disabled:hover,
+        .btn-primary.disabled:hover {
+            background: #b5c7d3;
+            color: #eee;
+            outline: none;
+        }
+
     /* 悬停与按下效果 */
     .btn-primary:hover {
-        background-color: #9BAE9E; /* hover 时更深的蓝紫 */
+        background-color: #5F9EA0;
         outline: 2px solid #F5F3EF;
         color: #F5F3EF;
     }
@@ -49,7 +287,7 @@ html, body {
 
 .btn-secondary {
     border: none;
-    color: #F5F3EF;
+    color: #000000;
     padding: 0.6rem 1.2rem; /* 高度 & 左右间距 */
     font-size: 1rem;
     font-weight: 600;
@@ -82,10 +320,10 @@ input,
 select,
 textarea {
     width: 100%;
-    padding: 0.6rem 0.8rem;
+    padding: 0.8rem 0.8rem;
     margin-top: 0.4rem;
     border: 1px solid #d1d5db;
-    border-radius: 8px;
+    border-radius: 6px;
     font-size: 1rem;
     transition: border .25s;
 }
@@ -97,6 +335,7 @@ textarea {
         outline: none;
         box-shadow: 0 0 0 3px rgba(99,102,241,0.2);
     }
+
 
 /* checkbox */
 .check-box {
@@ -129,7 +368,7 @@ textarea {
 /* 输入框 */
 .form-control {
     width: 100%; /* 让其充满父容器 */
-    height: 40px; /* 统一高度，可改 */
+    height: 45px; /* 统一高度，可改 */
     padding: 0.5rem 0.75rem;
     border: 1px solid #ccc;
     border-radius: 6px;
@@ -179,49 +418,49 @@ textarea {
     position: relative;
 }
 
-
-/* Flash Message -------------------------------------------------------------- */
-
-.info {
-    position: fixed;
-    background: #666;
-    color: #fff;
-    border: 1px solid #333;
-    border-radius: 5px;
-    padding: 10px 20px;
-    max-width: 500px;
-    left: 50%;
-    transform: translate(-50%, 0);
-    top: -100px;
-    opacity: 0;
-    z-index: 1000;
+.radio-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex; /* 横向排列 */
+    gap: 1rem; /* 间距 */
+    flex-wrap: wrap;
 }
 
-    .info:not(:empty) {
-        animation: fade 5s;
+    .radio-list li {
+        position: relative;
     }
 
-@keyframes fade {
-    0% {
-        top: -100px;
-        opacity: 0;
+    .radio-list input[type="radio"] {
+        display: none; /* 隐藏原生 radio */
     }
 
-    10% {
-        top: 100px;
-        opacity: 1;
+    .radio-list label {
+        display: inline-block;
+        padding: 12px 16px;
+        border: 1px solid #ccc;
+        background: #FFFFFF;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        user-select: none;
+        font-weight: normal;
     }
 
-    90% {
-        top: 100px;
-        opacity: 1;
+        /* hover 效果 */
+        .radio-list label:hover {
+            background: #5F9EA0;
+        }
+
+    /* 选中效果 */
+    .radio-list input[type="radio"]:checked + label {
+        background: linear-gradient(180deg,#5F9EA0 0%, #1A70BB 100%);
+        color: white;
+        font-weight: bold;
     }
 
-    100% {
-        top: -100px;
-        opacity: 0;
-    }
-}
+
+
 
 
 /*========================================================================*/
@@ -379,13 +618,13 @@ textarea {
         display: none;
     }
 
-    .navbar-down{
-                display: block;
-    }
-
-    .navbar-down .nav-links {
+    .navbar-down {
         display: block;
     }
+
+        .navbar-down .nav-links {
+            display: block;
+        }
 
     .navbar {
         padding: 10px 26px 20px 26px;
@@ -398,7 +637,7 @@ textarea {
     }
 }
 
-.jobseeker-theme.navbar{
+.jobseeker-theme.navbar {
     background-color: #9bae9e;
 }
 
@@ -534,7 +773,7 @@ footer {
     background: #9BAE9E;
     padding: 40px 20px 0px;
     text-align: center;
-/*    font-family: 'serif';*/
+    /*    font-family: 'serif';*/
     border-top: 1px solid #ddd;
     margin-top: auto;
 }

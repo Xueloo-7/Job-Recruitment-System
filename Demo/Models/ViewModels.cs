@@ -64,3 +64,4 @@ public class ApplicationListVM
     public DateTime? HiredDate { get; set; }
     public string JobTitle { get; set; }
     public string CompanyName { get; set; }
+}
