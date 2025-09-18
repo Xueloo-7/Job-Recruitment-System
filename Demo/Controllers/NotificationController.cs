@@ -40,6 +40,4 @@ public class NotificationController : BaseController
         await _notificationService.MarkAsReadAsync(id);
         return RedirectToAction("GetNotifications");
     }
-
-    #endregion
 }

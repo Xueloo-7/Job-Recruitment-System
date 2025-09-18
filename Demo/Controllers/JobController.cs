@@ -11,11 +11,13 @@ public class JobController : BaseController
 {
     private readonly DB db;
     private readonly Helper hp;
+    private readonly IEventDispatcher _eventDispatcher;
 
-    public JobController(DB db, Helper hp)
+    public JobController(DB db, Helper hp, IEventDispatcher eventDispatcher)
     {
         this.db = db;
         this.hp = hp;
+        _eventDispatcher = eventDispatcher;
     }
 
     // Functions
@@ -62,6 +64,7 @@ public class JobController : BaseController
             job.Summary = draft.Summary ?? "";
             job.UpdatedAt = DateTime.UtcNow;
             job.Status = JobStatus.Pending; // 回到待审核
+            job.LogoImageUrl = draft.LogoImageUrl;
 
             db.Jobs.Update(job);
             db.JobDrafts.Remove(draft);
@@ -87,7 +90,8 @@ public class JobController : BaseController
                 Summary = draft.Summary ?? "",
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,
-                Status = JobStatus.Pending
+                Status = JobStatus.Pending,
+                LogoImageUrl = draft.LogoImageUrl
             };
 
             db.Jobs.Add(job);
@@ -293,10 +297,10 @@ public class JobController : BaseController
                 return View(vm); // 验证失败，返回表单并显示错误
             }
 
-            var fileName = hp.SavePhoto(vm.Logo, "uploads/logo");
+            var fileName = hp.SavePhoto(vm.Logo, "uploads/logos");
 
             // 保存相对路径到 Draft
-            draft.LogoImageUrl = $"/uploads/logo/{fileName}";
+            draft.LogoImageUrl = $"/uploads/logos/{fileName}";
             vm.LogoImageUrl = draft.LogoImageUrl;
         }
 
@@ -322,6 +326,7 @@ public class JobController : BaseController
         // 映射 VM → Draft
         draft.Description = vm.Description;
         draft.Summary = vm.Summary;
+        draft.LogoImageUrl = vm.LogoImageUrl;
         draft.UpdatedAt = DateTime.UtcNow;
 
         if (action == "save")
@@ -392,44 +397,6 @@ public class JobController : BaseController
                 {
                 SetFlashMessage(FlashMessageType.Danger, ex.Message);
             }
-            else
-            {
-                // 模拟支付成功
-                var job = new Job
-                {
-                    Id = draft.JobId ?? Helper.GenerateId(db.Jobs, "J"), // 如果是从 Withdraw 过来的草稿，保留原 JobId
-                    UserId = draft.UserId,
-                    Title = draft.Title ?? "",
-                    Location = draft.Location ?? "",
-                    CategoryId = draft.CategoryId ?? "",
-                    PromotionId = draft.PromotionId ?? "",
-                    PayType = draft.PayType ?? PayType.Monthly,
-                    WorkType = draft.WorkType ?? WorkType.FullTime,
-                    SalaryMin = draft.SalaryMin ?? 0,
-                    SalaryMax = draft.SalaryMax ?? 0,
-                    Description = draft.Description ?? "",
-                    Summary = draft.Summary ?? "",
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow,
-                    Status = JobStatus.Pending
-                };
-
-                db.Jobs.Add(job);
-                db.JobDrafts.Remove(draft); // 删除草稿
-                db.SaveChanges();
-
-                // Audit log for new job
-                var log = new AuditLog
-                {
-                    UserId = User.GetUserId(),
-                    TableName = "Jobs",
-                    ActionType = "Create",
-                    RecordId = job.Id,
-                    Changes = $"Created new job: {job.Title}"
-                };
-                db.AuditLogs.Add(log);
-                db.SaveChanges();
-
             return RedirectToAction("Index", "Employer");
         }
 
@@ -568,9 +535,8 @@ public class JobController : BaseController
         return View(vm);
     }
 
-    [HttpPost]
     [Authorize(Roles = "Employer")]
-    public IActionResult CandidateDecision(string id, string decision)
+    public async Task<IActionResult> CandidateDecision(string id, string decision)
     {
         var application = db.Applications.FirstOrDefault(a => a.Id == id);
         if (application == null) return NotFound();
@@ -579,14 +545,22 @@ public class JobController : BaseController
         {
             application.Status = ApplicationStatus.Offered;
             application.HiredDate = DateTime.UtcNow;
+
+            await _eventDispatcher.DispatchAsync(
+                new ApplicationStatusChangedEvent(
+                    application.Id, application.JobId, User.GetUserId(), application.UserId, "Offer"));
         }
         else if (decision == "reject")
         {
             application.Status = ApplicationStatus.Rejected;
+
+            await _eventDispatcher.DispatchAsync(
+                new ApplicationStatusChangedEvent(
+                    application.Id, application.JobId, User.GetUserId(), application.UserId, "Reject"));
         }
 
         db.SaveChanges();
-        return RedirectToAction("Candidates", new { jobId = application.JobId });
+        return RedirectToAction("Candidates", new { id = application.JobId });
     }
 
 }

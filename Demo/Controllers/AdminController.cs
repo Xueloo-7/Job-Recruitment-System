@@ -520,6 +520,7 @@ public class AdminController : Controller
     // 驳回
     [HttpPost]
     [ValidateAntiForgeryToken]
+    public async Task<IActionResult> RejectJob(string id, string reason)
     {
         var job = _db.Jobs.Find(id);
         if (job == null) return NotFound();

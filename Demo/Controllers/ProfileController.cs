@@ -83,8 +83,6 @@ public class ProfileController : Controller
     }
 
     // 删除简历
-    [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteResume(string id)
     {
         var resume = await _context.Resumes.FindAsync(id);

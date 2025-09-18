@@ -26,6 +26,26 @@ ready(() => {
     });
 });
 
+function showConfirm(message, onConfirm) {
+    const modal = document.getElementById("confirmModal");
+    const msg = document.getElementById("confirmMessage");
+    const btnOk = document.getElementById("confirmOk");
+    const btnCancel = document.getElementById("confirmCancel");
+
+    msg.textContent = message;
+    modal.style.display = "flex";
+
+    btnOk.onclick = () => {
+        modal.style.display = "none";
+        if (typeof onConfirm === "function") {
+            onConfirm();
+        }
+    };
+    btnCancel.onclick = () => {
+        modal.style.display = "none";
+    };
+}
+
 // Photo preview
 $('.upload input').on('change', e => {
     const f = e.target.files[0];
@@ -73,12 +93,12 @@ $(document).on('click', '[data-post]', e => {
     f.submit();
 });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const toggleButton = document.getElementById("jobInfoToggle");
-    const jobInfo = document.getElementById("jobInfo");
+//document.addEventListener("DOMContentLoaded", function () {
+//    const toggleButton = document.getElementById("jobInfoToggle");
+//    const jobInfo = document.getElementById("jobInfo");
 
-    toggleButton.addEventListener("click", function () {
-        jobInfo.classList.toggle("show");
-        toggleButton.classList.toggle("active");
-    });
-});
+//    toggleButton.addEventListener("click", function () {
+//        jobInfo.classList.toggle("show");
+//        toggleButton.classList.toggle("active");
+//    });
+//});

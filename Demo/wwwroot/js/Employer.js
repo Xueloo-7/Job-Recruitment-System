@@ -22,6 +22,31 @@
         });
     });
 
+    // Offer button
+    const offerBtn = document.getElementById('offer-btn');
+    if (offerBtn) {
+        offerBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            showConfirm("Are you sure you want to offer this candidate?", function () {
+                const applicationId = offerBtn.dataset.id;
+                window.location.href = `/Job/CandidateDecision/${applicationId}?decision=offer`;
+            });
+        });
+    }
+
+    // Reject button
+    const rejectBtn = document.getElementById('reject-btn');
+    if (rejectBtn) {
+        rejectBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            showConfirm("Are you sure you want to reject this candidate?", function () {
+                const applicationId = rejectBtn.dataset.id;
+                window.location.href = `/Job/CandidateDecision/${applicationId}?decision=reject`;
+            });
+        });
+    }
+
+
 });
 
 //EditEmployer

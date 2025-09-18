@@ -59,7 +59,7 @@
         // Delete buttons
         document.querySelectorAll('.delete-btn').forEach(btn => {
             btn.addEventListener('click', function (e) {
-                e.preventDefault(); // 阻止默认跳转
+                e.preventDefault();
                 showConfirm("Are you sure you want to delete this resume?", function () {
                     const resumeId = btn.dataset.id;
                     window.location.href = `/Profile/DeleteResume/${resumeId}`;
