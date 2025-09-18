@@ -1,0 +1,72 @@
+﻿@model JobCandidatesVM
+@{
+    ViewBag.Title = "Candidates";
+    Layout = "_EmployerLayout";
+}
+
+<div class="container">
+    <div class="main">
+        <div class="top">
+            <h2>Candidates for @Model.JobTitle</h2>
+        </div>
+        <div class="employer-list">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Candidate Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Resume</th>
+                        <th>Applied On</th>
+                        <th>Status</th>
+                        <th style="width:25%; text-align:right; padding-right:50px;">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Candidates != null && Model.Candidates.Any())
+                    {
+                        foreach (var candidate in Model.Candidates)
+                        {
+                            <tr>
+                                <td>@candidate.User.Name</td>
+                                <td>@candidate.User.Email</td>
+                                <td>@candidate.User.PhoneNumber</td>
+                                <td>
+                                    @if (candidate.Resume != null)
+                                    {
+                                        <a href="@candidate.Resume.ImageUrl" target="_blank">View Resume</a>
+                                    }
+                                    else
+                                    {
+                                        <span>No Resume</span>
+                                    }
+                                </td>
+                                <td>@candidate.AppliedAt.ToString("MM/dd/yyyy")</td>
+                                <td>@candidate.Status.ToString()</td>
+                                <td style="text-align:right; padding-right:50px;">
+                                    <a asp-controller="Job" asp-action="CandidateDetail" asp-route-id="@candidate.Id" class="action-btn border">Detail</a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="5">No candidates have applied for this job yet.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+@section Styles {
+    <link rel="stylesheet" href="/css/employer.css" asp-append-version="true" />
+
+}
+
+@section Scripts {
+}

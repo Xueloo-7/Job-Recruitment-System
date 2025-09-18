@@ -262,7 +262,7 @@ public class EmployerController : BaseController
             {
                 JobId = g.Key,
                 Total = g.Count(),
-                Hired = g.Count(a => a.Status == ApplicationStatus.Hired)
+                Hired = g.Count(a => a.Status == ApplicationStatus.Offered)
             })
             .ToList();
 

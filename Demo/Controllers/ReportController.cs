@@ -21,7 +21,7 @@ public class ReportController : Controller
         {
             Id = "A001",
             UserId = "U000",
-            Status = ApplicationStatus.Hired,
+            Status = ApplicationStatus.Offered,
             CreatedAt = DateTime.Now.AddDays(-10),
             UpdatedAt = DateTime.Now,
             Source = ApplicationSource.LinkedIn,
@@ -39,7 +39,7 @@ public class ReportController : Controller
         {
             Id = "A003",
             UserId = "U000",
-            Status = ApplicationStatus.Hired,
+            Status = ApplicationStatus.Offered,
             CreatedAt = DateTime.Now.AddDays(-3),
             UpdatedAt = DateTime.Now,
             Source = ApplicationSource.Unknown,
@@ -71,7 +71,7 @@ public class ReportController : Controller
                 {
                     Job = j,
                     TotalApplications = _db.Applications.Count(a => a.JobId == j.Id),
-                    TotalHired = _db.Applications.Count(a => a.JobId == j.Id && a.Status == ApplicationStatus.Hired),
+                    TotalHired = _db.Applications.Count(a => a.JobId == j.Id && a.Status == ApplicationStatus.Offered),
                     RecruitmentDays = (DateTime.Now - j.CreatedAt).Days,
                     Status = j.Status
                 })

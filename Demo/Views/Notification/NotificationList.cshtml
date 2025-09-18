@@ -1,0 +1,26 @@
+﻿<h2 style="text-align:center; margin-top: 50px">Notifications</h2>
+
+<div class="notification-list">
+    @foreach (var n in Model)
+    {
+        <div id="notif-@n.Id"
+             class="notification-card @(n.IsRead ? "read" : "unread")"
+             data-id="@n.Id"
+             data-unread="@(n.IsRead ? "false" : "true")">
+
+            <div class="notification-header">
+                <span class="notification-title">@n.Title</span>
+                <span class="notification-time">@n.CreatedAt.ToLocalTime().ToString("g")</span>
+            </div>
+
+            <div class="notification-body">
+                <p>@n.Content</p>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- CSRF Token -->
+<form id="csrf-form" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+</form>

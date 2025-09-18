@@ -60,3 +60,39 @@ public class JobPaymentVM
     public decimal Tax { get; set; }
     public decimal Total { get; set; }
 }
+
+public class JobCandidatesVM
+{
+    public string JobId { get; set; }
+    public string JobTitle { get; set; }
+    public List<Application> Candidates { get; set; } = new();
+}
+
+public class CandidateDetailVM
+{
+    public string ApplicationId { get; set; }
+    public string JobTitle { get; set; }
+
+    // User 基本信息
+    public string Name { get; set; }
+    public string Email { get; set; }
+    public string PhoneNumber { get; set; }
+    public string Location { get; set; }
+    public string Summary { get; set; }
+
+    // 简历
+    public string? ResumeUrl { get; set; }
+
+    // 申请信息
+    public DateTime AppliedAt { get; set; }
+    public ApplicationStatus Status { get; set; }
+    public string ExpectedSalary { get; set; }
+    public NoticeTime NoticeTime { get; set; }
+
+    // Career History
+    public List<JobExperience> CareerHistory { get; set; } = new();
+
+    // Education
+    public List<Education> EducationHistory { get; set; } = new();
+}
+

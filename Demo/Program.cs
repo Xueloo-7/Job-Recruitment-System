@@ -4,19 +4,17 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 var builder = WebApplication.CreateBuilder(args);
+var services = builder.Services;
 
-// MVC
-builder.Services.AddControllersWithViews();
+services.AddControllersWithViews();
 
-// 数据库
-builder.Services.AddSqlServer<DB>($@"
+services.AddSqlServer<DB>($@"
     Data Source=(LocalDB)\MSSQLLocalDB;
     AttachDbFilename={builder.Environment.ContentRootPath}\DB.mdf;
 ");
-builder.Services.AddScoped<Helper>();
+services.AddScoped<Helper>();
 
-// 身份认证
-builder.Services.AddAuthentication(options =>
+services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = "DefaultCookie";
     options.DefaultSignInScheme = "DefaultCookie";
@@ -37,7 +35,30 @@ builder.Services.AddAuthorization();
 
 // HttpContext / HttpClient
 builder.Services.AddHttpContextAccessor();
+services.AddHttpContextAccessor();
 builder.Services.AddHttpClient(); // Google OAuth 2.0 用
+
+// 加入 Session 服务
+services.AddDistributedMemoryCache();
+services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // session有效期
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+// 在这里注册你需要的服务
+services.AddScoped<INotificationService, NotificationService>();
+services.AddScoped<IEventDispatcher, EventDispatcher>();
+
+// 注册事件处理器
+services.AddScoped<IEventHandler<JobAppliedEvent>, JobAppliedEventHandler>(); // 
+services.AddScoped<IEventHandler<InterviewScheduledEvent>, InterviewScheduledEventHandler>();
+services.AddScoped<IEventHandler<JobExpiredEvent>, JobExpiredEventHandler>();
+services.AddScoped<IEventHandler<ApplicationStatusChangedEvent>, ApplicationStatusChangedEventHandler>();
+services.AddScoped<IEventHandler<JobReviewedEvent>, JobReviewedEventHandler>();
+services.AddScoped<IEventHandler<AccountChangedEvent>, AccountChangedEventHandler>();
+
 
 var app = builder.Build();
 

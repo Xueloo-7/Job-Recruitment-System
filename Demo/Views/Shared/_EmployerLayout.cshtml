@@ -13,7 +13,7 @@
 
     @RenderSection("Styles", required: false)
 </head>
-<body>
+<body class="employer-theme">
 
     <!-- Flash Message -->
     <partial name="_FlashMessage" />
@@ -48,13 +48,7 @@
                     <i class="fa-solid fa-user"></i>
                 </a>
 
-                <a asp-controller="Notification" asp-action="Index" class="icon-button">
-                    <i class="fa-solid fa-comment-dots"></i>
-                    @if (ViewBag.UnreadCount > 0)
-                    {
-                        <span class="badge">@ViewBag.UnreadCount</span>
-                    }
-                </a>
+                <partial name="_NotificationBell" />
 
                 <!-- side Menu Button -->
                 <button class="menu-toggle icon-button">
@@ -129,6 +123,7 @@
     <script src="~/js/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/js/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/js/app.js"></script>
+    <script src="~/js/notifications.js"></script>
     @RenderSection("Scripts", required: false)
 
 </body>

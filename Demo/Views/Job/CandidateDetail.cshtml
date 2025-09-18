@@ -1,0 +1,116 @@
+﻿@model CandidateDetailVM
+@{
+    ViewBag.Title = "Candidate Detail";
+    Layout = "_EmployerLayout";
+}
+
+<div class="candidate-container">
+    <div class="main">
+        <div class="top">
+            <h2>@Model.Name - Candidate for @Model.JobTitle</h2>
+        </div>
+
+        <!-- Career History -->
+        <div class="detail-card">
+            <h3>Personal Info</h3>
+            <p><b>Email:</b> @Model.Email</p>
+            <p><b>Phone:</b> @Model.PhoneNumber</p>
+            <p><b>Location:</b> @Model.Location</p>
+            <p><b>Summary:</b> @Model.Summary</p>
+        </div>
+
+        <!-- Career History -->
+        <div class="detail-card">
+            <h3>Application Info</h3>
+            <p><b>Applied On:</b> @Model.AppliedAt.ToString("MM/dd/yyyy")</p>
+            <p><b>Status:</b> @Model.Status</p>
+            <p><b>Expected Salary:</b> @Model.ExpectedSalary</p>
+            <p><b>Notice Period:</b> @Model.NoticeTime</p>
+        </div>
+
+        <!-- Career History -->
+        <div class="detail-card">
+            <h3>Resume</h3>
+            @if (!string.IsNullOrEmpty(Model.ResumeUrl))
+            {
+                <a href="@Model.ResumeUrl" target="_blank">View Resume</a>
+            }
+            else
+            {
+                <span>No Resume</span>
+            }
+        </div>
+
+        <!-- Career History -->
+        <div class="detail-card">
+            <h3>Career History</h3>
+            @if (Model.CareerHistory.Any())
+            {
+                <ul class="timeline">
+                    @foreach (var job in Model.CareerHistory)
+                    {
+                        <li>
+                            <div class="timeline-title">@job.JobTitle - @job.CompanyName</div>
+                            <div class="timeline-period">
+                                @job.StartYear/@job.StartMonth.ToString("D2")
+                                -
+                                @(job.StillInRole
+                                                        ? "Present"
+                                                        : (job.EndYear.HasValue && job.EndMonth.HasValue
+                                                        ? $"{job.EndYear}/{job.EndMonth.Value:D2}"
+                                                        : "N/A"))
+                    </div>
+                </li>
+                                }
+                </ul>
+            }
+            else
+            {
+                <p>No career history provided.</p>
+            }
+        </div>
+
+
+        <!-- Education -->
+        <div class="detail-card">
+            <h3>Education</h3>
+            @if (Model.EducationHistory.Any())
+            {
+                <ul class="timeline">
+                    @foreach (var edu in Model.EducationHistory)
+                    {
+                        <li>
+                            <div class="timeline-title">@edu.Qualification</div>
+                            <div class="timeline-period">@edu.Institution</div>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No education history provided.</p>
+            }
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="form-actions">
+            <!-- Offer -->
+            <button id="offer-btn" data-id="@Model.ApplicationId" class="action-btn success" style="margin-right:20px;">
+                Offer
+            </button>
+            <!-- Reject -->
+            <button id="reject-btn" data-id="@Model.ApplicationId" class="action-btn delete">
+                Reject
+            </button>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <link rel="stylesheet" href="/css/employer.css" asp-append-version="true" />
+
+}
+
+@section Scripts {
+    <script src="~/js/employer.js"></script>
+}

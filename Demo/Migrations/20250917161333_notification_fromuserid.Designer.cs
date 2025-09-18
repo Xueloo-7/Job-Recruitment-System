@@ -4,6 +4,7 @@ using Demo.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Demo.Migrations
 {
     [DbContext(typeof(DB))]
-    partial class DBModelSnapshot : ModelSnapshot
+    [Migration("20250917161333_notification_fromuserid")]
+    partial class notification_fromuserid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -28,9 +31,6 @@ namespace Demo.Migrations
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
-                    b.Property<DateTime>("AppliedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -44,9 +44,6 @@ namespace Demo.Migrations
 
                     b.Property<int>("NoticeTime")
                         .HasColumnType("int");
-
-                    b.Property<string>("ResumeId")
-                        .HasColumnType("nvarchar(6)");
 
                     b.Property<int>("SalaryExpected")
                         .HasColumnType("int");
@@ -68,8 +65,6 @@ namespace Demo.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("JobId");
-
-                    b.HasIndex("ResumeId");
 
                     b.HasIndex("UserId");
 
@@ -394,7 +389,6 @@ namespace Demo.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("FromUserId")
-                        .IsRequired()
                         .HasMaxLength(6)
                         .HasColumnType("nvarchar(6)");
 
@@ -402,6 +396,7 @@ namespace Demo.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("RelatedEntityId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Title")
@@ -568,10 +563,6 @@ namespace Demo.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Demo.Models.Resume", "Resume")
-                        .WithMany()
-                        .HasForeignKey("ResumeId");
-
                     b.HasOne("Demo.Models.User", "User")
                         .WithMany("Applications")
                         .HasForeignKey("UserId")
@@ -579,8 +570,6 @@ namespace Demo.Migrations
                         .IsRequired();
 
                     b.Navigation("Job");
-
-                    b.Navigation("Resume");
 
                     b.Navigation("User");
                 });

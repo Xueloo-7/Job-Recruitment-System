@@ -41,7 +41,7 @@
         <label class="fw-bold">Application Status:</label>
         <span class="badge 
             @(Model.Status == Demo.Models.ApplicationStatus.Pending ? "bg-warning text-dark" :
-              Model.Status == Demo.Models.ApplicationStatus.Hired ? "bg-success" : "bg-danger")">
+                            Model.Status == Demo.Models.ApplicationStatus.Offered ? "bg-success" : "bg-danger")">
             @Model.Status
         </span>
     </div>

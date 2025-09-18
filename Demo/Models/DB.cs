@@ -378,17 +378,19 @@ public class Application : IHasId
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime AppliedAt { get; set; } = DateTime.UtcNow;
 
     // 【导航属性】
     public Job Job { get; set; }
     public User User { get; set; }
+    public Resume? Resume { get; set; }  // 可选的简历
 }
 
 public enum ApplicationStatus
 {
     Pending,
     Interview,
-    Hired,
+    Offered,
     Rejected
 }
 
@@ -465,17 +467,31 @@ public enum NoticeTime
     MoreThanThreeMonths
 }
 
+public enum NotificationType
+{
+    Application,
+    Interview,
+    System,
+    Reminder,
+    Account
+}
+
+public enum NotificationChannel
+{
+    InApp
+}
+
 public class Notification : IHasId
 {
     [Key, MaxLength(6)]
     [RegularExpression(@"^N\d{3}$", ErrorMessage = "ID 格式应为 N+三位数字")]
     public string Id { get; set; }
 
-    [Required, MaxLength(6)]  // 接收者 ID
-    public string UserId { get; set; }
+    [MaxLength(6)]
+    public string UserId { get; set; }   // 接收者 ID
 
-    [MaxLength(6)]  // 可选：触发通知的用户，如申请者
-    public string FromUserId { get; set; }
+    [MaxLength(6)]
+    public string? FromUserId { get; set; } // 触发人（如 Jobseeker）
 
     [Required, MaxLength(100)]
     public string Title { get; set; }
@@ -486,10 +502,15 @@ public class Notification : IHasId
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
+    public NotificationType Type { get; set; }
+
+    public string? RelatedEntityId { get; set; } // 例如 JobId 或 ApplicationId
+
+    public NotificationChannel Channel { get; set; } = NotificationChannel.InApp;
+
     // 导航属性
     public User User { get; set; }
-
-    public User FromUser { get; set; } // 可选
+    public User FromUser { get; set; }
 }
 
 public class Promotion : IHasId

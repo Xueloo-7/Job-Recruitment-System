@@ -3,17 +3,20 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Threading.Tasks;
 
 [Authorize(AuthenticationSchemes = "AdminCookie", Roles = "Admin")]
 public class AdminController : Controller
 {
     private readonly DB _db;
-    private readonly Helper hp;
+    private readonly Helper _hp;
+    private readonly IEventDispatcher _eventDispatcher;
 
-    public AdminController(DB _context, Helper _hp)
+    public AdminController(DB context, Helper hp, IEventDispatcher eventDispatcher)
     {
-        this._db = _context;
-        this.hp = _hp;
+        this._db = context;
+        this._hp = hp;
+        this._eventDispatcher = eventDispatcher;
     }
 
     #region Authentication
@@ -29,7 +32,7 @@ public class AdminController : Controller
     {
         var user = _db.Users.Where(u => u.Email == vm.Email).FirstOrDefault();
 
-        if (user == null || !hp.VerifyPassword(user.PasswordHash, vm.Password))
+        if (user == null || !_hp.VerifyPassword(user.PasswordHash, vm.Password))
         {
             ModelState.AddModelError("", "Invalid credentials");
         }
@@ -45,7 +48,7 @@ public class AdminController : Controller
         {
             // 登录成功
             TempData["Info"] = "Login Successfully.";
-            hp.SignIn(user, vm.RememberMe);
+            _hp.SignIn(user, vm.RememberMe);
 
             if (string.IsNullOrEmpty(returnURL))
                 return RedirectToAction("Dashboard", "Admin");
@@ -83,7 +86,7 @@ public class AdminController : Controller
             {
                 Id = GenerateUserId(),
                 Name = GenerateUsername(vm.Email),
-                PasswordHash = hp.HashPassword(vm.Password),
+                PasswordHash = _hp.HashPassword(vm.Password),
                 Email = vm.Email,
                 PhoneNumber = "",
                 Role = Role.Admin,
@@ -143,7 +146,7 @@ public class AdminController : Controller
 
         TempData["Info"] = "Logout Successfully.";
 
-        hp.SignOut("Admin");
+        _hp.SignOut("Admin");
 
         return RedirectToAction("Index", "Home");
     }
@@ -484,7 +487,7 @@ public class AdminController : Controller
     // 批准
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult ApproveJob(string id)
+    public async Task<IActionResult> ApproveJob(string id)
     {
         var job = _db.Jobs.Find(id);
         if (job == null) return NotFound();
@@ -505,16 +508,10 @@ public class AdminController : Controller
         _db.SaveChanges();
 
         // 通知招聘者
-        _db.Notifications.Add(new Notification
-        {
-            Id = Helper.GenerateId(_db.Notifications, "N", 3),
-            UserId = job.UserId,
-            FromUserId = User.GetUserId(),
-            Title = "岗位审核通过",
-            Content = $"您的岗位「{job.Title}」已通过审核，可以正式发布。",
-            CreatedAt = DateTime.UtcNow
-        });
-        _db.SaveChanges();
+        await _eventDispatcher.DispatchAsync(
+            new JobReviewedEvent(job.Id, job.UserId, "Approved",
+            $"您的岗位「{job.Title}」已通过审核，可以正式发布。"
+            ));
 
         TempData["Info"] = "Job approved.";
         return RedirectToAction("JobApprovals");
@@ -523,7 +520,6 @@ public class AdminController : Controller
     // 驳回
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public IActionResult RejectJob(string id, string reason)
     {
         var job = _db.Jobs.Find(id);
         if (job == null) return NotFound();
@@ -544,16 +540,10 @@ public class AdminController : Controller
         _db.SaveChanges();
 
         // 通知招聘者
-        _db.Notifications.Add(new Notification
-        {
-            Id = Helper.GenerateId(_db.Notifications, "N", 3),
-            UserId = job.UserId,
-            FromUserId = User.GetUserId(),
-            Title = "岗位审核未通过",
-            Content = $"您的岗位「{job.Title}」未通过审核。\n理由：{reason}",
-            CreatedAt = DateTime.UtcNow
-        });
-        _db.SaveChanges();
+        await _eventDispatcher.DispatchAsync(
+            new JobReviewedEvent(job.Id, job.UserId, "Rejected", 
+            $"您的岗位「{job.Title}」未通过审核。\n理由：{reason}"
+            ));
 
         TempData["Info"] = "Job rejected.";
         return RedirectToAction("JobApprovals");

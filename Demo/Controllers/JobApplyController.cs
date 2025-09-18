@@ -9,7 +9,7 @@ using System.Reflection;
 using System.Security.Claims;
 namespace Demo.Controllers
 {
-    public class JobApplyController : Controller
+    public class JobApplyController : BaseController
     {
         private readonly DB db;
         private readonly IWebHostEnvironment en;
@@ -220,7 +220,6 @@ namespace Demo.Controllers
                 SalaryExpected = vm.Application.SalaryExpected.Value,
                 Status = ApplicationStatus.Pending,
                 CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now
             };
             db.Applications.Add(application);
             db.SaveChanges();

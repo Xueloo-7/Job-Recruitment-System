@@ -38,7 +38,7 @@
                 <p>@Model.TotalHires</p>
             </div>
         </div>
-        <div class="job-list">
+        <div class="employer-list">
             <h2>@Model.TotalJobs Positions in total</h2>
 
             <table>
@@ -70,12 +70,16 @@
                                 </td>
                                 <td>@job.CandidatesCount</td>
                                 <td>@(job.HiredCount > 0 ? job.HiredCount.ToString() : "-")</td>
-                                <td style="text-align:right; margin-right: 20px; padding-right: 50px">
+                                <td style="text-align:right; padding-right: 50px;">
+                                    <div style="display:flex; justify-content:flex-end; gap:20px;">
                                     @if (job.Status == JobStatus.Approved)
                                     {
+                                            <!-- Candidates -->
+                                            <a asp-controller="Job" asp-action="Candidates" asp-route-id="@job.Id" class="action-btn border">Candidates</a>
                                         <!-- Withdraw -->
                                         <button data-id="@job.Id" class="action-btn border withdraw-btn">Withdraw</button>
                                     }
+                                    </div>
                                 </td>
                             </tr>
                         }
@@ -121,7 +125,7 @@
 </div>
 
 @section Styles {
-    <link rel="stylesheet" href="~/css/employer.css" />
+    <link rel="stylesheet" href="/css/employer.css" asp-append-version="true" />
 }
 
 @section Scripts {
