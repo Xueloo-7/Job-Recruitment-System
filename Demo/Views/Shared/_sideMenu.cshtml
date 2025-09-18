@@ -13,8 +13,10 @@
         <li class="nav-item" data-get="/">
             <i class="fas fa-bookmark"></i> Favorites
         </li>
-        <li class="nav-item" data-get="/">
-            <i class="fas fa-cog"></i> Settings
+        <li class="nav-item">
+            <a asp-controller="Account" asp-action="Settings">
+                <i class="fas fa-cog"></i> Settings
+            </a>
         </li>
         <li class="nav-item">
             <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">

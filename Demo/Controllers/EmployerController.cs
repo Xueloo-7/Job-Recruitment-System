@@ -52,8 +52,7 @@ public class EmployerController : BaseController
         if (ModelState.IsValid)
         {
             // Insert member
-            // TODO
-            db.Users.Add(new User
+            var newUser = new User
             {
                 Id = Helper.GenerateId(db.Users, "U"),
                 Name = GenerateUsername(vm.Email),
@@ -61,8 +60,21 @@ public class EmployerController : BaseController
                 Email = vm.Email,
                 PhoneNumber = "",
                 Role = Role.Employer,
-            });
+            };
 
+            db.Users.Add(newUser);
+            db.SaveChanges();
+
+            // audit log
+            var log = new AuditLog
+            {
+                UserId = newUser.Id,
+                TableName = "Users",
+                ActionType = "Create",
+                RecordId = newUser.Id,
+                Changes = $"Employer registered: {newUser.Email}"
+            };
+            db.AuditLogs.Add(log);
             db.SaveChanges();
 
             SetFlashMessage(FlashMessageType.Info, "Register successfully. Please login.");
@@ -116,6 +128,18 @@ public class EmployerController : BaseController
 
             hp.SignIn(user, vm.RememberMe);
 
+            // audit log
+            var log = new AuditLog
+            {
+                UserId = user.Id,
+                TableName = "Users",
+                ActionType = "Login",
+                RecordId = user.Id,
+                Changes = $"Employer login: {user.Email}"
+            };
+            db.AuditLogs.Add(log);
+            db.SaveChanges();
+
             if (string.IsNullOrEmpty(returnURL))
             {
                 return RedirectToAction("Index", "Employer");
@@ -130,6 +154,19 @@ public class EmployerController : BaseController
     public IActionResult Logout(string? returnURL)
     {
         SetFlashMessage(FlashMessageType.Info, "Logout Successfully");
+
+        // audit log
+        var userId = User.GetUserId();
+        var log = new AuditLog
+        {
+            UserId = userId,
+            TableName = "Users",
+            ActionType = "Logout",
+            RecordId = userId,
+            Changes = $"Employer logout: {userId}"
+        };
+        db.AuditLogs.Add(log);
+        db.SaveChanges();
 
         hp.SignOut();
 

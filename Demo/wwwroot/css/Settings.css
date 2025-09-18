@@ -1,0 +1,32 @@
+﻿.account-settings-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    background: #f5f5f5;
+}
+
+.account-settings-form {
+    background: #fff;
+    color: #222;
+    padding: 2rem 2.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+    min-width: 340px;
+}
+
+    .account-settings-form h2,
+    .account-settings-form label,
+    .account-settings-form input,
+    .account-settings-form span,
+    .account-settings-form button {
+        color: #222;
+    }
+
+    .account-settings-form .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .account-settings-form .btn-primary {
+        width: 100%;
+    }

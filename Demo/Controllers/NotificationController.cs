@@ -19,7 +19,7 @@ public class NotificationController : BaseController
                       .ToList();
 
         ViewBag.Users = new SelectList(users, "Id", "UserName");
-        
+
         return View();
     }
 
@@ -41,7 +41,7 @@ public class NotificationController : BaseController
 
     public IActionResult Index(string? userId = "")
     {
-        if(userId == null || userId == "")
+        if (userId == null || userId == "")
             userId = User.GetUserId(); // 获取当前用户 ID
 
         var notifications = _db.Notifications
@@ -92,7 +92,7 @@ public class NotificationController : BaseController
     {
         bool exists = _db.Notifications.Any(n => n.Id == id);
         if (exists)
-            return Json($"ID {id} 已存在");
+            return Json($"ID {id} Already exists");
         return Json(true);
     }
 

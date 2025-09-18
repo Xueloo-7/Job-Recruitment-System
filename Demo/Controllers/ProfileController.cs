@@ -83,6 +83,8 @@ public class ProfileController : Controller
     }
 
     // 删除简历
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteResume(string id)
     {
         var resume = await _context.Resumes.FindAsync(id);
@@ -142,7 +144,19 @@ public class ProfileController : Controller
         u.UpdatedAt = DateTime.UtcNow;
         await _context.SaveChangesAsync();
 
-        TempData["Success"] = "资料已更新";
+        // Audit log for profile info update
+        var log = new AuditLog
+        {
+            UserId = u.Id,
+            TableName = "Users",
+            ActionType = "Update",
+            RecordId = u.Id,
+            Changes = $"Profile updated: {u.Email}, {u.PhoneNumber}, {u.Location}, {u.FirstName}, {u.LastName}"
+        };
+        _context.AuditLogs.Add(log);
+        await _context.SaveChangesAsync();
+
+        TempData["Success"] = "Information has been updated";
         return RedirectToAction(nameof(Index));
     }
 
@@ -216,17 +230,6 @@ public class ProfileController : Controller
         return RedirectToAction(nameof(CareerHistory));
     }
 
-    public async Task<IActionResult> DeleteJob(string id)
-    {
-        var job = await _context.JobExperiences.FindAsync(id);
-        if (job != null)
-        {
-            _context.JobExperiences.Remove(job);
-            await _context.SaveChangesAsync();
-        }
-        return RedirectToAction(nameof(CareerHistory));
-    }
-
     // ── Education ───────────────────────────────────
     [HttpGet]
     public async Task<IActionResult> Education()
@@ -268,15 +271,41 @@ public class ProfileController : Controller
         _context.Educations.Add(e);
         await _context.SaveChangesAsync();
 
+        // Audit log for adding education
+        var log = new AuditLog
+        {
+            UserId = uCurrent.Id,
+            TableName = "Educations",
+            ActionType = "Create",
+            RecordId = e.Id,
+            Changes = $"Added education: {e.Qualification} at {e.Institution}"
+        };
+        _context.AuditLogs.Add(log);
+        await _context.SaveChangesAsync();
+
         return RedirectToAction(nameof(Education));
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteEducation(string id)
     {
         var edu = await _context.Educations.FindAsync(id);
         if (edu != null)
         {
             _context.Educations.Remove(edu);
+            await _context.SaveChangesAsync();
+
+            // Audit log for deleting education
+            var log = new AuditLog
+            {
+                UserId = edu.UserId,
+                TableName = "Educations",
+                ActionType = "Delete",
+                RecordId = edu.Id,
+                Changes = $"Deleted education: {edu.Qualification} at {edu.Institution}"
+            };
+            _context.AuditLogs.Add(log);
             await _context.SaveChangesAsync();
         }
         return RedirectToAction(nameof(Education));

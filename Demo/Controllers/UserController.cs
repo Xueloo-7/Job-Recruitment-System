@@ -48,21 +48,57 @@ public class UserController : Controller
 
         if (existingUser != null)
         {
+            // 记录变更内容
+            var changes = new List<string>();
+            if (existingUser.FirstName != model.FirstName)
+                changes.Add($"FirstName: {existingUser.FirstName} -> {model.FirstName}");
+            if (existingUser.LastName != model.LastName)
+                changes.Add($"LastName: {existingUser.LastName} -> {model.LastName}");
+            if (existingUser.Location != model.Location)
+                changes.Add($"Location: {existingUser.Location} -> {model.Location}");
+            if (existingUser.PhoneNumber != model.PhoneNumber)
+                changes.Add($"PhoneNumber: {existingUser.PhoneNumber} -> {model.PhoneNumber}");
+
             existingUser.FirstName = model.FirstName;
             existingUser.LastName = model.LastName;
             existingUser.Location = model.Location;
             existingUser.PhoneNumber = model.PhoneNumber;
 
             _context.Users.Update(existingUser);
+            await _context.SaveChangesAsync();
+
+            // audit log
+            var log = new AuditLog
+            {
+                UserId = userId,
+                TableName = "Users",
+                ActionType = "Update",
+                RecordId = existingUser.Id,
+                Changes = changes.Count > 0 ? string.Join(", ", changes) : "No changes"
+            };
+            _context.AuditLogs.Add(log);
+            await _context.SaveChangesAsync();
         }
         else
         {
             Debug.WriteLine("sss");
             model.Id = userId;
             _context.Users.Add(model);
+            await _context.SaveChangesAsync();
+
+            // audit log
+            var log = new AuditLog
+            {
+                UserId = userId,
+                TableName = "Users",
+                ActionType = "Create",
+                RecordId = model.Id,
+                Changes = $"Created user: {model.Email}"
+            };
+            _context.AuditLogs.Add(log);
+            await _context.SaveChangesAsync();
         }
 
-        await _context.SaveChangesAsync();
         return RedirectToAction("Profile");
     }
 }

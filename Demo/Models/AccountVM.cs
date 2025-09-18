@@ -35,3 +35,18 @@ public class RegisterVM
 
     public IFormFile? Photo { get; set; }
 }
+
+public class UpdateAccountViewModel
+{
+    [Required]
+    [EmailAddress]
+    public string Email { get; set; }
+
+    [DataType(DataType.Password)]
+    [MinLength(6)]
+    public string Password { get; set; }
+
+    [DataType(DataType.Password)]
+    [Compare("Password", ErrorMessage = "Passwords do not match.")]
+    public string ConfirmPassword { get; set; }
+}

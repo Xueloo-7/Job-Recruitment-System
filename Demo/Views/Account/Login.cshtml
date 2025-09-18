@@ -29,10 +29,22 @@
 
     <div class="divider">or</div>
 
-    <button class="social-btn google">
+    <button type="button" class="social-btn google" onclick="googleLogin()">
         <img src="https://developers.google.com/identity/images/g-logo.png" alt="Google" class="google-icon">
         Continue with Google
     </button>
+
+    <script>
+        function googleLogin() {
+            window.location.href =
+                "https://accounts.google.com/o/oauth2/v2/auth" +
+                "?client_id=752910921670-4krjej4vtfvrr1mtv346uthklt1pd7cn.apps.googleusercontent.com" +
+                "&redirect_uri=https://localhost:7213/Account/GoogleCallback" +
+                "&response_type=code" +
+                "&scope=openid%20email%20profile";
+        }
+    </script>
+
 
     Don’t have account?<a asp-controller="Account" asp-action="Register"> Register One!</a>
 </div>
@@ -40,3 +52,4 @@
 @section Styles {
     <link rel="stylesheet" href="~/css/sign-in.css" />
 }
+<script src="https://accounts.google.com/gsi/client" async defer></script>
