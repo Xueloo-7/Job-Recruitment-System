@@ -41,3 +41,11 @@ public class EmployerDashboardVM
     public List<EmployerDraftVM> Drafts { get; set; }
 
 }
+
+public class EmployerAccountVM
+{
+    public string Id { get; set; }
+    public string FirstName { get; set; }
+    public string LastName { get; set; }    
+    public string CompanyName { get; set; } 
+}

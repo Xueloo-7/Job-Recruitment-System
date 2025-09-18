@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
@@ -6,60 +7,18 @@ public class ReportController : Controller
 {
     private readonly DB _db;
 
-    private User demoUser = new User
-    {
-        Id = "U000",
-        FirstName = "Demo",
-        LastName = "User",
-        Email = "",
-        Role = Role.Employer,  
-    };
-
-    private List<Application> demoApplications = new List<Application>
-    {
-        new Application
-        {
-            Id = "A001",
-            UserId = "U000",
-            Status = ApplicationStatus.Offered,
-            CreatedAt = DateTime.Now.AddDays(-10),
-            UpdatedAt = DateTime.Now,
-            Source = ApplicationSource.LinkedIn,
-        },
-        new Application
-        {
-            Id = "A002",
-            UserId = "U000",
-            Status = ApplicationStatus.Rejected,
-            CreatedAt = DateTime.Now.AddDays(-5),
-            UpdatedAt = DateTime.Now,
-            Source = ApplicationSource.Indeed,
-        },
-        new Application
-        {
-            Id = "A003",
-            UserId = "U000",
-            Status = ApplicationStatus.Offered,
-            CreatedAt = DateTime.Now.AddDays(-3),
-            UpdatedAt = DateTime.Now,
-            Source = ApplicationSource.Unknown,
-        }
-    };
-
     public ReportController(DB context)
     {
         _db = context;
     }
 
-    public IActionResult Index(string? userId = "")
+    [Authorize(Roles = "Employer")]
+    public IActionResult Index()
     {
+        var userId = User.GetUserId();
         var user = _db.Users.Find(userId);
-
         if (user == null)
-            user = demoUser;
-
-        if (user.Role != Role.Employer)
-            return Unauthorized();
+            return NotFound();
 
         var vm = new ReportVM
         {
