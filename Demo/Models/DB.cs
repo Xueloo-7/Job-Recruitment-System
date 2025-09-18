@@ -68,6 +68,12 @@ public class User : IHasId
     [Required, EmailAddress, MaxLength(100)]
     public string Email { get; set; }
 
+    // 用于邮箱验证或密码重置的token
+    public string? ResetToken { get; set; }
+    public DateTime? ResetTokenExpire { get; set; }
+
+    public string? PendingEmail { get; set; }
+
     [Required, Phone, MaxLength(20)]
     public string PhoneNumber { get; set; }
 

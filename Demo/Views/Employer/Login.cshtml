@@ -34,7 +34,11 @@
         Continue with Google
     </button>
 
-    Don’t have account?<a asp-controller="Employer" asp-action="Register"> Register One!</a>
+    <div class="extra-links">
+        <span> Don’t have account?<a asp-controller="Employer" asp-action="Register"> Register One!</a></span>
+
+        <a asp-controller="Account" asp-action="ForgotPassword">Forgot Password?</a>
+    </div>
 </div>
 
 @section Styles {
