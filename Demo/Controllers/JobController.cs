@@ -151,6 +151,7 @@ public class JobController : BaseController
         var vm = new JobClassifyVM
         {
             DraftId = draft.Id,
+            JobId = draft.JobId,
             Title = draft.Title ?? "",
             Location = draft.Location ?? "",
             WorkType = draft.WorkType,
@@ -212,6 +213,7 @@ public class JobController : BaseController
         var vm = new JobSubscriptionVM
         {
             DraftId = draft.Id,
+            JobId = draft.JobId,
             PromotionId = draft.PromotionId ?? "",
             Promotions = db.Promotions.ToList()
         };
@@ -274,6 +276,7 @@ public class JobController : BaseController
         var vm = new JobWriteVM
         {
             DraftId = draft.Id,
+            JobId = draft.JobId,
             Description = draft.Description ?? "",
             Summary = draft.Summary ?? ""
         };
@@ -335,6 +338,19 @@ public class JobController : BaseController
             db.SaveChanges();
             SetFlashMessage(FlashMessageType.Success, "Draft Saved");
             return RedirectToAction("Write", new { id = draft.Id });
+        }
+        else if(action == "done")
+        {
+            try
+            {
+                var job = PublishOrUpdateJob(draft);
+                SetFlashMessage(FlashMessageType.Success, draft.JobId != null ? "Job Updated Successfully!" : "Job Posted Successfully!");
+            }
+            catch (InvalidOperationException ex)
+            {
+                SetFlashMessage(FlashMessageType.Danger, ex.Message);
+            }
+            return RedirectToAction("Index", "Employer");
         }
         else // continue
         {
