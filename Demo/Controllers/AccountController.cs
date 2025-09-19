@@ -436,14 +436,14 @@ public class AccountController : Controller
         var link = Url.Action("ResetPassword", "Account", new { token = user.ResetToken }, Request.Scheme);
         var mail = new MailMessage
         {
-            Subject = "重置密码",
-            Body = $"点击链接重置密码: {link}",
+            Subject = "RESET PASSWORD",
+            Body = $"Click the link to reset password: {link}",
             IsBodyHtml = true
         };
         mail.To.Add(user.Email);
         hp.SendEmail(mail);
 
-        ViewBag.Msg = "重置链接已发送，请查收邮件";
+        ViewBag.Msg = "Reset link is sent, please check it.";
 
         // TODO
         return View();
@@ -454,7 +454,7 @@ public class AccountController : Controller
     public IActionResult ResetPassword(string token)
     {
         var user = db.Users.FirstOrDefault(u => u.ResetToken == token && u.ResetTokenExpire > DateTime.Now);
-        if (user == null) return Content("无效或过期的链接");
+        if (user == null) return Content("Invalid or expired link");
 
         return View(new ResetPasswordVM { Token = token });
     }
@@ -463,7 +463,7 @@ public class AccountController : Controller
     public IActionResult ResetPassword(ResetPasswordVM vm)
     {
         var user = db.Users.FirstOrDefault(u => u.ResetToken == vm.Token && u.ResetTokenExpire > DateTime.Now);
-        if (user == null) return Content("无效或过期的链接");
+        if (user == null) return Content("Invalid or expired link");
 
         user.PasswordHash = hp.HashPassword(vm.NewPassword);
         user.ResetToken = null;
@@ -486,13 +486,13 @@ public class AccountController : Controller
 
         if (db.Users.Any(u => u.Email == vm.NewEmail))
         {
-            ModelState.AddModelError("NewEmail", "用户已注册");
+            ModelState.AddModelError("NewEmail", "User has already register");
             return View(vm);
         }
 
         if (!hp.VerifyPassword(user.PasswordHash, vm.Password))
         {
-            ModelState.AddModelError("Password", "密码错误");
+            ModelState.AddModelError("Password", "Password error");
             return View(vm);
         }
 
@@ -505,14 +505,14 @@ public class AccountController : Controller
         var link = Url.Action("ConfirmEmailChange", "Account", new { token = user.ResetToken }, Request.Scheme);
         var mail = new MailMessage
         {
-            Subject = "确认修改邮箱",
-            Body = $"点击确认新邮箱: {link}",
+            Subject = "Confirm edit email",
+            Body = $"Click to confirm your new email: {link}",
             IsBodyHtml = true
         };
         mail.To.Add(vm.NewEmail);
         hp.SendEmail(mail);
 
-        ViewBag.Msg = "确认链接已发送到新邮箱，请查收";
+        ViewBag.Msg = "Confirm the new email is already done，please check.";
         return View();
     }
 
@@ -520,7 +520,7 @@ public class AccountController : Controller
     public IActionResult ConfirmEmailChange(string token)
     {
         var user = db.Users.FirstOrDefault(u => u.ResetToken == token && u.ResetTokenExpire > DateTime.Now);
-        if (user == null) return Content("无效或过期的链接");
+        if (user == null) return Content("Invalid or expired link");
 
         if (!string.IsNullOrEmpty(user.PendingEmail))
         {

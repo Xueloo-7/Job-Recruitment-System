@@ -140,63 +140,76 @@ Q047	MSc in Robotics
 
 User
 
-U001	Jacky Loh	123456	jackyloh@gmail.com	0112345678	content	0	true	2025-08-04T00:00:00Z	Jacky	Loh	Kuala Lumpur	true
-U002	Alice Tan	123456	alicetan@gmail.com	0123456789	content	1	true	2025-08-04T00:00:00Z	Alice	Tan	Penang	false
-U003	Michael Lee	123456	mlee@example.com	0171111222	content	0	true	2025-08-04T00:00:00Z	Michael	Lee	Selangor	true
-U004	Sara Wong	123456	sara.wong@example.com	0102222333	content	1	true	2025-08-04T00:00:00Z	Sara	Wong	Melaka	false
-U005	Ben Lim	123456	benlim@example.com	0163333444	content	0	true	2025-08-04T00:00:00Z	Ben	Lim	Kuantan	true
-U006	Chloe Ong	123456	chloe.ong@example.com	0135555666	content	1	true	2025-08-04T00:00:00Z	Chloe	Ong	Johor Bahru	false
-U007	William Teh	123456	wteh@example.com	0186666777	content	0	true	2025-08-04T00:00:00Z	William	Teh	Kuching	true
-U008	Jane Goh	123456	jane.goh@example.com	0147777888	content	1	true	2025-08-04T00:00:00Z	Jane	Goh	Ipoh	true
-U009	Daniel Chia	123456	dchia@example.com	0198888999	content	0	true	2025-08-04T00:00:00Z	Daniel	Chia	Miri	false
-U010	Emily Tan	123456	emilytan@example.com	0159999000	content	1	true	2025-08-04T00:00:00Z	Emily	Tan	Seremban	true
-U011	TechNova Ltd	123456	employer1@gmail.com	0111111111	content	2	true	2025-08-04T00:00:00Z	TechNova	Ltd	Kuala Lumpur	false
-U012	PixelHive	123456	employer2@gmail.com	01212121212	content	2	true	2025-08-04T00:00:00Z	Pixel	Hive	George Town	false
-U013	Starlink Studio	123456	employer3@gmail.com	01313131313	content	2	true	2025-08-04T00:00:00Z	Starlink	Studio	Shah Alam	false
+U001	admin		admin@gmail.com	0123450001		0	true	2025-09-18 12:00:00	Admin	User	Malaysia	false	None	""	""	""
+U002	jobseeker		jobseeker@gmail.com	0123450002	Seeking opportunities	1	true	2025-09-18 12:00:00	Job	Seeker	Malaysia	false	None	""	""	""
+U003	employer		employer@gmail.com	0123450003		2	true	2025-09-18 12:00:00	Employer	User	Malaysia	true	TechCorp	""	""	""
+U004	alice		alice@example.com	0123450004	Passionate learner	1	true	2025-09-18 12:00:00	Alice	Lim	Penang	false	None	""	""	""
+U005	bob		bob@example.com	0123450005		2	false	2025-09-18 12:00:00	Bob	Tan	Kuala Lumpur	true	InnovaSoft	""	""	""
+U006	charlie		charlie@example.com	0123450006	Fresh graduate	1	true	2025-09-18 12:00:00	Charlie	Lee	Johor	false	None	""	""	""
+U007	diana		diana@example.com	0123450007		2	true	2025-09-18 12:00:00	Diana	Ng	Ipoh	true	NextGenWorks	""	""	""
+U008	edward		edward@example.com	0123450008	Curious mind	1	false	2025-09-18 12:00:00	Edward	Chan	Melaka	false	None	""	""	""
+U009	frank		frank@example.com	0123450009		2	true	2025-09-18 12:00:00	Frank	Goh	Kuala Lumpur	true	FutureLab	""	""	""
+U010	grace		grace@example.com	0123450010	Ready to grow	1	true	2025-09-18 12:00:00	Grace	Liew	Sabah	false	None	""	""	""
+U011	henry		henry@example.com	0123450011		2	false	2025-09-18 12:00:00	Henry	Tee	Selangor	true	GlobalTech	""	""	""
+U012	irene		irene@example.com	0123450012	Quick learner	1	true	2025-09-18 12:00:00	Irene	Ong	Kuantan	false	None	""	""	""
+U013	jack		jack@example.com	0123450013		2	true	2025-09-18 12:00:00	Jack	Wong	Kuala Lumpur	true	PrimeSolutions	""	""	""
+U014	karen		karen@example.com	0123450014	Team player	1	false	2025-09-18 12:00:00	Karen	Lam	Penang	false	None	""	""	""
+U015	leon		leon@example.com	0123450015		2	true	2025-09-18 12:00:00	Leon	Heng	Melaka	true	BuildSmart	""	""	""
+U016	mary		mary@example.com	0123450016	Focused and driven	1	true	2025-09-18 12:00:00	Mary	Ho	Sarawak	false	None	""	""	""
+U017	nick		nick@example.com	0123450017		2	true	2025-09-18 12:00:00	Nick	Foo	Kuala Lumpur	true	CyberWorks	""	""	""
+U018	olivia		olivia@example.com	0123450018	Motivated seeker	1	true	2025-09-18 12:00:00	Olivia	Chong	Negeri Sembilan	false	None	""	""	""
+U019	peter		peter@example.com	0123450019		2	false	2025-09-18 12:00:00	Peter	Yeoh	Penang	true	DigiServe	""	""	""
+U020	quincy		quincy@example.com	0123450020	Adaptable learner	1	true	2025-09-18 12:00:00	Quincy	Lau	Selangor	false	None	""	""	""
+
 
 
 Education (依赖于现有 User, Institution, Qualification)
 
-E001	U001	Diploma in Web Development	Harvard University
-E002	U001	Bachelor of Computer Science	University of Oxford
-E003	U002	Bachelor of Backend Engineering	Stanford University
+E001	U002	Diploma in Web Development	Harvard University
+E002	U004	Bachelor of Computer Science	University of Oxford
+E003	U006	Bachelor of Backend Engineering	Stanford University
 E004	U002	MSc in Artificial Intelligence	Massachusetts Institute of Technology (MIT)
-E005	U003	Bachelor of Information Systems	University of Cambridge
-E006	U003	Bachelor of Frontend Development	University of Tokyo
-E007	U004	Chartered Accountant (ACCA)	Tsinghua University
-E008	U004	Bachelor of Accounting	University of Malaya (UM)
-E009	U005	Bachelor of Financial Technology (FinTech)	University of Toronto
-E010	U005	MBA in Corporate Finance	University of Sydney
-E011	U006	MBBS (Bachelor of Medicine, Bachelor of Surgery)	National University of Singapore (NUS)
+E005	U004	Bachelor of Information Systems	University of Cambridge
+E006	U006	Bachelor of Frontend Development	University of Tokyo
+E007	U008	Chartered Accountant (ACCA)	Tsinghua University
+E008	U010	Bachelor of Accounting	University of Malaya (UM)
+E009	U012	Bachelor of Financial Technology (FinTech)	University of Toronto
+E010	U002	MBA in Corporate Finance	University of Sydney
+E011	U004	MBBS (Bachelor of Medicine, Bachelor of Surgery)	National University of Singapore (NUS)
 E012	U006	Master of Public Health (MPH)	University of Hong Kong (HKU)
-E013	U007	Bachelor of Nursing	Seoul National University
-E014	U007	PhD in Medical Research	California Institute of Technology (Caltech)
-E015	U008	Bachelor of Mental Health Studies	ETH Zurich – Swiss Federal Institute of Technology
-E016	U008	Bachelor of Medical Technology	Technical University of Munich
-E017	U009	Bachelor of Education (Primary)	University of Melbourne
-E018	U009	Master of Education (Higher Ed)	University of Chicago
-E019	U010	PhD in Education Research	TAR UMT (Tunku Abdul Rahman University of Management and Technology)
-E020	U010	Diploma in Online Teaching	University of Cambridge
-E021	U001	Bachelor of Civil Engineering	University of Oxford
-E022	U002	Bachelor of Mechanical Engineering	Peking University
-E023	U003	Bachelor of Electrical Engineering	Stanford University
-E024	U004	Bachelor of Software Engineering	Massachusetts Institute of Technology (MIT)
-E025	U005	Bachelor of Aerospace Engineering	University of Toronto
-E026	U006	MSc in Robotics	ETH Zurich – Swiss Federal Institute of Technology
-E027	U007	Bachelor of Chemical Engineering	University of Malaya (UM)
-E028	U008	Bachelor of Environmental Engineering	Technical University of Munich
-E029	U009	Degree in Industrial Design	University of Sydney
-E030	U010	Bachelor of Language Education	University of Melbourne
+E013	U008	Bachelor of Nursing	Seoul National University
+E014	U010	PhD in Medical Research	California Institute of Technology (Caltech)
+E015	U002	Bachelor of Mental Health Studies	ETH Zurich – Swiss Federal Institute of Technology
+E016	U004	Bachelor of Medical Technology	Technical University of Munich
+E017	U006	Bachelor of Education (Primary)	University of Melbourne
+E018	U008	Master of Education (Higher Ed)	University of Chicago
+E019	U002	PhD in Education Research	TAR UMT (Tunku Abdul Rahman University of Management and Technology)
+E020	U004	Diploma in Online Teaching	University of Cambridge
+E021	U006	Bachelor of Civil Engineering	University of Oxford
+E022	U008	Bachelor of Mechanical Engineering	Peking University
+E023	U010	Bachelor of Electrical Engineering	Stanford University
+E024	U012	Bachelor of Software Engineering	Massachusetts Institute of Technology (MIT)
+E025	U014	Bachelor of Aerospace Engineering	University of Toronto
+E026	U016	MSc in Robotics	ETH Zurich – Swiss Federal Institute of Technology
+E027	U018	Bachelor of Chemical Engineering	University of Malaya (UM)
+E028	U020	Bachelor of Environmental Engineering	Technical University of Munich
+E029	U018	Degree in Industrial Design	University of Sydney
+E030	U020	Bachelor of Language Education	University of Melbourne
 
 
 
 Job Experience (依赖于现有 User(仅限Role为Jobseeker的))
 
-JE001	U002	Software Engineer	TechNova Ltd	2020	6	2022	12	false	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
-JE002	U004	Frontend Developer	PixelHive	2019	3	2021	9	false	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
-JE003	U006	System Analyst	DataWorks	2018	1	2020	5	false	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
-JE004	U008	Product Manager	Starlink Studio	2022	7			true	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
-JE005	U010	Backend Developer	CodeWeld Inc	2021	11	2023	3	false	2025-08-04T16:00:00Z	2025-08-04T16:00:00Z
+JEX01	U002	Software Intern	""	2019	6	2020	5	false	2020-06-15 10:30:00	2020-06-15 10:30:00
+JEX02	U004	Web Developer	""	2021	3	2023	7	false	2023-08-01 09:00:00	2023-08-01 09:00:00
+JEX03	U006	IT Support	""	2018	9	2019	12	false	2019-12-20 11:45:00	2019-12-20 11:45:00
+JEX04	U008	Frontend Engineer	""	2022	2	2025	0	true	2022-02-10 14:20:00	2025-01-05 08:00:00
+JEX05	U010	Backend Developer	""	2020	11	2022	4	false	2022-05-18 15:00:00	2022-05-18 15:00:00
+JEX06	U012	System Analyst	""	2019	1	2021	6	false	2021-07-12 16:30:00	2021-07-12 16:30:00
+JEX07	U014	Mobile App Developer	""	2023	5	0	0	true	2023-05-25 12:10:00	2025-09-18 09:15:00
+JEX08	U016	Research Assistant	""	2018	7	2020	8	false	2020-09-02 13:00:00	2020-09-02 13:00:00
+JEX09	U018	UI/UX Designer	""	2021	10	2024	3	false	2024-04-06 10:10:00	2024-04-06 10:10:00
+JEX10	U020	Data Engineer	""	2022	6	0	0	true	2022-06-19 11:50:00	2025-09-18 11:50:00
 
 
 
@@ -209,16 +222,26 @@ P2	Premium Package	1080	30	Excellent visibility\nReports and analytics\n30 days 
 
 Job (依赖于现有 User(仅限Role为Employer的), Category, Promotion)
 
-J001	U011	C034	P1	Software Engineer	NovaEdge Solutions	Malacca	1	0	3596.59	5487.08	content	Great opportunity for career growth	/images/uploads/logo/1.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22	
-J002	U011	C004	P2	Marketing Manager	BluePeak Technologies	Ipoh	1	0	3682.60	6274.35	content	Join our dynamic team	/images/uploads/logo/2.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22	
-J003	U013	C018	P1	Data Analyst	QuantumVista Inc.	Johor Bahru	1	1	3193.00	5393.88	content	Flexible working hours	/images/uploads/logo/3.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22	
-J004	U013	C024	P2	UI/UX Designer	Evergrove Systems	Kuala Lumpur	1	0	3169.30	5628.29	content	Competitive salary and benefits	/images/uploads/logo/4.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22	
-J005	U013	C029	P1	Project Coordinator	ZenithCore Dynamics	Kuching	1	0	3937.03	5129.86	content	Innovative work environment	/images/uploads/logo/5.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22	
-J006	U013	C008	P2	Sales Executive	BrightLoom Innovations	Kuching	1	1	3099.06	5404.70	content	Work with industry leaders	/images/uploads/logo/6.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22	
-J007	U012	C011	P2	Content Writer	Skyward Nexus Ltd.	Malacca	1	0	3996.07	5253.62	content	Collaborative and inclusive culture	/images/uploads/logo/7.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22	
-J008	U011	C046	P2	Customer Support	Aetheria Group Specialist	Shah Alam	1	0	3283.16	4740.17	content	Challenging and rewarding role	/images/uploads/logo/8.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22	
-J009	U011	C007	P1	HR Officer	ForgeSpark Enterprises	George Town	0	1	3753.14	6605.30	content	Supportive management	/images/uploads/logo/9.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22	
-J010	U011	C046	P2	Finance Associate	NimbusByte Labs	Ipoh	1	0	2300.27	4824.35	content	Remote work available	/images/uploads/logo/10.png	True	2025/8/5 4:06:22	2025/8/5 4:06:22	
+J001	U003	C012	P1	Software Engineer	1	1	3000	5000	""	""	/images/uploads/logo/1.png	2023-05-01 10:00:00	2023-05-01 10:00:00	0	Kuala Lumpur
+J002	U005	C025	P2	Web Developer	2	2	2800	4500	""	""	/images/uploads/logo/2.png	2023-06-12 09:15:00	2023-06-12 09:15:00	0	Penang
+J003	U007	C008	P1	System Analyst	1	3	3500	5200	""	""	/images/uploads/logo/3.png	2024-01-08 14:00:00	2024-01-08 14:00:00	0	Johor Bahru
+J004	U009	C041	P1	Mobile App Developer	3	4	3200	4800	""	""	/images/uploads/logo/4.png	2024-03-20 16:30:00	2024-03-20 16:30:00	0	Melaka
+J005	U011	C033	P2	Database Administrator	2	1	4000	6000	""	""	/images/uploads/logo/5.png	2024-05-10 11:45:00	2024-05-10 11:45:00	0	Kuching
+J006	U013	C017	P1	Network Engineer	1	2	3600	5500	""	""	/images/uploads/logo/6.png	2024-07-02 10:20:00	2024-07-02 10:20:00	0	Shah Alam
+J007	U015	C049	P2	Full Stack Developer	2	3	4200	6500	""	""	/images/uploads/logo/7.png	2024-08-14 13:00:00	2024-08-14 13:00:00	0	Kuala Lumpur
+J008	U017	C006	P1	UI/UX Designer	1	4	3100	4700	""	""	/images/uploads/logo/8.png	2024-09-01 09:30:00	2024-09-01 09:30:00	0	Penang
+J009	U019	C022	P1	Data Scientist	3	2	5000	8000	""	""	/images/uploads/logo/9.png	2024-09-25 15:00:00	2024-09-25 15:00:00	0	Kuala Lumpur
+J010	U003	C010	P2	IT Support Specialist	1	1	2500	3800	""	""	/images/uploads/logo/10.png	2024-10-18 08:45:00	2024-10-18 08:45:00	0	Ipoh
+J011	U005	C037	P1	Backend Developer	2	2	3300	5000	""	""	/images/uploads/logo/2.png	2024-11-02 12:15:00	2024-11-02 12:15:00	0	Kota Kinabalu
+J012	U007	C015	P2	Cloud Engineer	1	3	4800	7200	""	""	/images/uploads/logo/3.png	2024-11-28 10:00:00	2024-11-28 10:00:00	0	Cyberjaya
+J013	U009	C028	P1	DevOps Engineer	2	4	4500	7000	""	""	/images/uploads/logo/4.png	2024-12-10 14:30:00	2024-12-10 14:30:00	0	Kuala Lumpur
+J014	U011	C044	P2	Machine Learning Engineer	3	1	5200	8500	""	""	/images/uploads/logo/5.png	2025-01-15 11:20:00	2025-01-15 11:20:00	0	Penang
+J015	U013	C020	P1	Security Specialist	1	2	3900	6000	""	""	/images/uploads/logo/6.png	2025-02-05 09:50:00	2025-02-05 09:50:00	0	Kuching
+J016	U015	C003	P1	Product Manager	2	3	5500	9000	""	""	/images/uploads/logo/7.png	2025-03-12 10:10:00	2025-03-12 10:10:00	0	Kuala Lumpur
+J017	U017	C027	P2	AI Engineer	3	4	6000	9500	""	""	/images/uploads/logo/8.png	2025-04-08 15:40:00	2025-04-08 15:40:00	0	Cyberjaya
+J018	U019	C045	P1	Business Analyst	1	2	3100	4800	""	""	/images/uploads/logo/9.png	2025-05-20 13:30:00	2025-05-20 13:30:00	0	Kuala Lumpur
+J019	U003	C018	P2	IT Consultant	2	3	3700	5800	""	""	/images/uploads/logo/1.png	2025-06-02 09:00:00	2025-06-02 09:00:00	0	Melaka
+J020	U005	C009	P1	Game Developer	3	1	4000	6500	""	""	/images/uploads/logo/2.png	2025-07-10 16:00:00	2025-07-10 16:00:00	0	Kuala Lumpur
 
 
 
@@ -234,21 +257,27 @@ R005	U010	/images/uploads/resume/example.png	2025-08-05T00:00:00Z	2025-08-05T00:
 
 Application (依赖现有 User(仅限Role为Jobseeker的), Job)
 
-A001	J001	U004	0	2025-07-04 09:35:28	1	2025-08-05 13:20:14	2025-08-05 13:20:14
-A002	J003	U010	2	2025-07-29 07:45:26	2	2025-08-05 13:20:14	2025-08-05 13:20:14
-A003	J001	U006	1	2025-06-26 13:11:26	1	2025-08-05 13:20:14	2025-08-05 13:20:14
-A004	J001	U008	0	2025-07-10 08:50:37	2	2025-08-05 13:20:14	2025-08-05 13:20:14
-A005	J007	U004	0	2025-07-16 01:26:59	2	2025-08-05 13:20:14	2025-08-05 13:20:14
-A006	J006	U006	1	2025-07-30 00:21:39	1	2025-08-05 13:20:14	2025-08-05 13:20:14
-A007	J004	U004	0	2025-07-04 06:29:52	2	2025-08-05 13:20:14	2025-08-05 13:20:14
-A008	J001	U004	0	2025-07-25 00:00:34	2	2025-08-05 13:20:14	2025-08-05 13:20:14
-A009	J005	U002	2	2025-06-29 20:14:51	0	2025-08-05 13:20:14	2025-08-05 13:20:14
-A010	J007	U006	0	2025-08-02 09:15:51	1	2025-08-05 13:20:14	2025-08-05 13:20:14
-A011	J001	U010	0	2025-07-15 19:15:54	1	2025-08-05 13:20:14	2025-08-05 13:20:14
-A012	J005	U010	0	2025-08-01 08:27:31	0	2025-08-05 13:20:14	2025-08-05 13:20:14
-A013	J003	U002	1	2025-06-29 13:48:38	3	2025-08-05 13:20:14	2025-08-05 13:20:14
-A014	J007	U010	0	2025-07-16 18:18:42	3	2025-08-05 13:20:14	2025-08-05 13:20:14
-A015	J009	U006	4	2025-07-23 19:47:54	0	2025-08-05 13:20:14	2025-08-05 13:20:14
+A001	J001	U002	1	2024-05-01 09:30:00	0	2024-05-01 10:00:00	2024-05-01 10:00:00	2	8	2024-05-01 09:30:00	R001
+A002	J002	U004	3	2024-06-12 09:00:00	1	2024-06-12 09:15:00	2024-06-12 09:15:00	1	12	2024-06-12 09:00:00	R001
+A003	J003	U006	2	2024-07-20 13:45:00	2	2024-07-20 14:00:00	2024-07-20 14:00:00	3	10	2024-07-20 13:45:00	R001
+A004	J004	U008	5	2024-08-10 16:00:00	0	2024-08-10 16:30:00	2024-08-10 16:30:00	4	6	2024-08-10 16:00:00	R001
+A005	J005	U010	4	2024-09-05 11:20:00	1	2024-09-05 11:45:00	2024-09-05 11:45:00	2	14	2024-09-05 11:20:00	R001
+A006	J006	U012	0	2024-09-28 10:00:00	3	2024-09-28 10:20:00	2024-09-28 10:20:00	1	7	2024-09-28 10:00:00	R001
+A007	J007	U014	2	2024-10-14 12:40:00	0	2024-10-14 13:00:00	2024-10-14 13:00:00	5	9	2024-10-14 12:40:00	R001
+A008	J008	U016	1	2024-11-01 09:10:00	2	2024-11-01 09:30:00	2024-11-01 09:30:00	0	11	2024-11-01 09:10:00	R001
+A009	J009	U018	3	2024-11-25 14:40:00	1	2024-11-25 15:00:00	2024-11-25 15:00:00	2	13	2024-11-25 14:40:00	R001
+A010	J010	U020	5	2024-12-18 08:20:00	0	2024-12-18 08:45:00	2024-12-18 08:45:00	1	15	2024-12-18 08:20:00	R001
+A011	J011	U002	0	2025-01-05 12:00:00	2	2025-01-05 12:15:00	2025-01-05 12:15:00	3	6	2025-01-05 12:00:00	R001
+A012	J012	U004	4	2025-01-28 09:40:00	3	2025-01-28 10:00:00	2025-01-28 10:00:00	4	10	2025-01-28 09:40:00	R001
+A013	J013	U006	2	2025-02-15 14:10:00	1	2025-02-15 14:30:00	2025-02-15 14:30:00	5	8	2025-02-15 14:10:00	R001
+A014	J014	U008	1	2025-03-10 11:00:00	0	2025-03-10 11:20:00	2025-03-10 11:20:00	2	12	2025-03-10 11:00:00	R001
+A015	J015	U010	5	2025-04-01 09:30:00	2	2025-04-01 09:50:00	2025-04-01 09:50:00	0	14	2025-04-01 09:30:00	R001
+A016	J016	U012	3	2025-04-18 09:55:00	1	2025-04-18 10:10:00	2025-04-18 10:10:00	1	16	2025-04-18 09:55:00	R001
+A017	J017	U014	2	2025-05-08 15:20:00	3	2025-05-08 15:40:00	2025-05-08 15:40:00	4	9	2025-05-08 15:20:00	R001
+A018	J018	U016	4	2025-06-02 13:10:00	0	2025-06-02 13:30:00	2025-06-02 13:30:00	3	11	2025-06-02 13:10:00	R001
+A019	J019	U018	1	2025-06-25 08:40:00	2	2025-06-25 09:00:00	2025-06-25 09:00:00	2	7	2025-06-25 08:40:00	R001
+A020	J020	U020	0	2025-07-10 15:40:00	1	2025-07-10 16:00:00	2025-07-10 16:00:00	5	13	2025-07-10 15:40:00	R001
+
 
 
 

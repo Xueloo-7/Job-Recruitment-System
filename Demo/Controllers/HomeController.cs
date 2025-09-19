@@ -64,6 +64,7 @@ public class HomeController : BaseController
             }
         }
 
+        jobQuery = jobQuery.OrderByDescending(j => j.CreatedAt);
         var jobs = jobQuery.ToList();
 
         // 获取未读通知数量
