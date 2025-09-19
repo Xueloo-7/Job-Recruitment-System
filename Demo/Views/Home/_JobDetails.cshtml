@@ -1,30 +1,44 @@
 ﻿@model Demo.Models.Job
 
-<div class="job-detail-box">
-    <div class="back-btn">
-        <i class="fa fa-arrow-left"></i>
+<div class="job-detail-card">
+    <div class="job-detail-header">
+        @* <button class="back-btn" onclick="history.back()">
+            <i class="fa fa-arrow-left"></i> Back
+        </button> *@
     </div>
-    <img src="@Model.LogoImageUrl" alt="company image"/>
-    <h2>@Model.Title</h2>
-    <p>@Model.User.CompanyName</p>
-    <a asp-controller="Home" asp-action="Index" asp-route-jobPostingUserId="@Model.User.Id">View all jobs</a>
-    <p>@Model.User.Location</p>
-    <p>@Model.Category.Name</p>
-    <p>@Model.WorkType</p>
-    <p>@Model.SalaryMin - @Model.SalaryMax</p>
-    <p>Posted @((DateTime.Now - Model.CreatedAt).Days)d ago</p>
-    <br />
-    <div>
-        <button type="button"
-                class="btn btn-primary"
-                onclick="location.href='@Url.Action("Apply", "JobApply", new { jobId = Model.Id })'">
-            Quick Apply
-        </button>
-        <button>Save</button>
+
+    <div class="job-detail-body">
+        <img src="@Model.LogoImageUrl" alt="company logo" class="company-logo" />
+
+        <div class="job-main-info">
+            <h2 class="job-title">@Model.Title</h2>
+            <p class="company-name">@Model.User.CompanyName</p>
+            <a asp-controller="Home" asp-action="Index" asp-route-jobPostingUserId="@Model.User.Id"
+               class="view-all-link">View all jobs</a>
+        </div>
+
+        <div class="job-meta">
+            <p><i class="fa fa-map-marker"></i> @Model.User.Location</p>
+            <p><i class="fa fa-briefcase"></i> @Model.Category.Name · @Model.WorkType</p>
+            <p><i class="fa fa-money"></i> RM @Model.SalaryMin - RM @Model.SalaryMax</p>
+            <p><i class="fa fa-clock"></i> Posted @((DateTime.Now - Model.CreatedAt).Days)d ago</p>
+        </div>
+
+        <div class="job-actions">
+            <button type="button"
+                    class="btn-apply"
+                    onclick="location.href='@Url.Action("Apply", "JobApply", new { jobId = Model.Id })'">
+                Quick Apply
+            </button>
+            <button class="btn-save">Save</button>
+        </div>
+
+        @if (Model.Description != null)
+        {
+            <div class="job-description">
+                <h3>Job Description</h3>
+                <p>@Html.Raw(Model.Description.Replace("\n", "<br />").Replace("\r", ""))</p>
+            </div>
+        }
     </div>
-    <br />
-    @if(Model.Description != null)
-    {
-        <p>@Html.Raw(Model.Description.Replace("\n", "<br />").Replace("\r", ""))</p>
-    }
 </div>

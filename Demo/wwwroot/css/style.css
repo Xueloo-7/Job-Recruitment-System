@@ -13,8 +13,12 @@ html, body {
         color: #004D40; /* Darker text for contrast */
     }
 
-/* Flash Message CSS -------------------------------------------------------------- */
+.container{
+    max-width: 800px;
+    margin: 50px auto;
+}
 
+/* Flash Message CSS -------------------------------------------------------------- */
 .flash-message {
     position: fixed;
     bottom: -120px; /* 初始隐藏在屏幕下方 */

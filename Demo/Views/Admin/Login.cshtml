@@ -27,8 +27,11 @@
         <button type="submit">Login</button>
     </form>
 
-    <a asp-controller="Admin" asp-action="Register">Register Admin Account</a>
+    <div class="extra-links">
+        <a asp-controller="Admin" asp-action="Register">Register Admin Account</a>
 
+        <a asp-controller="Account" asp-action="ForgotPassword">Forgot Password?</a>
+    </div>
 </div>
 
 @section Styles {

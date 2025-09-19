@@ -247,3 +247,9 @@ form {
     .employer-theme a {
         color: #F5F3EF;
     }
+
+.extra-links{
+    display:flex;
+    flex-direction:column;
+    gap: 10px;
+}

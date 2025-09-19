@@ -50,3 +50,30 @@ public class UpdateAccountViewModel
     [Compare("Password", ErrorMessage = "Passwords do not match.")]
     public string ConfirmPassword { get; set; }
 }
+
+public class ForgotPasswordVM
+{
+    [Required, EmailAddress]
+    public string Email { get; set; }
+}
+
+public class ResetPasswordVM
+{
+    [Required]
+    public string Token { get; set; }
+
+    [Required, DataType(DataType.Password)]
+    public string NewPassword { get; set; }
+
+    [Required, Compare("NewPassword", ErrorMessage = "两次密码不一致")]
+    public string ConfirmPassword { get; set; }
+}
+
+public class ChangeEmailVM
+{
+    [Required, EmailAddress]
+    public string NewEmail { get; set; }
+
+    [Required]
+    public string Password { get; set; }
+}

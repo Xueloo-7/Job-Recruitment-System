@@ -296,4 +296,41 @@ public class EmployerController : BaseController
         return View(vm);
     }
 
+    public IActionResult Account()
+    {
+        // Get Employer Data
+        var id = User.GetUserId();
+        var employer = db.Users.Find(id);
+        if(employer == null)
+            return NotFound();
+
+        var vm = new EmployerAccountVM
+        {
+            Id = id,
+            FirstName = employer.FirstName ?? "",
+            LastName = employer.LastName ?? "",
+            CompanyName = employer.CompanyName
+        };
+
+        return View(vm);
+    }
+
+    [HttpPost]
+    public IActionResult Account(EmployerAccountVM vm)
+    {
+        // Update Employer Data
+        var id = User.GetUserId();
+        var employer = db.Users.Find(id);
+        if(employer == null)
+            return NotFound();
+
+        employer.FirstName = vm.FirstName;
+        employer.LastName = vm.LastName;
+        employer.CompanyName = vm.CompanyName;
+        db.SaveChanges();
+
+        SetFlashMessage(FlashMessageType.Success, "Profile Saved");
+
+        return View(vm);
+    }
 }

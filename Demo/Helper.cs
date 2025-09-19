@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System.Diagnostics;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
@@ -19,13 +21,15 @@ public class Helper
     private readonly IWebHostEnvironment en;
     private readonly IHttpContextAccessor ct;
     private readonly DB _db;
+    private readonly IConfiguration cf;
 
     // TODO
-    public Helper(IWebHostEnvironment en, IHttpContextAccessor ct, DB _content)
+    public Helper(IWebHostEnvironment en, IHttpContextAccessor ct, DB _content, IConfiguration cf)
     {
         this.en = en;
         this.ct = ct;
         _db = _content;
+        this.cf = cf;
     }
 
 
@@ -97,33 +101,6 @@ public class Helper
         return ph.VerifyHashedPassword(0, hash, password)
             == PasswordVerificationResult.Success;
     }
-
-    //public void SignIn(User user, bool rememberMe)
-    //{
-    //    string scheme = user.Role switch
-    //    {
-    //        Role.Admin => "AdminCookie",
-    //        Role.Employer => "EmployerCookie",
-    //        _ => "DefaultCookie" // Jobseeker 或其他默认情况
-    //    };
-
-    //    var claims = new List<Claim>
-    //    {
-    //        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-    //        new Claim(ClaimTypes.Name, user.Email),
-    //        new Claim(ClaimTypes.Role, user.Role.ToString())
-    //    };
-
-    //    var identity = new ClaimsIdentity(claims, scheme);
-    //    var principal = new ClaimsPrincipal(identity);
-
-    //    var properties = new AuthenticationProperties
-    //    {
-    //        IsPersistent = rememberMe
-    //    };
-
-    //    ct.HttpContext!.SignInAsync(scheme, principal, properties);
-    //}
     public void SignIn(User user, bool rememberMe)
     {
         var scheme = user.Role == Role.Admin ? "AdminCookie" : "DefaultCookie";
@@ -145,19 +122,6 @@ public class Helper
 
         ct.HttpContext!.SignInAsync(scheme, principal, properties);
     }
-
-
-    //public void SignOut(string role = "")
-    //{
-    //    string scheme = role switch
-    //    {
-    //        "Admin" => "AdminCookie",
-    //        "Employer" => "EmployerCookie",
-    //        _ => "DefaultCookie"
-    //    };
-
-    //    ct.HttpContext!.SignOutAsync(scheme);
-    //}
     public void SignOut(string role="")
     {
         string scheme = role switch
@@ -215,6 +179,28 @@ public class Helper
         }
 
         return $"{prefix}{next.ToString($"D{length}")}";
+    }
+
+    public void SendEmail(MailMessage mail)
+    {
+        string user = cf["Smtp:User"];
+        string pass = cf["Smtp:Pass"];
+        string name = cf["Smtp:Name"];
+        string host = cf["Smtp:Host"];
+        int port = cf.GetValue<int>("Smtp:Port");
+
+        mail.From = new MailAddress(user, name);
+
+        using var smtp = new SmtpClient
+        {
+            Host = host,
+            Port = port,
+            EnableSsl = true,
+            Credentials = new NetworkCredential(user, pass),
+            DeliveryMethod = SmtpDeliveryMethod.Network
+        };
+
+        smtp.Send(mail);
     }
 
 

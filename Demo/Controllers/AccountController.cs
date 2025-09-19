@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -17,14 +18,18 @@ public class AccountController : Controller
     private readonly Helper hp;
     private readonly IConfiguration _config;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IConfiguration cf;
 
-    public AccountController(DB context, Helper hp, IConfiguration config, IHttpClientFactory httpClientFactory)
+    public AccountController(DB context, Helper hp, IConfiguration config, IHttpClientFactory httpClientFactory, IConfiguration cf)
     {
         this.db = context;
         this.hp = hp;
         _config = config;
         _httpClientFactory = httpClientFactory;
+        this.cf = cf;
     }
+
+    #region Authentication
 
     // GET: Account/CheckEmail
     public bool CheckEmail(string email)
@@ -403,4 +408,131 @@ public class AccountController : Controller
         TempData["Message"] = "Account updated successfully!";
         return RedirectToAction("Settings");
     }
+
+    #endregion
+
+    #region Forgot Password & Reset Password & Change Email
+
+    // ================== 忘记密码 ==================
+    [HttpGet]
+    public IActionResult ForgotPassword() => View();
+
+    [HttpPost]
+    public IActionResult ForgotPassword(ForgotPasswordVM vm)
+    {
+        var user = db.Users.FirstOrDefault(u => u.Email == vm.Email);
+        if (user == null)
+        {
+            ModelState.AddModelError("", "邮箱不存在");
+            return View(vm);
+        }
+
+        // 生成 token
+        user.ResetToken = Guid.NewGuid().ToString("N");
+        user.ResetTokenExpire = DateTime.Now.AddMinutes(30);
+        db.SaveChanges();
+
+        // 发送邮件
+        var link = Url.Action("ResetPassword", "Account", new { token = user.ResetToken }, Request.Scheme);
+        var mail = new MailMessage
+        {
+            Subject = "RESET PASSWORD",
+            Body = $"Click the link to reset password: {link}",
+            IsBodyHtml = true
+        };
+        mail.To.Add(user.Email);
+        hp.SendEmail(mail);
+
+        ViewBag.Msg = "Reset link is sent, please check it.";
+
+        // TODO
+        return View();
+    }
+
+    // ================== 重置密码 ==================
+    [HttpGet]
+    public IActionResult ResetPassword(string token)
+    {
+        var user = db.Users.FirstOrDefault(u => u.ResetToken == token && u.ResetTokenExpire > DateTime.Now);
+        if (user == null) return Content("Invalid or expired link");
+
+        return View(new ResetPasswordVM { Token = token });
+    }
+
+    [HttpPost]
+    public IActionResult ResetPassword(ResetPasswordVM vm)
+    {
+        var user = db.Users.FirstOrDefault(u => u.ResetToken == vm.Token && u.ResetTokenExpire > DateTime.Now);
+        if (user == null) return Content("Invalid or expired link");
+
+        user.PasswordHash = hp.HashPassword(vm.NewPassword);
+        user.ResetToken = null;
+        user.ResetTokenExpire = null;
+        db.SaveChanges();
+
+        return RedirectToAction("Login");
+    }
+
+    // ================== 修改邮箱 ==================
+    [HttpGet]
+    public IActionResult ChangeEmail() => View();
+
+    [HttpPost]
+    public IActionResult ChangeEmail(ChangeEmailVM vm)
+    {
+        var userId = User.GetUserId();
+        var user = db.Users.Find(userId);
+        if (user == null) return Unauthorized();
+
+        if (db.Users.Any(u => u.Email == vm.NewEmail))
+        {
+            ModelState.AddModelError("NewEmail", "User has already register");
+            return View(vm);
+        }
+
+        if (!hp.VerifyPassword(user.PasswordHash, vm.Password))
+        {
+            ModelState.AddModelError("Password", "Password error");
+            return View(vm);
+        }
+
+        // 保存待修改邮箱，并发验证链接
+        user.PendingEmail = vm.NewEmail;
+        user.ResetToken = Guid.NewGuid().ToString("N");
+        user.ResetTokenExpire = DateTime.Now.AddMinutes(30);
+        db.SaveChanges();
+
+        var link = Url.Action("ConfirmEmailChange", "Account", new { token = user.ResetToken }, Request.Scheme);
+        var mail = new MailMessage
+        {
+            Subject = "Confirm edit email",
+            Body = $"Click to confirm your new email: {link}",
+            IsBodyHtml = true
+        };
+        mail.To.Add(vm.NewEmail);
+        hp.SendEmail(mail);
+
+        ViewBag.Msg = "Confirm the new email is already done，please check.";
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult ConfirmEmailChange(string token)
+    {
+        var user = db.Users.FirstOrDefault(u => u.ResetToken == token && u.ResetTokenExpire > DateTime.Now);
+        if (user == null) return Content("Invalid or expired link");
+
+        if (!string.IsNullOrEmpty(user.PendingEmail))
+        {
+            user.Email = user.PendingEmail;
+            user.PendingEmail = null;
+        }
+        user.ResetToken = null;
+        user.ResetTokenExpire = null;
+        db.SaveChanges();
+
+        return RedirectToAction("Index", "Profile");
+    }
+
+    #endregion
 }

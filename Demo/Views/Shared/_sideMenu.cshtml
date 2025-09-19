@@ -7,21 +7,14 @@
         <li class="nav-item" data-get="/">
             <i class="fas fa-home"></i> Home
         </li>
-        <li class="nav-item" data-get="/">
-            <i class="fas fa-comment-dots"></i> Notifications
+        <li class="nav-item" data-get="/Account/ForgotPassword">
+            <i class="fas fa-cog"></i> Password Reset
         </li>
-        <li class="nav-item" data-get="/">
-            <i class="fas fa-bookmark"></i> Favorites
+        <li class="nav-item" data-get="/Account/ChangeEmail">
+            <i class="fas fa-cog"></i> Change Email
         </li>
-        <li class="nav-item">
-            <a asp-controller="Account" asp-action="Settings">
-                <i class="fas fa-cog"></i> Settings
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">
-                <i class="fas fa-cog"></i> Admin
-            </a>
+        <li class="nav-item" data-get="/Admin/Dashboard">
+            <i class="fas fa-cog"></i> Admin
         </li>
     </ul>
 

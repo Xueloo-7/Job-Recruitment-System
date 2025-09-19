@@ -3,69 +3,71 @@
     ViewData["Title"] = "Application Detail";
 }
 
-<div class="apply-container shadow-sm p-4 rounded bg-light">
-    <h2 class="mb-3 text-primary">Application Detail</h2>
+<div class="apply-container">
+    <h2>Application Detail</h2>
 
     <!-- Job Info -->
-    <div class="d-flex align-items-center mb-3">
-        <img src="@Url.Content("~/" + Model.JobLogo)" 
-             class="company-logo me-3" alt="Company Logo">
+    <div class="company-info">
+        <img src="@Url.Content(Model.JobLogo ?? "~/images/default-logo.png")"
+             alt="Job Logo" class="company-logo" />
         <div>
-            <h5 class="mb-1">@Model.CompanyName</h5>
-            <p class="text-muted">Applied on: @Model.CreatedAt.ToString("yyyy-MM-dd")</p>
+            <h5>@Model.CompanyName</h5>
+            <p class="applied-date">Applied on: @Model.CreatedAt.ToString("yyyy-MM-dd")</p>
         </div>
     </div>
 
-    <!-- Application fields -->
-    <div class="form-group mb-3">
-        <label class="fw-bold">Job Title:</label>
-        <div>@Model.JobTitle</div>
-    </div>
-
-    <div class="form-group mb-3">
-        <label class="fw-bold">Which source informed you about this job opportunity?</label>
-        <div>@Model.Source</div>
-    </div>
-
-    <div class="form-group mb-3">
-        <label class="fw-bold">What's your expected monthly basic salary?</label>
-        <div>@Model.SalaryExpected</div>
-    </div>
-
-    <div class="form-group mb-3">
-        <label class="fw-bold">How much notice are you required to give your current employer?</label>
-        <div>@Model.NoticeTime</div>
-    </div>
-
-    <div class="form-group mb-3">
-        <label class="fw-bold">Application Status:</label>
-        <span class="badge 
-            @(Model.Status == Demo.Models.ApplicationStatus.Pending ? "bg-warning text-dark" :
-                            Model.Status == Demo.Models.ApplicationStatus.Offered ? "bg-success" : "bg-danger")">
-            @Model.Status
-        </span>
-    </div>
-
-    @if (Model.HiredDate != null)
-    {
-        <div class="form-group mb-3">
-            <label class="fw-bold">Hired Date:</label>
-            <div>@Model.HiredDate?.ToString("yyyy-MM-dd")</div>
+    <!-- Single line for Job Title / Status / Hired Date -->
+    <div class="field-row">
+        <div class="field">
+            <span class="label">Job Title:</span>
+            <span class="value">@Model.JobTitle</span>
         </div>
-    }
-    else
-    {
-        <div class="form-group mb-3">
-            <label class="fw-bold">Hired Date: - </label>
-        </div>
-    }
-    <form asp-action="DeleteApplication" asp-controller="JobApply" method="post" style="display:inline;">
-        <input type="hidden" name="id" value="@Model.ApplicationId" />
-        <button type="submit" class="btn btn-danger btn-sm"
-                onclick="return confirm('Are you sure you want to cancel this application?');">
-            Cancel Job Application
-        </button>
-    </form>
 
-    <a asp-action="ApplyList" asp-controller="JobApply">Back to My Applications</a>
-</div>
+        <div class="field">
+        <span class="label">Application Status:</span>
+            <span class="value status-@Model.Status.ToString().ToLower()">
+                @Model.Status
+            </span>
+    </div>
+
+        <div class="field">
+            <span class="label">Hired Date:</span>
+            <span class="value">@((Model.HiredDate != null) ? Model.HiredDate?.ToString("yyyy-MM-dd") : "-")</span>
+        </div>
+    </div>
+
+    <!-- Other fields -->
+    <div class="field">
+        <span class="label">Which source informed you about this job opportunity?</span>
+        <span class="value">@Model.Source</span>
+    </div>
+
+    <div class="field">
+        <span class="label">What's your expected monthly basic salary?</span>
+        <span class="value">@Model.SalaryExpected</span>
+    </div>
+
+    <div class="field">
+        <span class="label">How much notice are you required to give your current employer?</span>
+        <span class="value">@Model.NoticeTime</span>
+    </div>
+
+    <!-- Actions -->
+    <div class="action-buttons">
+        <form asp-action="DeleteApplication" asp-controller="JobApply" method="post">
+            <input type="hidden" name="id" value="@Model.ApplicationId" />
+            <button type="submit" class="btn-animated btn-danger-animated"
+                    onclick="return confirm('Are you sure you want to cancel this application?');">
+                Cancel Job Application
+            </button>
+        </form>
+
+        <a asp-action="ApplyList" asp-controller="JobApply" class="btn-animated btn-secondary-animated">
+            Back to My Applications
+        </a>
+    </div>
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/JobApplyDetail.css" />
+}
+

@@ -61,13 +61,26 @@
         @foreach (var job in Model.Jobs)
         {
             <div class="job-card" data-id="@job.Id">
-                <img src="@job.LogoImageUrl" alt="company image" />
-                <h4>@job.Title</h4>
-                <p>CompanyName: @job.User.CompanyName</p>
-                <p>Location: @job.User.Location</p>
-                <p>Salary: RM @job.SalaryMin - RM @job.SalaryMax</p>
-                <p>Summary: @job.Summary</p>
-                <p>@((DateTime.Now - job.CreatedAt).Days) day</p>
+                <div class="top">
+                    <div class="title-company">
+                        <h4 class="title">@job.Title</h4>
+                        <p class="company">@job.User.CompanyName</p>
+                    </div>
+                    <img src="@job.LogoImageUrl" alt="company image" class="job-card-logo" />
+                </div>
+
+                <div class="job-card-body">
+                    <p class="location">
+                        <i class="fa fa-map-marker"></i> @job.User.Location
+                    </p>
+                    <p class="salary">
+                        <i class="fa fa-money"></i> RM @job.SalaryMin - RM @job.SalaryMax per month
+                    </p>
+                    <p class="summary">@job.Summary</p>
+                    <span class="time">
+                        <i class="fa fa-clock"></i> @((DateTime.Now - job.CreatedAt).Days) days ago
+                    </span>
+                </div>
             </div>
         }
         @if (Model.Jobs.Count == 0)

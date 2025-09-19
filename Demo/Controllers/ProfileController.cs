@@ -227,6 +227,28 @@ public class ProfileController : Controller
 
         return RedirectToAction(nameof(CareerHistory));
     }
+    
+    public async Task<IActionResult> DeleteJob(string id)
+    {
+        var career = await _context.JobExperiences.FindAsync(id);
+        if (career != null)
+        {
+            _context.JobExperiences.Remove(career);
+            await _context.SaveChangesAsync();
+
+            var log = new AuditLog
+            {
+                UserId = career.UserId,
+                TableName = "Career History",
+                ActionType = "Delete",
+                RecordId = career.Id,
+                Changes = $"Deleted career history: {career.Id}"
+            };
+            _context.AuditLogs.Add(log);
+            await _context.SaveChangesAsync();
+        }
+        return RedirectToAction(nameof(CareerHistory));
+    }
 
     // ── Education ───────────────────────────────────
     [HttpGet]
@@ -257,10 +279,9 @@ public class ProfileController : Controller
         var uCurrent = await GetCurrentUserAsync();
         if (uCurrent == null) return NotFound();
 
-        var nextNum = (_context.Educations.Count() + 1).ToString("D3");
         var e = new Education
         {
-            Id = $"E{nextNum}",
+            Id = Helper.GenerateId(_context.Educations, "E"),
             UserId = uCurrent.Id,
             Institution = vm.Institution,
             Qualification = vm.Institution
@@ -284,8 +305,6 @@ public class ProfileController : Controller
         return RedirectToAction(nameof(Education));
     }
 
-    [HttpPost]
-    [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteEducation(string id)
     {
         var edu = await _context.Educations.FindAsync(id);

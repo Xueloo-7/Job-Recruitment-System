@@ -1,7 +1,7 @@
 ﻿let pieChart, lineChart;
 
 function loadCharts(userId, startDate, endDate) {
-    $.getJSON('/Report/GetChartData', {
+    $.getJSON('/Report/GetChartMockData', {
         userId: userId,
         start: startDate,
         end: endDate
