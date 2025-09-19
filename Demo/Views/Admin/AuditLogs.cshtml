@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Demo.Models.AuditLog>
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<Demo.Models.AuditLog>
 
 @{
     Layout = "_AdminLayout";
@@ -6,50 +8,75 @@
 
 <h1>Audit Logs</h1>
 
-<partial name="_SearchBar" 
-         model="@(new SearchViewModel { 
-             Placeholder = "Search table | action | id | changes", 
-             Action = "AuditLogs", 
-             Controller = "Admin", 
+<partial name="_SearchBar"
+         model="@(new SearchViewModel {
+             Placeholder = "Search table | action | id | changes",
+             Action = "AuditLogs",
+             Controller = "Admin",
              Query = Context.Request.Query["query"].ToString(),
              Method = "GET"
          })" />
 
-<table>
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Table</th>
-            <th>Action</th>
-            <th>Changes</th>
-            <th>Performed By</th>
-            <th>Time stamp</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var log in Model)
-        {
+<!-- 给表格和分页包一层容器 -->
+<div id="logs-container">
+    <table class="table">
+        <thead>
             <tr>
-                <td>@log.Id</td>
-                <td>@log.TableName</td>
-                <td>@log.ActionType</td>
-                <td>@log.Changes</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(log.User.FirstName) || !string.IsNullOrEmpty(log.User.LastName))
-                    {
-                        @($"{log.User.FirstName} {log.User.LastName}".Trim())
-                    }
-                    else
-                    {
-                        @log.User.Name
-                    }
-                </td>
-                <td>@log.Timestamp</td>
+                <th>ID</th>
+                <th>Table</th>
+                <th>Action</th>
+                <th>Changes</th>
+                <th>Performed By</th>
+                <th>Time stamp</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var log in Model)
+            {
+                <tr>
+                    <td>@log.Id</td>
+                    <td>@log.TableName</td>
+                    <td>@log.ActionType</td>
+                    <td>@log.Changes</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(log.User.FirstName) || !string.IsNullOrEmpty(log.User.LastName))
+                        {
+                            @($"{log.User.FirstName} {log.User.LastName}".Trim())
+                        }
+                        else
+                        {
+                            @log.User.Name
+                        }
+                    </td>
+                    <td>@log.Timestamp</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-@section Styles{
-    
+    <div class="pagination-container">
+        @Html.PagedListPager(
+            Model,
+            page => Url.Action("AuditLogs", new { page, query = Context.Request.Query["query"].ToString() }),
+            new PagedListRenderOptions
+            {
+            UlElementClasses = new[] { "pagination" },   // 给 <ul> 加上 pagination class
+            LiElementClasses = new[] { "page-item" },    // 每个 <li> 加上 page-item class
+            PageClasses = new[] { "page-link" },         // 每个 <a> 或 <span> 加上 page-link class
+            ActiveLiElementClass = "active"              // 当前页 li.active
+            }
+        )
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // 拦截分页点击，局部刷新
+        $(document).on("click", ".pagination a", function (e) {
+            e.preventDefault();
+            var url = $(this).attr("href");
+            $("#logs-container").load(url + " #logs-container > *"); 
+        });
+    </script>
 }

@@ -1,0 +1,33 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model IPagedList<Demo.Models.AuditLog>
+
+<table class="table">
+    <thead> ... </thead>
+    <tbody>
+        @foreach (var log in Model)
+        {
+            <tr>
+                <td>@log.Id</td>
+                <td>@log.TableName</td>
+                <td>@log.ActionType</td>
+                <td>@log.Changes</td>
+                <td>@log.User?.Name</td>
+                <td>@log.Timestamp</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="d-flex justify-content-center">
+    @Html.PagedListPager(
+    Model,
+    page => Url.Action("AuditLogs", new { page, query = Context.Request.Query["query"] }),
+        new PagedListRenderOptions
+        {
+            LiElementClasses = new[] { "page-item" },
+            PageClasses = new[] { "page-link" },
+            UlElementClasses = new[] { "pagination" }
+        }
+        )
+</div>

@@ -943,3 +943,43 @@ footer {
 footer {
     padding-bottom: 50px;
 }
+
+
+/*paging*/
+
+.pagination {
+    display: flex;
+    flex-direction: row;
+    list-style: none;
+    padding-left: 0;
+    list-style: none; /* 去掉小点点 */
+    padding-left: 0; /* 去掉默认缩进 */
+}
+
+    .pagination li {
+        margin: 0 4px;
+    }
+
+    .pagination a, .pagination span {
+        display: block;
+        padding: 6px 12px;
+        color: #007bff;
+        text-decoration: none;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+    }
+
+    .pagination .active span {
+        background: #007bff;
+        color: #fff;
+        border-color: #007bff;
+    }
+
+ul.pagination,
+ul.pagination li,
+ul.pagination .page-item {
+    list-style: none !important;
+    list-style-type: none !important;
+    margin: 0;
+    padding: 0;
+}

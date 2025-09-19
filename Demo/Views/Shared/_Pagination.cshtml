@@ -1,0 +1,45 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using Microsoft.AspNetCore.Mvc.Rendering
+
+@model X.PagedList.IPagedList
+
+@{
+    // PagedList 默认 UI 配置
+    var options = PagedListRenderOptions.ClassicPlusFirstAndLast;
+    options.LinkToFirstPageFormat = "First";
+    options.LinkToLastPageFormat = "Last";
+    options.LinkToPreviousPageFormat = "Previous";
+    options.LinkToNextPageFormat = "Next";
+
+    // AJAX 配置，目标容器 ID 从 ViewData/RouteData 取，默认 "loader"
+    var updateTarget = ViewData["UpdateTargetId"]?.ToString() ?? "loader";
+
+    var ajaxOptions = new AjaxOptions
+    {
+        HttpMethod = "GET",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = updateTarget
+    };
+
+    // 自动获取当前 Controller 和 Action
+    var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+
+    // 保留 QueryString（比如搜索条件）
+    var queryString = ViewContext.HttpContext.Request.Query
+        .Where(q => q.Key != "page")
+        .ToDictionary(q => q.Key, q => (object)q.Value.ToString());
+}
+
+@Html.PagedListPager(
+Model,
+page => {
+        var routeValues = new Dictionary<string, object>(queryString)
+                          {
+                              ["page"] = page
+                          };
+return Url.Action(currentAction, currentController, routeValues);
+    },
+    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(options, ajaxOptions)
+)

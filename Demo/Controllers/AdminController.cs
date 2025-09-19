@@ -1,9 +1,10 @@
 ﻿using Demo.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
+using X.PagedList.Extensions;
 
 [Authorize(AuthenticationSchemes = "AdminCookie", Roles = "Admin")]
 public class AdminController : Controller
@@ -163,8 +164,11 @@ public class AdminController : Controller
 
     #region User Management
 
-    public IActionResult Users(string query)
+    public IActionResult Users(string query, int? page)
     {
+        int pageNumber = page ?? 1;
+        int pageSize = 10; // 每页显示10条，可根据需要调整
+
         IQueryable<User> users = _db.Users;
 
         // match Name, FirstName, LastName, Email
@@ -178,7 +182,9 @@ public class AdminController : Controller
             );
         }
 
-        return View(users.ToList());
+        var pagedUsers = users.OrderBy(u => u.Id).ToPagedList(pageNumber, pageSize);
+
+        return View(pagedUsers);
     }
 
     public IActionResult UserEdit(string id)
@@ -272,8 +278,11 @@ public class AdminController : Controller
 
     #region Job Management
 
-    public IActionResult Jobs(string query)
+    public IActionResult Jobs(string query, int? page)
     {
+        int pageNumber = page ?? 1;
+        int pageSize = 10; // 每页显示10条，可根据需要调整
+
         IQueryable<Job> jobs = _db.Jobs
             .Include(j => j.User);
 
@@ -286,7 +295,9 @@ public class AdminController : Controller
             );
         }
 
-        return View(jobs.ToList());
+        var pagedJobs = jobs.OrderByDescending(j => j.UpdatedAt).ToPagedList(pageNumber, pageSize);
+
+        return View(pagedJobs);
     }
 
     public IActionResult JobEdit(string id)
@@ -376,9 +387,14 @@ public class AdminController : Controller
     #endregion
 
     #region Audit Logs
-    public IActionResult AuditLogs(string query)
+    public IActionResult AuditLogs(string query, int? page)
     {
-        IQueryable<AuditLog> auditLogs = _db.AuditLogs.Include(a => a.User).OrderByDescending(a => a.Timestamp);
+        int pageNumber = page ?? 1;
+        int pageSize = 5; // 每页显示 10 条，可自行调整
+
+        IQueryable<AuditLog> auditLogs = _db.AuditLogs
+            .Include(a => a.User)
+            .OrderByDescending(a => a.Timestamp);
 
         // match TableName, ActionType, RecordId, Changes, User.Name
         if (!string.IsNullOrWhiteSpace(query))
@@ -396,7 +412,10 @@ public class AdminController : Controller
             );
         }
 
-        return View(auditLogs.ToList());
+        // 使用 X.PagedList 进行分页
+        var pagedLogs = auditLogs.ToPagedList(pageNumber, pageSize);
+
+        return View(pagedLogs);
     }
     #endregion
 
@@ -456,18 +475,23 @@ public class AdminController : Controller
     #region Job Approval
 
     // 待审核岗位列表
-    public IActionResult JobApprovals(string query)
+    public IActionResult JobApprovals(string query, int? page)
     {
+        int pageNumber = page ?? 1;
+        int pageSize = 10; // 每页显示10条，可根据需要调整
+
         IQueryable<Job> jobs = _db.Jobs
             .Include(j => j.User)
-            .Where(j => j.Status == JobStatus.Pending); // 只取待审核
+            .Where(j => j.Status == JobStatus.Pending);
 
         if (!string.IsNullOrWhiteSpace(query))
         {
             jobs = jobs.Where(j => j.Title.Contains(query) || j.User.CompanyName.Contains(query));
         }
 
-        return View(jobs.ToList());
+        var pagedJobs = jobs.OrderByDescending(j => j.UpdatedAt).ToPagedList(pageNumber, pageSize);
+
+        return View(pagedJobs);
     }
 
     // 详情页（只读）
@@ -510,7 +534,7 @@ public class AdminController : Controller
         // 通知招聘者
         await _eventDispatcher.DispatchAsync(
             new JobReviewedEvent(job.Id, job.UserId, "Approved",
-            $"您的岗位「{job.Title}」已通过审核，可以正式发布。"
+            $"Your position「{job.Title}」has been reviewed and can be officially released."
             ));
 
         TempData["Info"] = "Job approved.";
@@ -543,7 +567,7 @@ public class AdminController : Controller
         // 通知招聘者
         await _eventDispatcher.DispatchAsync(
             new JobReviewedEvent(job.Id, job.UserId, "Rejected", 
-            $"您的岗位「{job.Title}」未通过审核。\n理由：{reason}"
+            $"Your position「{job.Title}」Failed to review.\nReason:{reason}"
             ));
 
         TempData["Info"] = "Job rejected.";

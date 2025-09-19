@@ -1,5 +1,7 @@
 ﻿@* @using Demo.Models.ViewModels *@
-@model IEnumerable<Demo.Models.Job>
+@using X.PagedList.Extensions
+@using X.PagedList.Mvc.Core
+@model X.PagedList.IPagedList<Demo.Models.Job>
 
 @{
     Layout = "_AdminLayout";
@@ -52,6 +54,20 @@
         }
     </tbody>
 </table>
+
+<div class="pagination-container">
+    @Html.PagedListPager(
+        Model,
+        page => Url.Action("Jobs", new { page, query = Context.Request.Query["query"].ToString() }),
+        new PagedListRenderOptions
+        {
+            UlElementClasses = new[] { "pagination" },
+            LiElementClasses = new[] { "page-item" },
+            PageClasses = new[] { "page-link" },
+            ActiveLiElementClass = "active"
+        }
+    )
+</div>
 
 @section Styles{
 
