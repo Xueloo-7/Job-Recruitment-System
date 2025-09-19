@@ -58,7 +58,7 @@ public class ReportController : Controller
             .ToList();
 
         if (!applications.Any())
-            return Json(new { message = "No application data in this date range" });
+            return Json(new { pieLabels = new string[0], pieData = new int[0], lineLabels = new string[0], lineData = new int[0] });
 
         // Pie Data
         var sourceCounts = new Dictionary<ApplicationSource, int>();
@@ -111,6 +111,58 @@ public class ReportController : Controller
                 }).ToList();
         }
 
+        var data = new
+        {
+            pieLabels,
+            pieData,
+            lineLabels,
+            lineData
+        };
+        return Json(data);
+    }
+
+    [HttpGet]
+    public IActionResult GetChartMockData(string userId, DateTime start, DateTime end)
+    {
+        // 这里不从数据库取，而是生成一些 Mock Data
+        var random = new Random();
+
+        // 模拟 Pie 数据（申请来源占比）
+        var pieLabels = Enum.GetNames(typeof(ApplicationSource));
+        var pieData = new int[pieLabels.Length];
+        for (int i = 0; i < pieLabels.Length; i++)
+        {
+            pieData[i] = random.Next(5, 50); // 每个来源 5~50 条
+        }
+
+        // 模拟 Line 数据（申请随时间变化）
+        var totalDays = (end - start).TotalDays;
+        List<string> lineLabels;
+        List<int> lineData;
+
+        if (totalDays <= 14) // 如果时间跨度小，按天统计
+        {
+            lineLabels = Enumerable.Range(0, (int)totalDays + 1)
+                .Select(i => start.AddDays(i).ToString("MM-dd"))
+                .ToList();
+
+            lineData = lineLabels
+                .Select(_ => random.Next(0, 10)) // 每天 0~10 个申请
+                .ToList();
+        }
+        else // 否则按周统计
+        {
+            var weekCount = (int)Math.Ceiling(totalDays / 7);
+            lineLabels = Enumerable.Range(0, weekCount)
+                .Select(i => $"Week {i + 1}")
+                .ToList();
+
+            lineData = lineLabels
+                .Select(_ => random.Next(10, 50)) // 每周 10~50 个申请
+                .ToList();
+        }
+
+        // 返回 Json
         var data = new
         {
             pieLabels,
