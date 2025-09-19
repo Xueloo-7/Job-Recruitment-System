@@ -53,19 +53,17 @@
     </tbody>
 </table>
 
-<div class="pagination-container">
-        @Html.PagedListPager(
-            Model,
-            page => Url.Action("Users", new { page, query = Context.Request.Query["query"].ToString() }),
-            new PagedListRenderOptions
-            {
-                UlElementClasses = new[] { "pagination" },
-                LiElementClasses = new[] { "page-item" },
-                PageClasses = new[] { "page-link" },
-                ActiveLiElementClass = "active"
-            }
-        )
-    </div>
+@Html.PagedListPager(
+    Model,
+    page => Url.Action("Users", new { page, query = Context.Request.Query["query"].ToString() }),
+    new PagedListRenderOptions
+    {
+        UlElementClasses = new[] { "pagination" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" },
+        ActiveLiElementClass = "active"
+    }
+)
 
 @section Styles{
     

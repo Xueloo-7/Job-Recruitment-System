@@ -951,6 +951,10 @@ footer {
 
 /*paging*/
 
+.pagination-container {
+    margin: 20px 0;
+}
+
 .pagination {
     display: flex;
     flex-direction: row;
@@ -958,6 +962,7 @@ footer {
     padding-left: 0;
     list-style: none; /* 去掉小点点 */
     padding-left: 0; /* 去掉默认缩进 */
+    gap: 20px;
 }
 
     .pagination li {
