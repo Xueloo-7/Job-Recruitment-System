@@ -175,7 +175,7 @@ public class JobApplyController : BaseController
             || string.IsNullOrEmpty(currentUser.PhoneNumber)
             || string.IsNullOrEmpty(currentUser.Location))
         {
-            TempData["info"] = "Please complete your Information and Education before applying!";
+            TempData["Flash.Message"] = "Please complete your Information and Education before applying!";
             return RedirectToAction("Index", "Profile");
         }
 
@@ -186,7 +186,7 @@ public class JobApplyController : BaseController
             // 用户希望上传简历，但 Profile 里没有简历
             if (profileResume == null)
             {
-                TempData["Info"] = "Please upload your resume in your profile first.";
+                TempData["Flash.Message"] = "Please upload your resume in your profile first.";
                 return RedirectToAction("Resume", "Profile"); // 跳到 Profile 上传页面
             }
         }
@@ -239,7 +239,7 @@ public class JobApplyController : BaseController
         db.AuditLogs.Add(log);
         db.SaveChanges();
 
-        TempData["Info"] = "Application submitted successfully!";
+        TempData["Flash.Message"] = "Application submitted successfully!";
         return RedirectToAction("ApplyList"); // 成功跳转页面
     }
 
@@ -319,7 +319,7 @@ public class JobApplyController : BaseController
             db.AuditLogs.Add(log);
             db.SaveChanges();
 
-            TempData["Info"] = "Application canceled successfully.";
+            TempData["Flash.Message"] = "Application canceled successfully.";
         }
 
         return RedirectToAction("ApplyList", "JobApply");  // 删除后回到之前页面

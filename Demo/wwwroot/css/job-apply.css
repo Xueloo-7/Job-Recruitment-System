@@ -1,84 +1,164 @@
-﻿.apply-container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background: #fafafa;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+﻿/* 容器样式 */
+.apply-container {
+    max-width: 850px;
+    margin: 40px auto;
+    padding: 30px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+    font-family: "Segoe UI", sans-serif;
 }
 
-    .apply-container img {
-        max-width: 120px;
-        border-radius: 8px;
-        /* 内层：厚 border，可随状态改变颜色 */
-        border: 6px solid white; /* 这里换成你想要的颜色 */
-        /* 外层：灰色固定 */
-        outline: 2px solid #ccc;
-    }
+/* 公司 Logo */
+.company-logo {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    background: #f9f9f9;
+    padding: 8px;
+    border: 1px solid #ddd;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
 
+/* 小字说明 */
+.apply-container .small {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 6px;
+    text-align: center;
+}
 
-    .apply-container .small {
-        font-size: 16px;
-        color: #666;
-        margin: 10px 0px;
-    }
+/* 主标题 */
+.apply-container h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #0056b3;
+    text-align: center;
+    margin-bottom: 8px;
+}
 
-    .apply-container h1 {
-        font-size: 28px;
-        margin: 10px 0px;
-    }
+/* 地点 */
+.apply-container .location {
+    text-align: center;
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 25px;
+}
 
-    .apply-container .location {
-        font-size: 20px;
-        color: #666;
-        margin: 10px 0px;
-    }
-
-    .btn-toggle {
-        display: inline-flex;
-        align-items: center;
-        padding: 6px 12px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #333;
-        background: #f5f5f5;
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: background 0.2s;
-    }
+/* Toggle 按钮 */
+.btn-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #e9f2ff;
+    color: #0056b3;
+    font-weight: 600;
+    border: 1px solid #bcd4f6;
+    border-radius: 8px;
+    padding: 10px 16px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease;
+}
 
     .btn-toggle:hover {
-        background: #e0e0e0;
+        background: #d6e8ff;
     }
 
 .job-info {
     max-height: 0;
     overflow: hidden;
-    margin-top: 10px;
-    transition: all 0.2s cubic-bezier(0.02, 1.505, 0.745, 1.235);
+    opacity: 0;
+    transition: max-height 0.5s ease, padding 0.4s ease, opacity 0.4s ease;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 0 15px; /* 左右内边距保持 */
+    margin-bottom: 20px;
+    background: #f9f9f9;
 }
 
-    .job-info.show {
-        max-height: 500px; /* 足够大的值，保证能完全展开 */
+    .job-info.show,
+    .job-info[style*="max-height"]:not([style*="0px"]) {
+        opacity: 1;
     }
 
 
-    .job-info .card {
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        padding: 12px;
-        background-color: gainsboro;
-    }
-
-.apply-container form {
-    margin-top: 50px;
+/* Toggle 按钮图标旋转 */
+.btn-toggle i {
+    transition: transform 0.4s ease;
 }
 
-.apply-container .form-check-input {
-    width: auto;
+.btn-toggle.show i {
+    transform: rotate(180deg);
 }
 
-.apply-container .resume-upload-container {
+/* job-info 内部 card 样式，去掉原有边框，保持一致 */
+.job-info .card {
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 表单字段 */
+.form-group {
     margin-bottom: 20px;
 }
+
+    .form-group label {
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+.form-control {
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+}
+
+    .form-control:focus {
+        border-color: #0056b3;
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+    }
+
+/* Resume Upload */
+.resume-upload-container {
+    padding: 15px;
+    background: #f5f7fa;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+    .resume-upload-container label {
+        font-weight: 500;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+/* Submit 按钮 */
+.btn-success {
+    background: #28a745;
+    border: none;
+    border-radius: 8px;
+    padding: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+    .btn-success:hover {
+        background: #218838;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(40, 167, 69, 0.3);
+    }

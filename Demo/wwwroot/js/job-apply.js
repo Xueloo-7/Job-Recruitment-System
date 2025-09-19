@@ -9,6 +9,19 @@
 
     toggleBtn.addEventListener("click", function () {
         console.log("按钮被点击了"); // 调试用
-        jobInfo.classList.toggle("show");
+
+        if (jobInfo.style.maxHeight && jobInfo.style.maxHeight !== "0px") {
+            // 已展开 -> 收起
+            jobInfo.style.maxHeight = "0px";
+            jobInfo.style.paddingTop = "0px";
+            jobInfo.style.paddingBottom = "0px";
+            toggleBtn.classList.remove("show"); // 图标旋转复原
+        } else {
+            // 收起 -> 展开
+            jobInfo.style.maxHeight = jobInfo.scrollHeight + "px";
+            jobInfo.style.paddingTop = "15px";
+            jobInfo.style.paddingBottom = "15px";
+            toggleBtn.classList.add("show"); // 图标旋转
+        }
     });
 });
